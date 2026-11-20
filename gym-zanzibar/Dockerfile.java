@@ -9,10 +9,3 @@ WORKDIR /app
 COPY --from=build /app/target/*.jar app.jar
 EXPOSE 8080
 ENTRYPOINT ["java","-jar","app.jar"]
-*3. `render.yaml`*
-services:
-    - type: web
-    name: gym-zanzibar
-    env: docker
-    plan: free
-    envVars:
