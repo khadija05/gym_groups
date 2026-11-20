@@ -1,0 +1,9 @@
+
+services:
+    - type: web
+    name: gym-zanzibar
+    env: docker
+    plan: free
+    envVars:
+            - key: DATABASE_URL
+        value: jdbc:h2:mem:gymdb
