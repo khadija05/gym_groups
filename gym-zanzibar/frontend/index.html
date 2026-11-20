@@ -1,0 +1,121 @@
+l
+<!DOCTYPE html><html lang="sw"><head><meta charset="UTF-8"><meta name="viewport" content="width=device-width,initial-scale=1">
+<title>💪 GYM ZANZIBAR - Jenga Mwili Wako</title>
+<style>
+*{box-sizing:border-box;margin:0;padding:0;font-family:'Segoe UI',system-ui}body{background:#0B0B0F;color:#fff;overflow-x:hidden}
+a{color:#FFD400;text-decoration:none}
+.top{position:sticky;top:0;z-index:50;background:#0B0B0FEE;backdrop-filter:blur(10px);border-bottom:1px solid #222;padding:12px 18px;display:flex;justify-content:space-between;align-items:center}
+.logo{font-size:20px;font-weight:900}.logo span{color:#FFD400}.nav{display:flex;gap:16px;font-size:13px;font-weight:700}.nav a{color:#ccc}.nav a:hover{color:#FFD400}
+.btn{padding:13px 22px;border:none;border-radius:50px;font-weight:800;cursor:pointer;font-size:14px;display:inline-block;text-align:center}.btn-yellow{background:linear-gradient(135deg,#FFD400,#FFAA00);color:#000;box-shadow:0 8px 20px #FFD40033}.btn-dark{background:#1A1A1A;color:#fff;border:1px solid #333}.btn-green{background:#25D366;color:#fff}.btn-orange{background:linear-gradient(135deg,#FF6B00,#FF2D00);color:#fff}.btn-white{background:#fff;color:#000}.btn:disabled{opacity:.6}
+.hero{position:relative;padding:40px 18px 30px;text-align:center;background:radial-gradient(600px 300px at 50% 0%,#FFD40022,transparent),linear-gradient(180deg,#111,#0B0B0F)}
+.hero-badge{display:inline-block;background:#FFD40022;border:1px solid #FFD40066;color:#FFD400;padding:6px 14px;border-radius:50px;font-size:12px;font-weight:800}
+.hero h1{font-size:52px;line-height:1.05;margin:14px 0}.hero h1 span{background:linear-gradient(135deg,#FFD400,#FF6B00);-webkit-background-clip:text;-webkit-text-fill-color:transparent}
+.hero p{color:#aaa;font-size:16px;max-width:600px;margin:0 auto 18px;line-height:1.6}
+.hero-stats{display:flex;gap:10px;justify-content:center;flex-wrap:wrap;margin-top:18px}.hero-stat{background:#161616;border:1px solid #2A2A2A;padding:14px 18px;border-radius:16px;min-width:110px}.hero-stat b{font-size:22px;color:#FFD400}.hero-stat span{font-size:11px;color:#888;display:block}
+.wrap{max-width:1100px;margin:0 auto;padding:0 16px}
+.section{padding:22px 0}.section h2{font-size:26px;margin-bottom:6px}.section h2 span{color:#FFD400}.sub{color:#888;font-size:14px;margin-bottom:16px}
+.grid3{display:grid;grid-template-columns:repeat(3,1fr);gap:16px}.grid2{display:grid;grid-template-columns:1fr 1fr;gap:16px}
+.card{background:#151515;border:1px solid #2A2A2A;border-radius:22px;overflow:hidden;transition:.2s}.card:hover{transform:translateY(-4px);border-color:#FFD40088}
+.card-top{height:180px;display:flex;align-items:center;justify-content:center;font-size:80px;position:relative}.card-top .price{position:absolute;top:12px;right:12px;background:#000C;color:#fff;padding:6px 12px;border-radius:50px;font-size:12px;font-weight:800}
+.pad{padding:16px}.pad h3{font-size:17px;margin:6px 0}.pad p{font-size:13px;color:#999;line-height:1.6}
+.chip{display:inline-block;background:#FFD400;color:#000;padding:5px 11px;border-radius:50px;font-size:11px;font-weight:800}
+input,select{width:100%;padding:13px;border:1px solid #333;border-radius:14px;margin:6px 0;font-size:14px;background:#111;color:#fff;outline:none}input:focus,select:focus{border-color:#FFD400}
+.plan{border:2px solid #2A2A2A;border-radius:22px;padding:20px;text-align:center;background:#151515;position:relative}.plan.hot{border-color:#FFD400;box-shadow:0 10px 30px #FFD40022}
+.progress{height:12px;background:#2A2A2A;border-radius:50px;overflow:hidden}.progress div{height:100%;background:linear-gradient(90deg,#FFD400,#FF6B00);transition:.4s}
+.modal{position:fixed;inset:0;background:#000C;display:none;align-items:center;justify-content:center;z-index:99;padding:14px}.modal.show{display:flex}.modal-box{background:#161616;border:1px solid #333;width:100%;max-width:430px;padding:24px;border-radius:24px;text-align:center}
+.pay-info{background:#FFF8E1;color:#222;padding:14px;border-radius:14px;text-align:left;font-size:14px;line-height:1.8}
+.footer{text-align:center;padding:20px;color:#666;font-size:12px;border-top:1px solid #222;margin-top:20px}
+@media(max-width:760px){.grid3,.grid2{grid-template-columns:1fr}.hero h1{font-size:32px}.nav{display:none}}
+</style></head><body>
+<div class="top"><div class="logo">💪 GYM <span>ZANZIBAR</span></div><div class="nav"><a href="#vikundi">Vikundi</a><a href="#vifurushi">Vifurushi</a><a href="#maendeleo">Maendeleo</a><a href="#hudhurio">Mahudhurio</a></div><div style="display:flex;gap:8px"><a href="login.html" class="btn btn-dark" style="padding:10px 16px;font-size:13px">Ingia</a><a href="login.html" class="btn btn-yellow" style="padding:10px 16px;font-size:13px">Jisajili →</a></div></div>
+<div class="hero"><span class="hero-badge">✨ #1 GYM ZANZIBAR • KARIBU</span><h1>Jenga Mwili Wako<br><span>Kuwa Bora Kila Siku 💪</span></h1><p>Gym • Kocha Binafsi • Chakula • Maendeleo. Jiunge na kikundi chako, lipa kwa urahisi, ona uzito wako unavyopungua kila wiki.</p>
+<div style="display:flex;gap:10px;justify-content:center;flex-wrap:wrap"><a href="#vikundi" class="btn btn-yellow">💪 Jiunge Sasa →</a><a href="#vifurushi" class="btn btn-white">💰 Vifurushi</a><a href="#maendeleo" class="btn btn-green">📊 Maendeleo</a></div>
+<div class="hero-stats"><div class="hero-stat"><b id="sMembers">77</b><span>Wanachama</span></div><div class="hero-stat"><b id="sGroups">4</b><span>Vikundi</span></div><div class="hero-stat"><b>4</b><span>Makocha</span></div><div class="hero-stat"><b id="sToday">0</b><span>Leo Wamekuja</span></div></div></div>
+<div class="wrap">
+<div class="section" id="vikundi"><h2>💪 Vikundi vya <span>Gym</span></h2><p class="sub">Chagua kikundi chako. Kila kikundi kina Kocha wake na ratiba yake.</p><input id="search" placeholder="🔍 Tafuta kikundi..." oninput="renderGroups()"><div class="grid3" id="groupGrid" style="margin-top:14px"></div></div>
+<div class="section" id="vifurushi"><h2>💰 <span>Vifurushi</span></h2><p class="sub">Chagua kifurushi. Utaingiza WhatsApp, tutakutumia taarifa za malipo (PBZ).</p>
+<div class="grid3">
+<div class="plan"><div style="font-size:44px">🎁</div><h3>JARIBIO</h3><div style="font-size:30px;font-weight:900;color:#FFD400">0 TZS</div><span style="color:#888;font-size:13px">Siku 3 Bure</span><div style="text-align:left;font-size:13px;line-height:2;margin:12px 0">✅ Siku 3 • Gym yote<br>✅ Kocha • Vifaa vyote<br>✅ Pima uzito mara 1</div><button class="btn btn-dark" style="width:100%" onclick="location.href='login.html'">Jisajili Bure →</button></div>
+<div class="plan hot"><span class="chip" style="position:absolute;top:-12px;left:50%;transform:translateX(-50%)">🔥 MARUFU SANA</span><div style="font-size:44px">💪</div><h3>MWEZI</h3><div style="font-size:30px;font-weight:900;color:#FFD400">30,000 TZS</div><span style="color:#888;font-size:13px">/ Mwezi • Siku 30</span><div style="text-align:left;font-size:13px;line-height:2;margin:12px 0">✅ Siku 30 • Gym yote<br>✅ Kocha binafsi<br>✅ Mpango wa chakula<br>✅ Pima uzito kila wiki</div><button class="btn btn-yellow" style="width:100%" onclick="openWa('KIDOGO','MWEZI - 30,000 TZS')">Chagua MWEZI →</button></div>
+<div class="plan" style="border-color:#FF6B00"><span class="chip" style="background:#FF6B00;color:#fff;position:absolute;top:-12px;left:50%;transform:translateX(-50%)">🏆 BORA ZAIDI</span><div style="font-size:44px">🏆</div><h3>MWAKA</h3><div style="font-size:30px;font-weight:900;color:#FFD400">300,000 TZS</div><span style="color:#888;font-size:13px">/ Mwaka • Okoa 60,000</span><div style="text-align:left;font-size:13px;line-height:2;margin:12px 0">✅ Kila kitu cha MWEZI<br>✅ <b>Miezi 12 kamili</b><br>✅ <b>Kocha binafsi kila siku</b><br>✅ <b>Supplements bure</b></div><button class="btn btn-orange" style="width:100%" onclick="openWa('KUBWA','MWAKA - 300,000 TZS')">Chagua MWAKA →</button></div>
+</div></div>
+<div class="section" id="maendeleo"><h2>📊 <span>Maendeleo Yangu</span></h2><p class="sub">Weka uzito wako, ona maendeleo yako.</p><div class="grid2"><div class="card"><div class="pad"><label>Uzito wa Kwanza (kg)</label><input id="wStart" type="number" placeholder="Mf: 85"><label>Uzito wa Sasa (kg)</label><input id="wNow" type="number" placeholder="Mf: 78"><label>Lengo (kg)</label><input id="wGoal" type="number" placeholder="Mf: 70"><button class="btn btn-yellow" style="width:100%" onclick="calcProgress()">📊 Ona Maendeleo →</button></div></div><div class="card"><div class="pad"><h3 id="progTitle">Maendeleo yako yataonekana hapa</h3><div class="progress" style="margin:12px 0"><div id="progBar" style="width:0%"></div></div><p id="progText" style="color:#aaa;font-size:13px">Weka uzito wako kushoto.</p><div id="progList" style="margin-top:12px"></div></div></div></div></div>
+<div class="section" id="hudhurio"><h2>✅ <span>Mahudhurio ya Leo</span></h2><p class="sub">Weka jina lako kama umefika leo.</p><div class="card"><div class="pad"><label>Jina la Mwanachama</label><input id="aName" placeholder="Jina lako"><label>Kikundi</label><select id="aGroup"><option>Gym Stone Town - Jenga Mwili</option><option>Gym Mjini - Punguza Uzito</option><option>Gym Forodhani - Wanawake Tu</option><option>Gym Mjini Magharibi - Wanaume Tu</option></select><button class="btn btn-green" style="width:100%" onclick="doAttend()">✅ Nimefika Leo →</button><div id="attendList" style="margin-top:12px"></div></div></div></div>
+<div class="section" id="join"><h2>💪 <span>Jiunge na Kikundi</span></h2><div class="card"><div class="pad"><label>Jina Lako</label><input id="jName" placeholder="Jina lako"><label>Simu / WhatsApp</label><input id="jPhone" placeholder="077..."><label>Kikundi Ulichochagua</label><input id="jGroup" placeholder="Bonyeza 'Jiunge' kwenye kikundi hapo juu"><label>Lengo Lako</label><select id="jGoal"><option>Kujenga Mwili</option><option>Kupunguza Uzito</option><option>Kuwa na Afya</option><option>Kujenga Misuli</option></select><button class="btn btn-yellow" style="width:100%" onclick="doJoin()">💪 Jiunge Sasa →</button></div></div></div>
+</div>
+<div class="footer">© 2026 Gym Zanzibar • Jenga Mwili Wako 💪 • Stone Town • Mjini Magharibi • Forodhani</div>
+
+<div class="modal" id="waModal"><div class="modal-box"><div id="waStep1"><div style="font-size:50px">💬</div><h3 id="waTitle">Kifurushi MWEZI</h3><p style="color:#aaa;font-size:13px">Ingiza namba yako ya WhatsApp, tutakutumia taarifa za malipo.</p><input id="waPhone" placeholder="📱 Namba ya WhatsApp - 077..."><input id="waName" placeholder="✍️ Jina lako"><button class="btn btn-green" style="width:100%" onclick="sendWaInfo()">📩 Nitumie Taarifa za Malipo →</button><button class="btn btn-dark" style="width:100%;margin-top:8px" onclick="closeWa()">Ghairi</button></div><div id="waStep2" style="display:none"><div style="font-size:50px">✅</div><h3>Taarifa za Malipo</h3><p style="color:#aaa;font-size:13px">Tumekutumia WhatsApp. Hizi hapa pia:</p><div class="pay-info">🏦 <b>Bank:</b> PBZ<br>💳 <b>Account:</b> 0887387001<br>👤 <b>Jina:</b> KHADIJA DENGE<br>💰 <b>Kifurushi:</b> <span id="waPlanInfo"></span><br>📝 <b>Reference:</b> Weka Jina lako + Kifurushi</div><input id="waTxn" placeholder="Namba ya Muamala baada ya kulipa" style="background:#fff;color:#000"><button class="btn btn-orange" style="width:100%" onclick="confirmPay()">✅ Nimelipa - Thibitisha →</button><a id="waLink" href="#" target="_blank" class="btn btn-green" style="width:100%;margin-top:8px">💬 Fungua WhatsApp</a><button class="btn btn-dark" style="width:100%;margin-top:8px" onclick="closeWa()">Funga</button></div></div></div>
+<div class="modal" id="popupModal"><div class="modal-box"><div id="popupIcon" style="font-size:55px">✅</div><h3 id="popupTitle" style="margin:8px 0">Karibu!</h3><p id="popupMsg" style="font-size:14px;color:#bbb;line-height:1.6"></p><div id="popupAction" style="margin-top:14px"></div><button class="btn btn-yellow" style="width:100%;margin-top:10px" onclick="closePopup()">SAWA ✓</button></div></div>
+
+<script>
+const API_URL='https://gym-zanzibar.onrender.com';
+const ADMIN_WA='255887387001';
+let curPlan='KIDOGO', curPkg='', attends=[];
+const PLANS={ JARIBIO:{price:'0 TZS'}, KIDOGO:{price:'30,000 TZS'}, KUBWA:{price:'300,000 TZS'} };
+let GROUPS=[];
+async function loadGroups(){
+  try{ let r=await fetch(API_URL+'/api/gym/groups'); if(r.ok){ GROUPS=await r.json(); renderGroups(); return; } }catch(e){}
+  GROUPS=[
+    {name:'Gym Stone Town - Jenga Mwili',coach:'Kocha Juma',days:'Jumatatu - Jumamosi',timeSlot:'5:00 Asubuhi - 9:00 Jioni',price:30000,membersCount:25,emoji:'🏋️',description:'Kujenga misuli • Vifaa vyote • Kocha binafsi',color:'#FFD400'},
+    {name:'Gym Mjini - Punguza Uzito',coach:'Kocha Amina',days:'Jumatatu, Jumatano, Ijumaa',timeSlot:'6:00 Asubuhi • 6:00 Jioni',price:30000,membersCount:18,emoji:'🔥',description:'Punguza uzito • Cardio • Mpango wa chakula',color:'#FF6B00'},
+    {name:'Gym Forodhani - Wanawake Tu',coach:'Kocha Fatma',days:'Jumanne, Alhamisi, Jumamosi',timeSlot:'6:00 Jioni - 8:00 Jioni',price:25000,membersCount:12,emoji:'🧘',description:'Wanawake tu • Yoga • Aerobics • Faragha',color:'#FF69B4'},
+    {name:'Gym Mjini Magharibi - Wanaume Tu',coach:'Kocha Ali',days:'Kila Siku',timeSlot:'5:00 Asubuhi - 10:00 Jioni',price:30000,membersCount:22,emoji:'💪',description:'Wanaume tu • Ngumi • Kujenga mwili',color:'#00D4FF'},
+  ]; renderGroups();
+}
+function showPopup(t,m,type='ok',a=''){ document.getElementById('popupTitle').textContent=t; document.getElementById('popupMsg').textContent=m; document.getElementById('popupIcon').textContent=type==='ok'?'✅':type==='err'?'❌':type==='lock'?'🔒':'⏳'; document.getElementById('popupAction').innerHTML=a; document.getElementById('popupModal').classList.add('show'); }
+function closePopup(){ document.getElementById('popupModal').classList.remove('show'); }
+function renderGroups(){
+  let q=(document.getElementById('search').value||'').toLowerCase();
+  let list=GROUPS.filter(g=>(g.name||'').toLowerCase().includes(q));
+  document.getElementById('groupGrid').innerHTML=list.map(g=>`<div class="card"><div class="card-top" style="background:${g.color}"><span class="price">${(g.price||0).toLocaleString()} TZS / Mwezi</span>${g.emoji}</div><div class="pad"><span class="chip">${g.coach}</span><h3>${g.name}</h3><p>📅 ${g.days}<br>⏰ ${g.timeSlot}<br>👥 Wanachama: ${g.membersCount}</p><p style="margin:8px 0">${g.description||''}</p><button class="btn btn-yellow" style="width:100%" onclick="pickGroup('${g.name.replace(/'/g,"")}')">💪 Jiunge na Hiki →</button></div></div>`).join('');
+  document.getElementById('sGroups').textContent=GROUPS.length;
+  document.getElementById('sMembers').textContent=GROUPS.reduce((s,g)=>s+(g.membersCount||0),0);
+}
+function pickGroup(name){ document.getElementById('jGroup').value=name; document.getElementById('join').scrollIntoView({behavior:'smooth'}); showPopup('Umechagua '+name,'Umechagua '+name+'. Jaza jina na namba hapo chini ili ujiunge.','ok'); }
+function openWa(plan,pkg){ curPlan=plan; curPkg=pkg; document.getElementById('waTitle').textContent='Kifurushi: '+pkg; document.getElementById('waStep1').style.display='block'; document.getElementById('waStep2').style.display='none'; document.getElementById('waModal').classList.add('show'); }
+function closeWa(){ document.getElementById('waModal').classList.remove('show'); }
+function sendWaInfo(){
+  let phone=document.getElementById('waPhone').value.trim(); let name=document.getElementById('waName').value.trim()||'Mteja';
+  if(!phone){ showPopup('Ingiza Namba','Ingiza namba ya WhatsApp kwanza.','err'); return; }
+  document.getElementById('waPlanInfo').textContent=curPkg;
+  document.getElementById('waStep1').style.display='none'; document.getElementById('waStep2').style.display='block';
+  document.getElementById('waLink').href='https://wa.me/'+ADMIN_WA+'?text='+encodeURIComponent('Habari! Mimi '+name+' ('+phone+') nataka kifurushi cha Gym '+curPkg+'. Nimtumie taarifa za malipo.');
+  localStorage.setItem('waPhone',phone); localStorage.setItem('waName',name);
+  fetch(API_URL+'/api/auth/pay',{method:'POST',headers:{'Content-Type':'application/json'},body:JSON.stringify({phone:phone,plan:curPlan,reference:'GYM-WHATSAPP-'+phone})}).catch(e=>{});
+}
+async function confirmPay(){
+  let txn=document.getElementById('waTxn').value.trim(); let phone=localStorage.getItem('waPhone')||document.getElementById('waPhone').value.trim();
+  if(!txn){ showPopup('Ingiza Muamala','Ingiza Namba ya Muamala baada ya kulipa.','err'); return; }
+  try{ await fetch(API_URL+'/api/auth/pay',{method:'POST',headers:{'Content-Type':'application/json'},body:JSON.stringify({phone:phone,plan:curPlan,reference:txn})}); closeWa(); document.getElementById('waTxn').value=''; showPopup('Asante!','Malipo yamepokelewa. Mmiliki atakuthibitisha hivi karibuni.','ok'); }catch(e){ showPopup('Mfumo Unachelewa','Mfumo unachelewa, jaribu tena.','err'); }
+}
+function calcProgress(){
+  let s=parseFloat(document.getElementById('wStart').value); let n=parseFloat(document.getElementById('wNow').value); let g=parseFloat(document.getElementById('wGoal').value);
+  if(!s||!n||!g){ showPopup('Jaza Uzito','Jaza uzito wa kwanza, wa sasa na lengo kwanza.','err'); return; }
+  let total=Math.abs(s-g); let done=Math.abs(s-n); let pct=total===0?100:Math.min(100,Math.round((done/total)*100));
+  document.getElementById('progBar').style.width=pct+'%'; document.getElementById('progTitle').textContent='Maendeleo: '+pct+'%';
+  let diff=s-n; let msg=diff>0?'Hongera! Umepunguza '+diff+' kg 🎉':diff<0?'Umeongezeka '+Math.abs(diff)+' kg - Endelea kujituma!':'Bado uko palepale - Anza leo!';
+  document.getElementById('progText').textContent=msg+' • Umetoka '+s+'kg → '+n+'kg • Lengo: '+g+'kg';
+  document.getElementById('progList').innerHTML='<div style="background:#111;padding:12px;border-radius:12px">🏋️ Kwanza: <b>'+s+' kg</b><br>📊 Sasa: <b>'+n+' kg</b><br>🎯 Lengo: <b>'+g+' kg</b><br>📉 Umebadilika: <b>'+diff+' kg</b></div>';
+  showPopup('Maendeleo Yako: '+pct+'%',msg+'\nUmetoka '+s+'kg → '+n+'kg. Lengo: '+g+'kg.','ok');
+}
+async function doAttend(){
+  let name=document.getElementById('aName').value.trim(); let grp=document.getElementById('aGroup').value;
+  if(!name){ showPopup('Jaza Jina','Jaza jina lako kwanza.','err'); return; }
+  let time=new Date().toLocaleTimeString('sw-TZ',{hour:'2-digit',minute:'2-digit'});
+  try{ await fetch(API_URL+'/api/gym/attendance',{method:'POST',headers:{'Content-Type':'application/json'},body:JSON.stringify({memberName:name,groupName:grp})}); }catch(e){}
+  attends.unshift({memberName:name,groupName:grp,time:time});
+  document.getElementById('aName').value=''; document.getElementById('sToday').textContent=attends.length;
+  document.getElementById('attendList').innerHTML='<h3 style="font-size:14px;margin:6px 0">✅ Wamefika Leo ('+attends.length+')</h3>'+attends.map(a=>`<div style="background:#111;padding:10px;border-radius:12px;margin:6px 0;font-size:13px">💪 <b>${a.memberName}</b> • ${a.groupName} • ⏰ ${a.time}</div>`).join('');
+  showPopup('✅ Karibu Gym!','Karibu '+name+'! Mahudhurio yako ya leo yamehifadhiwa. Jitume! 💪','ok');
+}
+async function doJoin(){
+  let name=document.getElementById('jName').value.trim(); let phone=document.getElementById('jPhone').value.trim(); let grp=document.getElementById('jGroup').value; let goal=document.getElementById('jGoal').value;
+  if(!name||!phone){ showPopup('Jaza Taarifa','Jaza jina na namba kwanza.','err'); return; }
+  if(!grp){ showPopup('Chagua Kikundi','Chagua kikundi kwanza hapo juu.','err'); return; }
+  document.getElementById('jName').value=''; document.getElementById('jPhone').value=''; document.getElementById('jGroup').value='';
+  showPopup('💪 Umejiunga!','Umejiunga na '+grp+'! Lengo lako: '+goal+'. Utatumiwa taarifa za malipo WhatsApp.','ok');
+  window.open('https://wa.me/'+ADMIN_WA+'?text='+encodeURIComponent('Habari! Mimi '+name+' ('+phone+') nataka nijiunge na '+grp+'. Lengo langu: '+goal+'. Nitumie taarifa za malipo.'),'_blank');
+}
+loadGroups(); fetch(API_URL+'/api/gym/attendance').then(r=>r.json()).then(d=>{ attends=d.slice(0,10).map(x=>({memberName:x.memberName,groupName:x.groupName,time:new Date(x.createdAt).toLocaleTimeString('sw-TZ',{hour:'2-digit',minute:'2-digit'})})); document.getElementById('sToday').textContent=attends.length; }).catch(()=>{});
+</script></body></html>
