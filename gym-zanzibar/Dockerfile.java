@@ -1,11 +1,17 @@
-
-FROM maven:3.9-eclipse-temurin-17 AS build
-WORKDIR /app
-COPY pom.xml .
-COPY src ./src
-RUN mvn clean package -DskipTests
-FROM eclipse-temurin:17-jre
-WORKDIR /app
-COPY --from=build /app/target/*.jar app.jar
-EXPOSE 8080
-ENTRYPOINT ["java","-jar","app.jar"]
+{
+  "name": "gym-groups-backend",
+  "version": "1.0.0",
+  "main": "server.js",
+  "scripts": {
+    "start": "node server.js"
+  },
+  "engines": {
+    "node": "18.x"
+  },
+  "dependencies": {
+    "express": "^4.18.2",
+    "cors": "^2.8.5",
+    "pg": "^8.11.3",
+    "bcryptjs": "^2.4.3"
+  }
+}
