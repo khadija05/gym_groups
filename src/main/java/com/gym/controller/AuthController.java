@@ -1,4 +1,3 @@
-
 package com.gym.controller;
 import com.gym.model.User; import com.gym.repository.UserRepository;
 import org.springframework.web.bind.annotation.*; import java.util.*; import java.time.LocalDateTime;
@@ -24,7 +23,20 @@ public class AuthController {
     if(!Boolean.TRUE.equals(u.getApprovedByKhadija())) return Map.of("error","NOT_APPROVED","message","Bado haijathibitishwa na Mmiliki. Subiri kidogo.");
     if(u.getExpiresAt()!=null && LocalDateTime.now().isAfter(u.getExpiresAt())){ u.setStatus("expired"); u.setLocked(true); users.save(u); return Map.of("error","EXPIRED","message","Muda wako umeisha! Lipa ili uendelee."); }
     if(!"active".equals(u.getStatus())) return Map.of("error","NOT_ACTIVE","message","Akaunti si active. Lipa kwanza.");
-    return Map.of("success",true,"id",u.getId(),"username",u.getUsername(),"name",u.getName(),"phone",u.getPhone(),"role",u.getRole(),"plan",u.getPlan(),"status",u.getStatus(),"gymGroup",u.getGymGroup()==null?"":u.getGymGroup(),"approvedByKhadija",true,"expiresAt",u.getExpiresAt()==null?"":u.getExpiresAt().toString());
+    // FIX: HashMap badala ya Map.of ya 11 pairs
+    Map<String,Object> response = new HashMap<>();
+    response.put("success", true);
+    response.put("id", u.getId());
+    response.put("username", u.getUsername());
+    response.put("name", u.getName());
+    response.put("phone", u.getPhone());
+    response.put("role", u.getRole());
+    response.put("plan", u.getPlan());
+    response.put("status", u.getStatus());
+    response.put("gymGroup", u.getGymGroup()==null?"":u.getGymGroup());
+    response.put("approvedByKhadija", true);
+    response.put("expiresAt", u.getExpiresAt()==null?"":u.getExpiresAt().toString());
+    return response;
   }
   @PostMapping("/register") public Map<String,Object> register(@RequestBody Map<String,String> m){
     String phone=m.get("phone"); String username=m.get("username");
