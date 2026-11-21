@@ -1,0 +1,4 @@
+<h1>TEST MPYA</h1>
+<script>
+fetch('/api/health').then(r=>r.text()).then(t=>document.body.innerHTML+='<p>BACKEND: '+t+'</p>').catch(e=>document.body.innerHTML+='<p>BACKEND FAIL: '+e.message+'</p>')
+</script>
