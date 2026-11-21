@@ -1,4 +1,3 @@
-
 <!DOCTYPE html><html lang="sw"><head><meta charset="UTF-8"><meta name="viewport" content="width=device-width,initial-scale=1"><title>Admin - GYM Zanzibar</title>
 <style>*{box-sizing:border-box;margin:0;padding:0;font-family:'Segoe UI',system-ui}body{background:#0B0B0F;color:#fff;padding:14px}.top{display:flex;justify-content:space-between;align-items:center;margin-bottom:14px}.btn{padding:10px 16px;border:none;border-radius:50px;font-weight:800;cursor:pointer;font-size:13px}.btn-yellow{background:#FFD400;color:#000}.btn-green{background:#25D366;color:#fff}.btn-red{background:#FF2D00;color:#fff}.btn-dark{background:#222;color:#fff}.card{background:#161616;border:1px solid #2A2A2A;padding:16px;border-radius:18px;margin:10px 0}.grid{display:grid;grid-template-columns:repeat(4,1fr);gap:10px}.stat{background:#161616;border:1px solid #2A2A2A;padding:16px;border-radius:16px;text-align:center}.stat b{font-size:22px;color:#FFD400}input{width:100%;padding:12px;background:#111;color:#fff;border:1px solid #333;border-radius:12px;margin:6px 0}</style></head><body>
 <div class="top"><h2>👑 Admin - GYM Zanzibar</h2><div><a href="index.html" class="btn btn-dark">🏠 Homepage</a> <button class="btn btn-yellow" onclick="loadAll()">🔄 Onyesha Upya</button></div></div>
@@ -7,7 +6,7 @@
 <div class="card"><h3>👥 Wanachama</h3><div id="list"></div></div>
 <div class="card"><h3>✅ Mahudhurio ya Hivi Karibuni</h3><div id="aList"></div></div>
 <script>
-const API_URL='https://gym-zanzibar.onrender.com';
+const API_URL='';
 let users=[], attends=[];
 async function loadAll(){
   try{ let r=await fetch(API_URL+'/api/auth/all'); users=await r.json(); }catch(e){ users=[]; }
@@ -22,7 +21,7 @@ function render(){
   document.getElementById('tActive').textContent=users.filter(u=>u.status==='active').length;
   document.getElementById('tAttend').textContent=attends.length;
   document.getElementById('list').innerHTML=list.length?list.map(u=>`<div style="background:#111;padding:12px;border-radius:14px;margin:8px 0;display:flex;justify-content:space-between;gap:10px;flex-wrap:wrap"><div><b>${u.name||u.username}</b> • ${u.phone||''}<br><span style="color:#aaa;font-size:12px">${u.gymGroup||'Hakuna kikundi'} • ${u.plan||''} • ${u.status||''} • ${u.expiresAt?new Date(u.expiresAt).toLocaleDateString():''}</span></div><div style="display:flex;gap:6px"><button class="btn btn-green" onclick="act('approve',${u.id})">✅ Kubali</button><button class="btn btn-red" onclick="act('lock',${u.id})">🔒 Funga</button></div></div>`).join(''):'<p style="color:#888">Hakuna wanachama bado.</p>';
-  document.getElementById('aList').innerHTML=attends.slice(0,20).map(a=>`<div style="background:#111;padding:10px;border-radius:12px;margin:6px 0;font-size:13px">💪 <b>${a.memberName}</b> • ${a.groupName} • ${a.createdAt?new Date(a.createdAt).toLocaleString('sw-TZ'):''}</div>`).join('')||'<p style="color:#888">Hakuna mahudhurio bado.</p>';
+  document.getElementById('aList').innerHTML=attends.slice(0,20).map(a=>`<div style="background:#111;padding:10px;border-radius:12px;margin:6px 0;font-size:13px">💪 <b>${a.memberName}</b> • ${a.groupName} • ${a.createdAt?new Date(a.createdAt).toLocaleDateString():''}</div>`).join('')||'<p style="color:#888">Hakuna mahudhurio bado.</p>';
 }
 async function act(type,id){ await fetch(API_URL+'/api/auth/'+type+'/'+id,{method:'PUT'}); loadAll(); }
 loadAll();
