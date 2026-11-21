@@ -49,7 +49,6 @@ input,select{width:100%;padding:13px;border:1px solid #333;border-radius:14px;ma
 const API_URL='';
 const ADMIN_WA='255887387001';
 let curPlan='KIDOGO', curPkg='', attends=[];
-const PLANS={ JARIBIO:{price:'0 TZS'}, KIDOGO:{price:'30,000 TZS'}, KUBWA:{price:'300,000 TZS'} };
 let GROUPS=[];
 async function loadGroups(){
   try{ let r=await fetch(API_URL+'/api/gym/groups'); if(r.ok){ GROUPS=await r.json(); renderGroups(); return; } }catch(e){}
