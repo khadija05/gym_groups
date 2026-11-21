@@ -7,7 +7,7 @@
 <p style="text-align:center;font-size:12px;margin-top:12px"><a href="index.html" style="color:#FFD400">← Rudi Homepage</a></p></div>
 <div class="modal" id="popupModal"><div class="modal-box"><div id="popupIcon" style="font-size:55px">✅</div><h3 id="popupTitle" style="margin:8px 0">Karibu!</h3><p id="popupMsg" style="font-size:14px;color:#bbb;line-height:1.6;white-space:pre-line"></p><div id="popupAction" style="margin-top:14px"></div><button class="btn btn-yellow" style="width:100%;margin-top:10px" onclick="closePopup()">SAWA ✓</button></div></div>
 <script>
-const API_URL='';
+const API_URL='https://gymgroups.up.railway.app';
 let selectedPlan='JARIBIO', isLoggingIn=false;
 function showPopup(t,m,type='ok',a=''){ document.getElementById('popupTitle').textContent=t; document.getElementById('popupMsg').textContent=m; document.getElementById('popupIcon').textContent=type==='ok'?'✅':type==='err'?'❌':type==='lock'?'🔒':'⏳'; document.getElementById('popupAction').innerHTML=a; document.getElementById('popupModal').classList.add('show'); }
 function closePopup(){ document.getElementById('popupModal').classList.remove('show'); }
@@ -15,7 +15,7 @@ function logout(){ localStorage.removeItem('gym_token'); localStorage.removeItem
 function show(t){ document.getElementById('pLogin').style.display=t==='login'?'block':'none'; document.getElementById('pReg').style.display=t==='reg'?'block':'none'; document.getElementById('tLogin').classList.toggle('active',t==='login'); document.getElementById('tReg').classList.toggle('active',t==='reg'); }
 function selectPlan(p,el){ selectedPlan=p; document.getElementById('rPlan').value=p; document.querySelectorAll('.plan').forEach(x=>x.classList.remove('sel')); el.classList.add('sel'); }
 async function testBackend(){
-  showPopup('⏳ Inapima...','Inajaribu kuongea na Backend:\n'+(API_URL||window.location.origin),'wait');
+  showPopup('⏳ Inapima...','Inajaribu kuongea na Backend:\n'+API_URL,'wait');
   try{ let r=await fetch(API_URL+'/api/health'); let t=await r.text(); if(r.ok) showPopup('✅ Backend Iko Hai!','Backend inafanya kazi.\nJibu: '+t.substring(0,120),'ok'); else showPopup('⚠️ Backend Inajibu na Kosa','Status: '+r.status+'\n'+t.substring(0,200),'err'); }catch(e){ showPopup('❌ Backend Haijapatikana','Backend haijapatikana.\nKosa: '+e.message,'err'); }
 }
 async function fetchWithTimeout(url,opt,ms=30000){ let c=new AbortController(); let t=setTimeout(()=>c.abort(),ms); try{ let r=await fetch(url,{...opt,signal:c.signal}); clearTimeout(t); return r; }catch(e){ clearTimeout(t); throw e; } }
@@ -49,5 +49,4 @@ async function register(){
   }catch(e){ showPopup('❌ Backend Haijapatikana','Backend haijapatikana. Bonyeza Pima Backend.','err'); }
   btn.disabled=false; btn.textContent='Jisajili →';
 }
-fetch(API_URL+'/api/health').catch(()=>{});
 </script></body></html>
