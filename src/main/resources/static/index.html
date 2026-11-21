@@ -1,4 +1,3 @@
-
 <!DOCTYPE html><html lang="sw"><head><meta charset="UTF-8"><meta name="viewport" content="width=device-width,initial-scale=1">
 <title>💪 GYM ZANZIBAR - Jenga Mwili Wako</title>
 <style>
@@ -44,12 +43,10 @@ input,select{width:100%;padding:13px;border:1px solid #333;border-radius:14px;ma
 <div class="section" id="join"><h2>💪 <span>Jiunge na Kikundi</span></h2><div class="card"><div class="pad"><label>Jina Lako</label><input id="jName" placeholder="Jina lako"><label>Simu / WhatsApp</label><input id="jPhone" placeholder="077..."><label>Kikundi Ulichochagua</label><input id="jGroup" placeholder="Bonyeza 'Jiunge' kwenye kikundi hapo juu"><label>Lengo Lako</label><select id="jGoal"><option>Kujenga Mwili</option><option>Kupunguza Uzito</option><option>Kuwa na Afya</option><option>Kujenga Misuli</option></select><button class="btn btn-yellow" style="width:100%" onclick="doJoin()">💪 Jiunge Sasa →</button></div></div></div>
 </div>
 <div class="footer">© 2026 Gym Zanzibar • Jenga Mwili Wako 💪 • Stone Town • Mjini Magharibi • Forodhani</div>
-
 <div class="modal" id="waModal"><div class="modal-box"><div id="waStep1"><div style="font-size:50px">💬</div><h3 id="waTitle">Kifurushi MWEZI</h3><p style="color:#aaa;font-size:13px">Ingiza namba yako ya WhatsApp, tutakutumia taarifa za malipo.</p><input id="waPhone" placeholder="📱 Namba ya WhatsApp - 077..."><input id="waName" placeholder="✍️ Jina lako"><button class="btn btn-green" style="width:100%" onclick="sendWaInfo()">📩 Nitumie Taarifa za Malipo →</button><button class="btn btn-dark" style="width:100%;margin-top:8px" onclick="closeWa()">Ghairi</button></div><div id="waStep2" style="display:none"><div style="font-size:50px">✅</div><h3>Taarifa za Malipo</h3><p style="color:#aaa;font-size:13px">Tumekutumia WhatsApp. Hizi hapa pia:</p><div class="pay-info">🏦 <b>Bank:</b> PBZ<br>💳 <b>Account:</b> 0887387001<br>👤 <b>Jina:</b> KHADIJA DENGE<br>💰 <b>Kifurushi:</b> <span id="waPlanInfo"></span><br>📝 <b>Reference:</b> Weka Jina lako + Kifurushi</div><input id="waTxn" placeholder="Namba ya Muamala baada ya kulipa" style="background:#fff;color:#000"><button class="btn btn-orange" style="width:100%" onclick="confirmPay()">✅ Nimelipa - Thibitisha →</button><a id="waLink" href="#" target="_blank" class="btn btn-green" style="width:100%;margin-top:8px">💬 Fungua WhatsApp</a><button class="btn btn-dark" style="width:100%;margin-top:8px" onclick="closeWa()">Funga</button></div></div></div>
 <div class="modal" id="popupModal"><div class="modal-box"><div id="popupIcon" style="font-size:55px">✅</div><h3 id="popupTitle" style="margin:8px 0">Karibu!</h3><p id="popupMsg" style="font-size:14px;color:#bbb;line-height:1.6"></p><div id="popupAction" style="margin-top:14px"></div><button class="btn btn-yellow" style="width:100%;margin-top:10px" onclick="closePopup()">SAWA ✓</button></div></div>
-
 <script>
-const API_URL='https://gym-zanzibar.onrender.com';
+const API_URL='';
 const ADMIN_WA='255887387001';
 let curPlan='KIDOGO', curPkg='', attends=[];
 const PLANS={ JARIBIO:{price:'0 TZS'}, KIDOGO:{price:'30,000 TZS'}, KUBWA:{price:'300,000 TZS'} };
