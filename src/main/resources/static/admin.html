@@ -6,7 +6,7 @@
 <div class="card"><h3>👥 Wanachama</h3><div id="list"></div></div>
 <div class="card"><h3>✅ Mahudhurio ya Hivi Karibuni</h3><div id="aList"></div></div>
 <script>
-const API_URL='https://gymgroups.up.railway.app';
+const API_URL='';
 let users=[], attends=[];
 async function loadAll(){
   try{ let r=await fetch(API_URL+'/api/auth/all'); users=await r.json(); }catch(e){ users=[]; }
