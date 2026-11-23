@@ -1,8 +1,9 @@
-
+// repository/UserRepository.java
 package com.gym.repository;
-import com.gym.model.User; import org.springframework.data.jpa.repository.JpaRepository; import java.util.*;
-public interface UserRepository extends JpaRepository<User,Long> {
-  Optional<User> findByPhone(String phone);
-  Optional<User> findByUsername(String username);
-  List<User> findByStatus(String status);
+import com.gym.model.User; import org.springframework.data.jpa.repository.JpaRepository; import java.util.Optional;
+public interface UserRepository extends JpaRepository<User,Long>{
+    Optional<User> findByUsername(String username);
+    Optional<User> findByPhone(String phone);
+    long countByRole(String role);
+    boolean existsByRole(String role);
 }
