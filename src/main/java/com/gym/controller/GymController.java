@@ -1,24 +1,22 @@
-
 package com.gym.controller;
-import com.gym.model.*; import com.gym.repository.*;
-import org.springframework.web.bind.annotation.*; import java.util.*;
-@RestController @RequestMapping("/api/gym") @CrossOrigin("*")
+import com.gym.model.*; import com.gym.repository.*; import org.springframework.web.bind.annotation.*; import java.util.List; import java.util.Map;
+@RestController @CrossOrigin(origins="*") @RequestMapping("/api")
 public class GymController {
-  private final GymGroupRepository groups; private final AttendanceRepository attends;
-  public GymController(GymGroupRepository g, AttendanceRepository a){ this.groups=g; this.attends=a; }
-  @GetMapping("/groups") public List<GymGroup> groups(){
-    if(groups.count()==0){
-      groups.saveAll(List.of(
-        mk("Gym Stone Town - Jenga Mwili","Kocha Juma","Jumatatu - Jumamosi","5:00 Asubuhi - 9:00 Jioni",30000,25,"🏋️","Kujenga misuli • Vifaa vyote • Kocha binafsi","#FFD400"),
-        mk("Gym Mjini - Punguza Uzito","Kocha Amina","Jumatatu, Jumatano, Ijumaa","6:00 Asubuhi • 6:00 Jioni",30000,18,"🔥","Punguza uzito • Cardio • Mpango wa chakula","#FF6B00"),
-        mk("Gym Forodhani - Wanawake Tu","Kocha Fatma","Jumanne, Alhamisi, Jumamosi","6:00 Jioni - 8:00 Jioni",25000,12,"🧘","Wanawake tu • Yoga • Aerobics • Faragha","#FF69B4"),
-        mk("Gym Mjini Magharibi - Wanaume Tu","Kocha Ali","Kila Siku","5:00 Asubuhi - 10:00 Jioni",30000,22,"💪","Wanaume tu • Ngumi • Kujenga mwili","#00D4FF")
-      ));
+    private final MemberRepository members; private final PaymentRepository payments; private final AttendanceRepository attendance;
+    public GymController(MemberRepository m, PaymentRepository p, AttendanceRepository a){ this.members=m; this.payments=p; this.attendance=a; }
+    @GetMapping("/members") public List<Member> allMembers(){ return members.findAll(); }
+    @PostMapping("/members") public Member addMember(@RequestBody Member m){ return members.save(m); }
+    @GetMapping("/payments") public List<Payment> allPayments(){ return payments.findAll(); }
+    @PostMapping("/payments") public Payment addPayment(@RequestBody Payment p){ return payments.save(p); }
+    @GetMapping("/gym/attendance") public List<Attendance> allAttendance(){ return attendance.findAll(); }
+    @PostMapping("/gym/attendance") public Attendance checkIn(@RequestBody Attendance a){ return attendance.save(a); }
+    @GetMapping("/health") public String health(){ return "Gym Zanzibar API is running"; }
+    @GetMapping("/gym/groups") public List<Map<String,Object>> groups(){
+        return List.of(
+            Map.of("name","Gym Stone Town - Jenga Mwili","coach","Kocha Juma","days","Jumatatu - Jumamosi","timeSlot","5:00 Asubuhi - 9:00 Jioni","price",30000,"membersCount",25,"emoji","🏋️","description","Kujenga misuli","color","#FFD400"),
+            Map.of("name","Gym Mjini - Punguza Uzito","coach","Kocha Amina","days","Jumatatu, Jumatano, Ijumaa","timeSlot","6:00 Asubuhi • 6:00 Jioni","price",30000,"membersCount",18,"emoji","🔥","description","Punguza uzito","color","#FF6B00"),
+            Map.of("name","Gym Forodhani - Wanawake Tu","coach","Kocha Fatma","days","Jumanne, Alhamisi, Jumamosi","timeSlot","6:00 Jioni - 8:00 Jioni","price",25000,"membersCount",12,"emoji","🧘","description","Wanawake tu","color","#FF69B4"),
+            Map.of("name","Gym Mjini Magharibi - Wanaume Tu","coach","Kocha Ali","days","Kila Siku","timeSlot","5:00 Asubuhi - 10:00 Jioni","price",30000,"membersCount",22,"emoji","💪","description","Wanaume tu","color","#00D4FF")
+        );
     }
-    return groups.findAll();
-  }
-  private GymGroup mk(String n,String c,String d,String t,Integer p,Integer m,String e,String desc,String col){ GymGroup g=new GymGroup(); g.setName(n); g.setCoach(c); g.setDays(d); g.setTimeSlot(t); g.setPrice(p); g.setMembersCount(m); g.setEmoji(e); g.setDescription(desc); g.setColor(col); return g; }
-  @PostMapping("/attendance") public Attendance attend(@RequestBody Map<String,String> b){ Attendance a=new Attendance(); a.setMemberName(b.get("memberName")); a.setGroupName(b.get("groupName")); return attends.save(a); }
-  @GetMapping("/attendance") public List<Attendance> allAttend(){ return attends.findAllByOrderByCreatedAtDesc(); }
-  @PostMapping("/join") public Map<String,Object> join(@RequestBody Map<String,String> b){ return Map.of("success",true,"message","Umejiunga na "+b.get("groupName")); }
 }
