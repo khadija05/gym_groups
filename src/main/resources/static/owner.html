@@ -36,8 +36,8 @@ input,select{width:100%;padding:14px;border:1px solid #333;border-radius:14px;ma
 <h3 style="margin:14px 0 6px">➕ Sajili Admin Mpya</h3>
 <div class="card">
 <input id="aName" placeholder="Jina la Admin">
-<input id="aUser" placeholder="Username ya Admin">
-<input id="aPhone" placeholder="Simu ya Admin">
+<input id="aUser" placeholder="Username ya Admin - lazima iwe mpya">
+<input id="aPhone" placeholder="Simu ya Admin - lazima iwe mpya">
 <input id="aPass" type="password" placeholder="Password ya Admin">
 <select id="aGroup">
 <option>Gym Stone Town - Jenga Mwili</option>
@@ -71,16 +71,16 @@ input,select{width:100%;padding:14px;border:1px solid #333;border-radius:14px;ma
 
 <script>
 const API_URL='https://gym-groups.onrender.com';
-let owner=JSON.parse(localStorage.getItem('gym_user')||'null');
+let owner = JSON.parse(localStorage.getItem('gym_user')||'null');
+console.log('Owner kutoka localStorage:', owner);
+if(owner && !owner.id && owner.user){ owner = owner.user; localStorage.setItem('gym_user', JSON.stringify(owner)); }
 
-// POPUP + MSG - LAZIMA ZIWE HAPA JUU
 function showPopup(t,m,icon='✅'){ document.getElementById('popupTitle').textContent=t; document.getElementById('popupMsg').textContent=m; document.getElementById('popupIcon').textContent=icon; document.getElementById('popupModal').classList.add('show'); }
 function closePopup(){ document.getElementById('popupModal').classList.remove('show'); }
 function showMsg(id,txt,ok=true){ let el=document.getElementById(id); el.textContent=txt; el.className='msg '+(ok?'ok':'err'); el.style.display='block'; }
 function clearOwnerForm(){ ['oName','oUser','oPhone','oPass'].forEach(id=>document.getElementById(id).value=''); }
 function clearAdminForm(){ ['aName','aUser','aPhone','aPass'].forEach(id=>document.getElementById(id).value=''); document.getElementById('aFee').value='50000'; }
 
-// REGISTER OWNER - IMEFIXWA
 async function registerOwner(){
   let btn=document.getElementById('oBtn');
   let statusEl=document.getElementById('oStatus');
@@ -111,45 +111,63 @@ async function registerOwner(){
   btn.disabled=false; btn.textContent='👑 Jisajili kama Owner →';
 }
 
-// REGISTER ADMIN - IMEFIXWA KABISA - SASA INALETA UJUMBE
+// OWNER ANASAJILI ADMIN - IMEFIXWA KABISA
 async function registerAdmin(){
   let btn=document.getElementById('aBtn');
   let statusEl=document.getElementById('aStatus');
-  let b={ ownerId:owner ? owner.id : null, name:document.getElementById('aName').value.trim(), username:document.getElementById('aUser').value.trim(), phone:document.getElementById('aPhone').value.trim(), password:document.getElementById('aPass').value, gymGroup:document.getElementById('aGroup').value, monthlyFee:document.getElementById('aFee').value };
 
-  if(!owner){ showPopup('🔒 Ingia Kwanza','Ingia kama Owner kwanza ili usajili Admin.','🔒'); location.href='login.html'; return; }
-  if(!b.name||!b.username||!b.password){
-    showMsg('aMsg','⚠️ Jaza Jina, Username na Password!',false);
-    showPopup('⚠️ Haijakamilika','Jaza Jina, Username na Password ya Admin kwanza.','⚠️');
+  console.log('Owner aliyeingia:', owner);
+
+  if(!owner || !owner.id){
+    showPopup('🔒 Ingia Kwanza','Wewe hujaingia kama Owner. Ingia kwanza.','🔒');
+    alert('🔒 Ingia kwanza kama Owner.\n\nNenda login.html, ingia na username ya Owner.');
+    location.href='login.html';
     return;
   }
-  if(b.password.length<4){ showMsg('aMsg','⚠️ Password iwe angalau herufi 4',false); return; }
+  if(owner.role !== 'OWNER'){
+    showPopup('❌ Sio Owner','Wewe umeingia kama '+owner.role+', sio OWNER. Toka, ingia kama Owner.','❌');
+    alert('❌ Wewe sio Owner. Uko kama '+owner.role);
+    return;
+  }
+
+  let b={ ownerId: owner.id, name:document.getElementById('aName').value.trim(), username:document.getElementById('aUser').value.trim(), phone:document.getElementById('aPhone').value.trim(), password:document.getElementById('aPass').value, gymGroup:document.getElementById('aGroup').value, monthlyFee:document.getElementById('aFee').value || 50000 };
+  console.log('Ninatuma Admin:', b);
+
+  if(!b.name||!b.username||!b.password||!b.phone){
+    showMsg('aMsg','⚠️ Jaza Jina, Username, Simu na Password zote!',false);
+    alert('⚠️ Jaza Jina, Username, Simu na Password zote!');
+    return;
+  }
+  if(b.password.length<4){ showMsg('aMsg','⚠️ Password iwe angalau herufi 4',false); alert('⚠️ Password iwe angalau herufi 4'); return; }
+  if(b.phone.length<10){ showMsg('aMsg','⚠️ Simu sio sahihi. Andika 077... au 088...',false); alert('⚠️ Simu sio sahihi'); return; }
 
   btn.disabled=true; btn.textContent='⏳ Inatuma... Subiri...'; statusEl.textContent='⏳ Inamtuma Admin kwa server...';
   showMsg('aMsg','⏳ Inatuma... subiri sekunde chache',true);
 
   try{
-    console.log('Ninatuma Admin:', b);
     let r=await fetch(API_URL+'/api/auth/register-admin',{method:'POST',headers:{'Content-Type':'application/json'},body:JSON.stringify(b)});
-    console.log('Status:', r.status);
+    console.log('Status ya server:', r.status);
     let d=await r.json();
-    console.log('Majibu:', d);
+    console.log('Majibu ya server:', d);
     if(d.success){
       clearAdminForm();
       showMsg('aMsg','✅ Admin '+b.name+' amesajiliwa!',true);
       statusEl.textContent='✅ Amefanikiwa - Anaweza kuingia sasa';
       showPopup('✅ Admin Amesajiliwa!','Admin '+b.name+' ('+b.username+')\n\nGroup: '+b.gymGroup+'\nAda: '+b.monthlyFee+' TZS\n\nSasa anaweza kuingia kwa username na password yake.','✅');
+      alert('✅ Admin Amesajiliwa!\n\nJina: '+b.name+'\nUsername: '+b.username+'\nSimu: '+b.phone+'\nGroup: '+b.gymGroup);
       loadOwner();
     } else {
       showMsg('aMsg','❌ '+(d.message||'Imeshindikana'),false);
       statusEl.textContent='❌ Imeshindikana';
-      showPopup('❌ Imeshindikana', d.message || 'Username au Simu hii tayari inatumika. Jaribu username nyingine.', '❌');
+      showPopup('❌ Imeshindikana', d.message || 'Username au Simu tayari inatumika. Jaribu username nyingine.', '❌');
+      alert('❌ Imeshindikana\n\nSababu: '+(d.message||'Haijulikani')+'\n\nSuluhisho: Badilisha Username na Simu ziwe mpya kabisa.');
     }
   }catch(e){
     console.log('Error:', e);
     showMsg('aMsg','❌ Backend haijapatikana. Subiri sekunde 30 jaribu tena.',false);
     statusEl.textContent='❌ Backend haijapatikana';
-    showPopup('❌ Backend Haijapatikana','Server imelala. Subiri sekunde 30, kisha jaribu tena.\n\nError: '+e.message,'❌');
+    showPopup('❌ Backend Haijapatikana','Server imelala. Subiri sekunde 30, refresh, jaribu tena.\n\nError: '+e.message,'❌');
+    alert('❌ Backend Haijapatikana\n\nSubiri sekunde 30 jaribu tena.');
   }
   btn.disabled=false; btn.textContent='➕ Sajili Admin →';
 }
