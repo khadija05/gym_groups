@@ -1,9 +1,8 @@
 package com.gym.repository;
-import com.gym.model.Payment;
+import com.gym.model.AdminPayment;
 import org.springframework.data.jpa.repository.JpaRepository;
 import java.util.List;
-public interface PaymentRepository extends JpaRepository<Payment, Long> {
-List<Payment> findByUserId(Long userId);
-List<Payment> findByMemberId(Long memberId);
-List<Payment> findByStatus(String status);
+public interface AdminPaymentRepository extends JpaRepository<AdminPayment, Long>{
+List<AdminPayment> findByAdminId(Long adminId);
+List<AdminPayment> findByStatus(String status);
 }
