@@ -65,14 +65,48 @@ User u=new User(); u.setName((String)b.get("name")); u.setUsername(username); u.
 Object cb=b.get("createdBy"); if(cb!=null) try{u.setCreatedBy(Long.parseLong(cb.toString()));}catch(Exception e){}
 userRepo.save(u); Map<String,Object> out=toMap(u); out.put("message","Member amesajiliwa, subiri akubaliwe"); return out;
 }
-
 @PostMapping("/login")
 public Map<String,Object> login(@RequestBody Map<String,String> b){
-Map<String,Object> res=new HashMap<>();
-Optional<User> opt=userRepo.findByUsername(b.get("username"));
-if(opt.isEmpty()){res.put("success",false);res.put("message","Username haipo");return res;}
-User u=opt.get(); if(!u.getPassword().equals(b.get("password"))){res.put("success",false);res.put("message","Password sio sahihi");return res;}
-if("locked".equals(u.getStatus())){res.put("success",false);res.put("message","Akaunti imefungwa - wasiliana na Owner");return res;}
-Map<String,Object> out=toMap(u); out.put("message","Karibu "+u.getName()); return out;
+    Map<String,Object> res=new HashMap<>();
+    String input = b.get("username");
+    if(input==null) input = b.get("phone");
+    if(input==null || input.isBlank()){
+        res.put("success",false);
+        res.put("message","Username au Simu inahitajika");
+        return res;
+    }
+    input = input.trim();
+
+    // Jaribu username kwanza (bila kujali kubwa/ndogo), halafu simu
+    Optional<User> opt = userRepo.findByUsernameIgnoreCase(input);
+    if(opt.isEmpty()){
+        opt = userRepo.findByPhone(input);
+    }
+    if(opt.isEmpty()){
+        // Jaribu kama input ni simu iliyotumwa kama username
+        String phone = b.get("phone");
+        if(phone!=null && !phone.isBlank()){
+            opt = userRepo.findByPhone(phone.trim());
+        }
+    }
+    if(opt.isEmpty()){
+        res.put("success",false);
+        res.put("message","Akaunti haipo kwa '"+input+"'. Jaribu kujisajili tena au hakikisha umeandika username sahihi.");
+        return res;
+    }
+    User u=opt.get();
+    if(!u.getPassword().equals(b.get("password"))){
+        res.put("success",false);
+        res.put("message","Password sio sahihi kwa '"+input+"'");
+        return res;
+    }
+    if("locked".equals(u.getStatus())){
+        res.put("success",false);
+        res.put("message","Akaunti imefungwa - wasiliana na Owner");
+        return res;
+    }
+    Map<String,Object> out=toMap(u);
+    out.put("message","Karibu "+u.getName());
+    return out;
 }
 }
