@@ -1,33 +1,57 @@
-<!DOCTYPE html><html lang="sw"><head><meta charset="UTF-8"><meta name="viewport" content="width=device-width,initial-scale=1"><title>Ingia - GYM</title>
+<!DOCTYPE html><html lang="sw"><head><meta charset="UTF-8"><meta name="viewport" content="width=device-width,initial-scale=1,maximum-scale=1"><title>Ingia - GYM Zanzibar</title>
 <style>
 *{box-sizing:border-box;margin:0;padding:0;font-family:'Segoe UI',system-ui}
 body{background:#0B0B0F;color:#fff;min-height:100vh;display:flex;align-items:center;justify-content:center;padding:14px}
-.box{width:100%;max-width:440px;background:#16161C;border:1px solid #2A2A32;padding:28px;border-radius:28px}
-h2{font-size:26px;text-align:center} .sub{text-align:center;color:#888;font-size:13px;margin:6px 0 16px}
+.box{width:100%;max-width:440px;background:#16161C;border:1px solid #2A2A32;padding:28px;border-radius:28px;box-shadow:0 20px 60px rgba(0,0,0,.5)}
+h2{font-size:clamp(22px,5vw,26px);text-align:center}.sub{text-align:center;color:#888;font-size:13px;margin:6px 0 16px;line-height:1.5}
 label{font-size:13px;color:#aaa}
 input{width:100%;padding:15px;border:1px solid #333;border-radius:14px;margin:6px 0 12px;background:#111;color:#fff;font-size:16px;outline:none}input:focus{border-color:#FFD400}
-.btn{width:100%;padding:15px;border:none;border-radius:999px;font-weight:800;cursor:pointer;font-size:15px;margin-top:6px}.btn-yellow{background:linear-gradient(135deg,#FFD400,#FFAA00);color:#000}.btn-dark{background:#222;color:#fff}
-.msg{padding:12px;border-radius:12px;font-size:13px;margin:10px 0;display:none;text-align:center}.msg.err{display:block;background:#FF2D0022;color:#FF6B6B;border:1px solid #FF2D00}
+.btn{width:100%;padding:15px;border:none;border-radius:999px;font-weight:800;cursor:pointer;font-size:15px;margin-top:6px}.btn-yellow{background:linear-gradient(135deg,#FFD400,#FFAA00);color:#000}.btn-dark{background:#222;color:#fff;border:1px solid #333}.btn:disabled{opacity:.6}
+.msg{padding:12px;border-radius:12px;font-size:13px;margin:10px 0;display:none;text-align:center;line-height:1.5;white-space:pre-line}.msg.err{display:block;background:#FF2D0022;color:#FF6B6B;border:1px solid #FF2D00}.msg.ok{display:block;background:#25D36622;color:#25D366;border:1px solid #25D366}
 .links{text-align:center;margin-top:14px;font-size:13px;line-height:2}.links a{color:#FFD400;text-decoration:none}
+.debug{margin-top:10px;font-size:11px;color:#666;text-align:center;word-break:break-all}
 @media(max-width:520px){body{padding:10px;align-items:flex-start}.box{padding:20px 16px;border-radius:22px;margin-top:20px}}
 </style></head><body>
 <div class="box"><div style="text-align:center;font-size:52px">🔑</div><h2>Karibu Tena</h2><p class="sub">Owner / Admin / Member — ingia uende kwenye Dashboard yako</p>
-<label>Username</label><input id="u" placeholder="mfano: ali123" autocomplete="username">
+<label>Username au Simu</label><input id="u" placeholder="mfano: khadija05 au 077..." autocomplete="username">
 <label>Password</label><input id="p" type="password" placeholder="••••••••" autocomplete="current-password">
 <div id="msg" class="msg"></div><button class="btn btn-yellow" id="btn" onclick="doLogin()">Ingia →</button>
 <button class="btn btn-dark" onclick="location.href='index.html'">← Nyumbani</button>
-<div class="links"><a href="owner.html">Jisajili Owner</a> • <a href="register-member.html">Jisajili Member</a></div></div>
+<div class="links"><a href="owner.html">Jisajili Owner</a> • <a href="register-member.html">Jisajili Member</a></div>
+<div class="links"><a href="#" onclick="clearAll();return false" style="color:#888">🧹 Futa akaunti iliyohifadhiwa</a> • <a href="test.html" style="color:#888">🔍 Pima Backend</a></div>
+<div id="debug" class="debug"></div></div>
 <script>
-const API_URL='https://gym-groups.onrender.com';
+const API_URL='';
+function showMsg(t,ok=false){let e=document.getElementById('msg');e.textContent=t;e.className='msg '+(ok?'ok':'err');}
+function clearAll(){localStorage.removeItem('gym_user');localStorage.removeItem('gym_token');showMsg('✅ Imefutwa. Sasa ingia upya.',true);}
 async function doLogin(){
-let b={username:document.getElementById('u').value.trim(),password:document.getElementById('p').value};
-if(!b.username||!b.password){let e=document.getElementById('msg');e.textContent='Jaza username na password';e.className='msg err';return;}
-document.getElementById('btn').textContent='⏳ Inaingia...';
-try{let r=await fetch(API_URL+'/api/auth/login',{method:'POST',headers:{'Content-Type':'application/json'},body:JSON.stringify(b)}); let d=await r.json();
-if(d.success){localStorage.setItem('gym_user',JSON.stringify(d)); location.href='dashboard.html';}
-else{let e=document.getElementById('msg');e.textContent='❌ '+d.message;e.className='msg err';}
-}catch(e){let el=document.getElementById('msg');el.textContent='❌ Backend haijapatikana, subiri 30s jaribu tena';el.className='msg err';}
-document.getElementById('btn').textContent='Ingia →';
+let u=document.getElementById('u').value.trim();
+let p=document.getElementById('p').value;
+if(!u||!p){showMsg('Jaza username na password');return;}
+let btn=document.getElementById('btn'); btn.disabled=true; btn.textContent='⏳ Inaingia...';
+document.getElementById('debug').textContent='';
+let isPhone=/^[0-9+]+$/.test(u);
+let b=isPhone?{phone:u,username:u,password:p}:{username:u,phone:u,password:p};
+try{
+let r=await fetch(API_URL+'/api/auth/login',{method:'POST',headers:{'Content-Type':'application/json'},body:JSON.stringify(b)});
+let d=await r.json();
+document.getElementById('debug').textContent='Backend: '+JSON.stringify(d).substring(0,250);
+if(d.success){
+  // REKEBISHA: Weka role iwe kubwa kila wakati ili Dashboard isikukatae
+  d.role=(d.role||'MEMBER').toUpperCase();
+  localStorage.setItem('gym_user',JSON.stringify(d));
+  localStorage.setItem('gym_token','logged-in-'+Date.now());
+  showMsg('✅ Karibu '+(d.name||d.username)+'! Inaelekea...',true);
+  setTimeout(()=>{ location.href='dashboard.html'; },800);
+  return;
+}
+if(d.error==='NOT_FOUND') showMsg('❌ Akaunti haipo kwa "'+u+'"\nJaribu Username EXACT uliyojisajilia nayo.\nMfano: khadija05 sio Khadija05');
+else if(d.error==='WRONG_PASSWORD') showMsg('❌ Password si sahihi kwa "'+u+'"');
+else if(d.error==='NOT_APPROVED') showMsg('⏳ Akaunti IPO lakini haijakubaliwa.\nWewe ni Owner? Tutakuingiza tu kwenye Dashboard ukajikubali mwenyewe.');
+else if(d.error==='LOCKED'||d.error==='EXPIRED') showMsg('🔒 '+(d.message||'Akaunti imefungwa / muda umeisha.'));
+else showMsg('❌ '+(d.message||d.error||'Imeshindikana'));
+}catch(e){showMsg('❌ Backend haijapatikana, subiri 30s jaribu tena\n'+e.message);}
+btn.disabled=false; btn.textContent='Ingia →';
 }
 document.getElementById('p').addEventListener('keypress',e=>{if(e.key==='Enter')doLogin();});
 </script></body></html>
