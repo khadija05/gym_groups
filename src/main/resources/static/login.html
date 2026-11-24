@@ -13,30 +13,21 @@ input{width:100%;padding:15px;border:1px solid #333;border-radius:14px;margin:6p
 @media(max-width:520px){body{padding:10px;align-items:flex-start}.box{padding:20px 16px;border-radius:22px;margin-top:20px}}
 </style></head><body>
 <div class="box"><div style="text-align:center;font-size:52px">🔑</div><h2>Karibu Tena</h2><p class="sub">Owner / Admin / Member — ingia uende kwenye Dashboard yako</p>
-<label>Username au Simu</label><input id="u" placeholder="mfano: khadija05" autocomplete="username">
+<label>Username</label><input id="u" placeholder="mfano: khadija05" autocomplete="username">
 <label>Password</label><input id="p" type="password" placeholder="••••••••" autocomplete="current-password">
 <div id="msg" class="msg"></div>
 <button class="btn btn-yellow" id="btn" onclick="doLogin()">Ingia →</button>
 <button class="btn btn-green" id="wakeBtn" onclick="wakeBackend()">⏰ Amsha Backend Kwanza (Subiri 50s) →</button>
 <button class="btn btn-dark" onclick="location.href='index.html'">← Nyumbani</button>
-<div class="links"><a href="owner.html">Jisajili Owner</a> • <a href="register-member.html">Jisajili Member</a></div>
-<div class="links"><a href="#" onclick="clearAll();return false" style="color:#888">🧹 Futa akaunti iliyohifadhiwa</a></div>
+<div class="links"><a href="register-member.html">Huna akaunti? Jisajili Member →</a></div>
 <div id="debug" class="debug"></div></div>
 <script>
-// MUHIMU: Kwa sababu unafungua kupitia Vercel, lazima API iwe ya Render moja kwa moja
 const API_URL='https://gym-groups.onrender.com';
 function showMsg(t,ok=false){let e=document.getElementById('msg');e.textContent=t;e.className='msg '+(ok?'ok':'err');}
-function clearAll(){localStorage.removeItem('gym_user');localStorage.removeItem('gym_token');showMsg('✅ Imefutwa. Sasa ingia upya.',true);}
 async function wakeBackend(){
   let b=document.getElementById('wakeBtn'); b.disabled=true; b.textContent='⏳ Inaamsha Backend... subiri 50s';
-  showMsg('⏳ Backend ya Render imelala (Free Plan).\nInaamka sasa... Subiri sekunde 50 usibonyeze chochote.',true);
-  try{
-    let r=await fetch(API_URL+'/api/health',{cache:'no-store'});
-    let t=await r.text();
-    document.getElementById('debug').textContent='Health: '+t.substring(0,200);
-    if(r.ok) showMsg('✅ Backend Imeamka! Sasa bonyeza Ingia.',true);
-    else showMsg('⚠️ Backend imeamka lakini inajibu: '+t.substring(0,150));
-  }catch(e){ showMsg('❌ Bado inaamka. Subiri sekunde 30 tena ubonyeze Amsha tena.\n'+e.message); }
+  showMsg('⏳ Backend ya Render imelala (Free Plan).\nInaamka sasa... Subiri sekunde 50.',true);
+  try{ let r=await fetch(API_URL+'/api/health',{cache:'no-store'}); let t=await r.text(); document.getElementById('debug').textContent='Health: '+t.substring(0,200); if(r.ok) showMsg('✅ Backend Imeamka! Sasa bonyeza Ingia.',true); else showMsg('⚠️ Backend: '+t.substring(0,150)); }catch(e){ showMsg('❌ Bado inaamka. Subiri 30s bonyeza tena.'); }
   b.disabled=false; b.textContent='⏰ Amsha Backend Kwanza (Subiri 50s) →';
 }
 async function doLogin(){
@@ -45,36 +36,23 @@ let p=document.getElementById('p').value;
 if(!u||!p){showMsg('Jaza username na password');return;}
 let btn=document.getElementById('btn'); btn.disabled=true; btn.textContent='⏳ Inaingia...';
 document.getElementById('debug').textContent='';
-let isPhone=/^[0-9+]+$/.test(u);
-let b=isPhone?{phone:u,username:u,password:p}:{username:u,phone:u,password:p};
 try{
-let r=await fetch(API_URL+'/api/auth/login',{method:'POST',headers:{'Content-Type':'application/json'},body:JSON.stringify(b)});
-// REKEBISHA KUBWA: Soma kama TEXT kwanza, sio JSON moja kwa moja
+let r=await fetch(API_URL+'/api/auth/login',{method:'POST',headers:{'Content-Type':'application/json'},body:JSON.stringify({username:u,password:p})});
 let txt=await r.text();
 document.getElementById('debug').textContent='Status: '+r.status+' | Jibu: '+txt.substring(0,300);
-// Kama Backend amerudisha HTML "The page..." maana yake Backend imelala au URL sio sahihi
-if(txt.trim().startsWith('<') || txt.startsWith('The page')){
-  showMsg('❌ Backend imelala au URL si sahihi.\n\n1. Bonyeza "⏰ Amsha Backend" juu hapo\n2. Subiri sekunde 50\n3. Halafu bonyeza Ingia tena');
-  btn.disabled=false; btn.textContent='Ingia →'; return;
-}
-let d={};
-try{ d=JSON.parse(txt); }catch(e){ showMsg('❌ Backend amerudisha kitu sio JSON:\n'+txt.substring(0,200)); btn.disabled=false; btn.textContent='Ingia →'; return; }
+if(txt.trim().startsWith('<')||txt.startsWith('The page')){ showMsg('❌ Backend imelala.\n1. Bonyeza "⏰ Amsha Backend"\n2. Subiri 50s\n3. Bonyeza Ingia tena'); btn.disabled=false; btn.textContent='Ingia →'; return; }
+let d={}; try{d=JSON.parse(txt);}catch(e){ showMsg('❌ Backend amerudisha: '+txt.substring(0,200)); btn.disabled=false; btn.textContent='Ingia →'; return; }
 if(d.success){
   d.role=(d.role||'MEMBER').toUpperCase();
   localStorage.setItem('gym_user',JSON.stringify(d));
   localStorage.setItem('gym_token','logged-in-'+Date.now());
   showMsg('✅ Karibu '+(d.name||d.username)+'! Inaelekea...',true);
-  setTimeout(()=>{ location.href='dashboard.html'; },800);
-  return;
+  setTimeout(()=>{ location.href='dashboard.html'; },800); return;
 }
-if(d.error==='NOT_FOUND') showMsg('❌ Akaunti haipo kwa "'+u+'"\nAndika Username EXACT: khadija05');
-else if(d.error==='WRONG_PASSWORD') showMsg('❌ Password si sahihi kwa "'+u+'"');
-else if(d.error==='NOT_APPROVED') showMsg('⏳ Akaunti IPO lakini haijakubaliwa. Utakubaliwa kwenye Dashboard.');
-else showMsg('❌ '+(d.message||d.error||'Imeshindikana'));
-}catch(e){showMsg('❌ Backend haijapatikana, imelala.\nBonyeza "⏰ Amsha Backend" kwanza, subiri 50s, halafu Ingia tena.\n'+e.message);}
+showMsg('❌ '+(d.message||'Imeshindikana'));
+}catch(e){showMsg('❌ Backend haijapatikana, imelala.\nBonyeza "⏰ Amsha Backend" kwanza, subiri 50s.');}
 btn.disabled=false; btn.textContent='Ingia →';
 }
 document.getElementById('p').addEventListener('keypress',e=>{if(e.key==='Enter')doLogin();});
-// Jaribu kuamsha Backend yenyewe ukifungua ukurasa
 fetch(API_URL+'/api/health').catch(()=>{});
 </script></body></html>
