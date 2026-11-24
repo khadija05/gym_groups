@@ -1,107 +1,75 @@
-<!DOCTYPE html><html lang="sw"><head><meta charset="UTF-8"><meta name="viewport" content="width=device-width,initial-scale=1"><title>Dashboard - GYM</title>
+<!DOCTYPE html><html lang="sw"><head><meta charset="UTF-8"><meta name="viewport" content="width=device-width,initial-scale=1,maximum-scale=1"><title>Dashboard - GYM Zanzibar</title>
 <style>
 *{box-sizing:border-box;margin:0;padding:0;font-family:'Segoe UI',system-ui}
-body{background:#0B0B0F;color:#fff;min-height:100vh}
-.top{position:sticky;top:0;z-index:10;background:#111;border-bottom:1px solid #2A2A32;padding:12px 16px;display:flex;justify-content:space-between;align-items:center;gap:10px}
-.logo{font-weight:900;font-size:18px;white-space:nowrap}.logo span{color:#FFD400}
-.userbox{display:flex;align-items:center;gap:10px;font-size:13px}
-.avatar{width:38px;height:38px;border-radius:50%;background:#FFD400;color:#000;display:flex;align-items:center;justify-content:center;font-weight:900;font-size:18px;flex-shrink:0}
-.badge{font-size:11px;padding:4px 8px;border-radius:999px;background:#222;border:1px solid #333}
-.wrap{max-width:1100px;margin:0 auto;padding:16px;display:grid;grid-template-columns:240px 1fr;gap:14px;align-items:start}
-.sidebar{background:#16161C;border:1px solid #2A2A32;border-radius:22px;padding:14px;position:sticky;top:68px}
-.sidebar h3{font-size:13px;color:#888;margin-bottom:10px;text-transform:uppercase;letter-spacing:.5px}
-.menu-btn{width:100%;text-align:left;padding:13px 14px;border:none;border-radius:14px;background:transparent;color:#fff;cursor:pointer;font-size:14px;display:flex;gap:10px;align-items:center;margin:3px 0}
-.menu-btn:hover{background:#222}.menu-btn.active{background:#FFD400;color:#000;font-weight:800}
-.main{background:#16161C;border:1px solid #2A2A32;border-radius:22px;padding:20px;min-height:400px}
-.stats{display:grid;grid-template-columns:repeat(4,1fr);gap:10px;margin:12px 0}
-.stat{background:#111;border:1px solid #26262E;padding:16px;border-radius:18px;text-align:center}.stat b{color:#FFD400;font-size:22px;display:block}.stat span{font-size:12px;color:#aaa}
-input,select{width:100%;padding:13px;border:1px solid #333;border-radius:13px;margin:6px 0;background:#111;color:#fff;font-size:15px;outline:none}input:focus{border-color:#FFD400}
-.btn{padding:13px 18px;border:none;border-radius:999px;font-weight:800;cursor:pointer;font-size:14px;margin:4px 2px}.btn-yellow{background:linear-gradient(135deg,#FFD400,#FFAA00);color:#000}.btn-green{background:linear-gradient(135deg,#25D366,#00B84D);color:#fff}.btn-red{background:#FF2D00;color:#fff}.btn-dark{background:#222;color:#fff}.btn-full{width:100%}
-.card{background:#111;padding:16px;border-radius:18px;margin:10px 0;border:1px solid #26262E}
+body{background:#0B0B0F;color:#fff;padding:14px}
+.top{max-width:1100px;margin:0 auto;display:flex;justify-content:space-between;align-items:center;gap:10px;flex-wrap:wrap;margin-bottom:14px}
+.logo{font-size:19px;font-weight:900}.logo span{color:#FFD400}
+.btn{padding:10px 16px;border:none;border-radius:999px;font-weight:800;cursor:pointer;font-size:13px;white-space:nowrap}.btn-yellow{background:#FFD400;color:#000}.btn-green{background:#25D366;color:#fff}.btn-red{background:#FF2D00;color:#fff}.btn-dark{background:#222;color:#fff;border:1px solid #333}
+.wrap{max-width:1100px;margin:0 auto}
+.welcome{background:linear-gradient(135deg,#FFD400,#FF6B00);color:#000;padding:18px;border-radius:20px;display:flex;justify-content:space-between;gap:12px;flex-wrap:wrap;align-items:center}
+.stats{display:grid;grid-template-columns:repeat(4,1fr);gap:12px;margin:14px 0}.stat{background:#161616;border:1px solid #2A2A2A;padding:16px;border-radius:18px;text-align:center}.stat b{font-size:clamp(18px,4vw,26px);color:#FFD400;display:block}
+.card{background:#161616;border:1px solid #2A2A2A;padding:16px;border-radius:20px;margin:12px 0}
+input,select{width:100%;padding:12px;background:#111;color:#fff;border:1px solid #333;border-radius:12px;margin:6px 0;font-size:14px}
+.row{display:flex;gap:10px;flex-wrap:wrap}.row>*{flex:1;min-width:140px}
+.member{background:#111;padding:13px;border-radius:14px;margin:8px 0;display:flex;justify-content:space-between;gap:10px;flex-wrap:wrap}
+.badge{padding:4px 10px;border-radius:999px;font-size:11px;font-weight:800}.b-active{background:#25D36622;color:#25D366}.b-pending{background:#FFD40022;color:#FFD400}.b-locked{background:#FF2D0022;color:#FF2D00}
+.tabs{display:flex;gap:8px;overflow-x:auto;padding-bottom:4px}.tabs button{padding:11px 18px;border-radius:999px;border:1px solid #333;background:#161616;color:#fff;cursor:pointer;font-weight:700;white-space:nowrap}.tabs button.active{background:#FFD400;color:#000}
 .msg{padding:12px;border-radius:12px;font-size:13px;margin:10px 0;display:none;text-align:center}.msg.ok{display:block;background:#25D36622;color:#25D366;border:1px solid #25D366}.msg.err{display:block;background:#FF2D0022;color:#FF6B6B;border:1px solid #FF2D00}
-.mob-menu{display:none}
-@media(max-width:820px){.wrap{grid-template-columns:1fr}.sidebar{position:static}.stats{grid-template-columns:repeat(2,1fr)}}
-@media(max-width:520px){
-.top{padding:10px}.logo{font-size:16px}.userbox .name{display:none}
-.wrap{padding:10px;gap:10px}.main{padding:14px;border-radius:18px}.sidebar{padding:12px}
-.mob-menu{display:flex;gap:8px;overflow-x:auto;padding:6px 10px;background:#111;border-bottom:1px solid #222;position:sticky;top:58px;z-index:9}
-.mob-menu button{flex-shrink:0;padding:10px 14px;border-radius:999px;border:1px solid #333;background:#1A1A22;color:#fff;font-size:13px;white-space:nowrap}
-.mob-menu button.active{background:#FFD400;color:#000;font-weight:800;border-color:#FFD400}
-.sidebar{display:none}
-}
+.empty{text-align:center;color:#888;padding:20px}
+@media(max-width:760px){.stats{grid-template-columns:repeat(2,1fr)}.member{flex-direction:column}}
+@media(max-width:420px){.stats{grid-template-columns:1fr 1fr}.top{flex-direction:column;align-items:flex-start}}
 </style></head><body>
-<div class="top"><div class="logo">🏋️ GYM <span>Zanzibar</span></div><div class="userbox"><span class="name" id="topName"></span><span class="badge" id="topRole"></span><div class="avatar" id="avatar">A</div><button class="btn btn-red" style="padding:9px 14px" onclick="logout()">Toka</button></div></div>
-<div class="mob-menu" id="mobMenu"></div>
+<div class="top"><div class="logo">💪 GYM <span>ZANZIBAR</span> • <span id="roleLabel">Dashboard</span></div><div style="display:flex;gap:8px;flex-wrap:wrap"><span id="userTop" style="font-size:13px;color:#aaa;align-self:center"></span><a href="index.html" class="btn btn-dark">🏠 Home</a><button class="btn btn-yellow" onclick="loadDash()">🔄 Onyesha Upya</button><button class="btn btn-red" onclick="logout()">Toka</button></div></div>
 <div class="wrap">
-<div class="sidebar"><h3>📋 Menu</h3><div id="sideMenu"></div><hr style="border:1px solid #222;margin:12px 0"><button class="btn btn-dark btn-full" onclick="location.href='index.html'">🏠 Nyumbani</button></div>
-<div class="main"><div id="content"></div></div>
+<div class="welcome"><div><h2 id="hello">Karibu 👋</h2><p id="userInfo">Inapakia...</p></div><div style="background:rgba(0,0,0,.2);padding:10px 14px;border-radius:14px;text-align:center"><b id="todayCount" style="font-size:22px">0</b><br><span style="font-size:11px">Wamefika Leo</span></div></div>
+<div id="ownerBanner" style="display:none;background:#FFD40022;border:1px solid #FFD400;padding:14px;border-radius:16px;margin-top:14px"><b>👑 Wewe ni OWNER</b><br><span style="font-size:13px;color:#ccc">Unaweza kukubali Member, kufunga, na kusajili Admin hapa chini.</span></div>
+<div class="stats"><div class="stat"><b id="sMembers">0</b><span>Wanachama</span></div><div class="stat"><b id="sPending">0</b><span>Wanasubiri</span></div><div class="stat"><b id="sActive">0</b><span>Active</span></div><div class="stat"><b id="sAttend">0</b><span>Mahudhurio</span></div></div>
+<div class="tabs"><button id="tab-members" class="active" onclick="showTab('members')">👥 Wanachama</button><button id="tab-add" onclick="showTab('add')">➕ Sajili Member</button><button id="tab-attend" onclick="showTab('attend')">✅ Mahudhurio</button></div>
+<div id="sec-members" class="card"><div class="row"><input id="q" placeholder="🔍 Tafuta jina / simu..." oninput="renderMembers()"><select id="fStatus" onchange="renderMembers()"><option value="">Status Zote</option><option value="active">Active</option><option value="pending">Pending</option><option value="waiting-payment">Waiting Payment</option><option value="locked">Locked</option></select></div><div id="memberList"></div></div>
+<div id="sec-add" class="card" style="display:none"><h3>➕ Sajili Member Mpya</h3><input id="mName" placeholder="Jina Kamili"><input id="mUser" placeholder="Username"><input id="mPhone" placeholder="Simu 077..."><input id="mPass" type="password" placeholder="Password"><select id="mGroup"><option>Gym Stone Town - Jenga Mwili</option><option>Gym Mjini - Punguza Uzito</option><option>Gym Forodhani - Wanawake Tu</option><option>Gym Mjini Magharibi - Wanaume Tu</option></select><select id="mPlan"><option value="KIDOGO">MWEZI - 30,000</option><option value="KUBWA">MWAKA - 300,000</option><option value="JARIBIO">JARIBIO - 0</option></select><div id="addMsg" class="msg"></div><button class="btn btn-green" style="width:100%" onclick="addMember()">➕ Sajili Member →</button></div>
+<div id="sec-attend" class="card" style="display:none"><h3>✅ Mahudhurio</h3><div id="attList"></div></div>
 </div>
 <script>
-const API_URL='https://gym-groups.onrender.com';
-let user=JSON.parse(localStorage.getItem('gym_user')||'null');
-if(!user||!user.role){location.href='login.html';}
-document.getElementById('topName').textContent=user.name||'';
-document.getElementById('topRole').textContent=user.role+' • '+(user.gymGroup||'');
-document.getElementById('avatar').textContent=(user.name||'A').charAt(0).toUpperCase();
-function logout(){localStorage.removeItem('gym_user');location.href='login.html';}
-function showMsg(id,txt,ok=true){let el=document.getElementById(id); if(!el) return; el.textContent=txt; el.className='msg '+(ok?'ok':'err');}
-function setActive(key){
-document.querySelectorAll('.menu-btn').forEach(b=>b.classList.toggle('active',b.dataset.key===key));
-document.querySelectorAll('#mobMenu button').forEach(b=>b.classList.toggle('active',b.dataset.key===key));
+const API_URL='';
+let user=null; let members=[]; let attends=[];
+function showTab(t){ ['members','add','attend'].forEach(x=>{ document.getElementById('sec-'+x).style.display=x===t?'block':'none'; document.getElementById('tab-'+x).classList.toggle('active',x===t); }); }
+function logout(){ localStorage.removeItem('gym_user'); localStorage.removeItem('gym_token'); location.href='login.html'; }
+function showMsg(id,txt,ok=true){let el=document.getElementById(id);el.textContent=txt;el.className='msg '+(ok?'ok':'err');}
+async function loadDash(){
+  let raw=localStorage.getItem('gym_user');
+  if(!raw){ location.href='login.html'; return; }
+  try{ user=JSON.parse(raw); }catch(e){ location.href='login.html'; return; }
+  // REKEBISHA KUBWA: Role iwe kubwa kila wakati, usimfukuze Owner
+  user.role=(user.role||'MEMBER').toString().toUpperCase().trim();
+  // Hifadhi upya ili safari nyingine isikukatae
+  localStorage.setItem('gym_user',JSON.stringify(user));
+  document.getElementById('hello').textContent='Karibu '+(user.name||user.username)+' 👋';
+  document.getElementById('userTop').textContent=user.username+' • '+user.role;
+  document.getElementById('roleLabel').textContent=user.role;
+  document.getElementById('userInfo').textContent=(user.role==='OWNER'?'Wewe ni Owner wa GYM Zanzibar':user.role==='ADMIN'?'Wewe ni Admin':'Wewe ni Member')+' • '+(user.gymGroup||'GYM Zanzibar')+' • '+(user.plan||'');
+  if(user.role==='OWNER') document.getElementById('ownerBanner').style.display='block';
+  try{ let r=await fetch(API_URL+'/api/auth/all'); if(r.ok) members=await r.json(); }catch(e){ members=[]; }
+  try{ let r=await fetch(API_URL+'/api/gym/attendance'); if(r.ok) attends=await r.json(); }catch(e){ attends=[]; }
+  document.getElementById('sMembers').textContent=members.length;
+  document.getElementById('sPending').textContent=members.filter(m=>m.status==='pending'||m.status==='waiting-payment').length;
+  document.getElementById('sActive').textContent=members.filter(m=>m.status==='active').length;
+  document.getElementById('sAttend').textContent=attends.length;
+  document.getElementById('todayCount').textContent=attends.length;
+  renderMembers(); renderAttend();
 }
-let MENUS={
-OWNER:[
-{key:'home',label:'🏠 Nyumbani'},
-{key:'admins',label:'➕ Sajili Admin'},
-{key:'adminpay',label:'⏳ Malipo ya Admin'},
-{key:'adminlist',label:'💰 Ma-Admin Wangu'},
-],
-ADMIN:[
-{key:'home',label:'🏠 Nyumbani'},
-{key:'member',label:'➕ Sajili Member'},
-{key:'pending',label:'⏳ Members Wanasubiri'},
-{key:'members',label:'👥 Members Wangu'},
-{key:'pay',label:'💰 Lipa Ada Yangu'},
-{key:'mypay',label:'📜 Malipo Yangu'},
-],
-MEMBER:[
-{key:'home',label:'🏠 Nyumbani'},
-{key:'mystatus',label:'🏋️ Status Yangu'},
-{key:'attendance',label:'📅 Mahudhurio'},
-]
-};
-let menu=MENUS[user.role]||MENUS.MEMBER;
-document.getElementById('sideMenu').innerHTML=menu.map(m=>`<button class="menu-btn" data-key="${m.key}" onclick="go('${m.key}')">${m.label}</button>`).join('');
-document.getElementById('mobMenu').innerHTML=menu.map(m=>`<button data-key="${m.key}" onclick="go('${m.key}')">${m.label}</button>`).join('');
-function go(key){ setActive(key); if(key==='home') renderHome(); if(key==='admins') renderSajiliAdmin(); if(key==='adminpay') renderAdminPay(); if(key==='adminlist') renderAdminList(); if(key==='member') renderSajiliMember(); if(key==='pending') renderPending(); if(key==='members') renderMembers(); if(key==='pay') renderPay(); if(key==='mypay') renderMyPay(); if(key==='mystatus') renderMyStatus(); if(key==='attendance') renderAttendance(); window.scrollTo({top:0,behavior:'smooth'}); }
-
-async function renderHome(){
-let html=`<h2>Karibu, ${user.name} 👋</h2><p style="color:#aaa;margin:6px 0">Role: <b style="color:#FFD400">${user.role}</b> • Group: ${user.gymGroup||'-'} • Simu: ${user.phone||''}</p>`;
-if(user.role==='OWNER'){ try{let r=await fetch(API_URL+'/api/owner/report?ownerId='+user.id); let d=await r.json(); html+=`<div class="stats"><div class="stat"><b>${d.totalUsers||0}</b><span>Watumiaji</span></div><div class="stat"><b>${d.totalAdmins||0}</b><span>Admin</span></div><div class="stat"><b>${d.totalMembers||0}</b><span>Members</span></div><div class="stat"><b>${(d.totalAmount||0).toLocaleString()}</b><span>Pesa TZS</span></div></div><div class="card">⏳ Wanasubiri: <b>${d.pendingMembers}</b> • ✅ Active: <b>${d.activeMembers}</b><br>💰 Malipo: <b>${d.totalPayments}</b> • ✅ Mahudhurio: <b>${d.totalAttendance}</b></div>`;}catch(e){html+=`<div class="card">Haijaweza kupakia report — jaribu Refresh</div>`;} }
-if(user.role==='ADMIN'){ html+=`<div class="card"><b>📌 Kumbuka:</b><br>• Ukilipa ada, Owner atakuthibitishia na akaunti yako itabaki Active mwezi mzima.<br>• Kama hujalipa, akaunti inaweza kufungwa.<br><b>Status yako:</b> ${user.status} • Subscription: ${user.subscriptionStatus||''}</div><button class="btn btn-green" onclick="go('pay')">💰 Lipa Ada Sasa →</button>`; }
-if(user.role==='MEMBER'){ html+=`<div class="card">Status: <b style="color:${user.status==='active'?'#25D366':'#FFD400'}">${user.status==='active'?'✅ Active - Unaweza kuingia Gym':user.status==='pending'?'⏳ Inasubiri Admin akukubali':'🔒 Imefungwa'}</b><br>Plan: <b>${user.plan||''}</b> • Goal: <b>${user.goal||''}</b></div>`; }
-html+=`<div style="display:flex;flex-wrap:wrap;gap:6px;margin-top:10px"><button class="btn btn-yellow" onclick="go('${menu[1]?menu[1].key:'home'}')">${menu[1]?menu[1].label:'Anza'} →</button></div>`;
-document.getElementById('content').innerHTML=html;
+function renderMembers(){
+  let q=(document.getElementById('q').value||'').toLowerCase(); let f=document.getElementById('fStatus').value;
+  let list=members.filter(m=>((m.name||'')+' '+(m.phone||'')+' '+(m.username||'')).toLowerCase().includes(q) && (!f||m.status===f));
+  document.getElementById('memberList').innerHTML=list.length?list.map(m=>`<div class="member"><div><b>${m.name||m.username}</b> • ${m.phone||''}<br><span style="color:#aaa;font-size:12px">${m.gymGroup||''} • ${m.plan||''} • ${m.expiresAt?new Date(m.expiresAt).toLocaleDateString():''}</span> <span class="badge ${m.status==='active'?'b-active':m.status==='pending'?'b-pending':'b-locked'}">${m.status||''}</span></div><div style="display:flex;gap:6px"><button class="btn btn-green" onclick="act('approve',${m.id})">✅ Kubali</button><button class="btn btn-red" onclick="act('lock',${m.id})">🔒 Funga</button></div></div>`).join(''):'<div class="empty">Hakuna wanachama bado.</div>';
 }
-function renderSajiliAdmin(){
-document.getElementById('content').innerHTML=`<h2>➕ Sajili Admin Mpya</h2><div class="card"><input id="aName" placeholder="Jina la Admin"><input id="aUser" placeholder="Username ya Admin"><input id="aPhone" placeholder="Simu ya Admin"><input id="aPass" type="password" placeholder="Password ya Admin"><select id="aGroup"><option>Gym Stone Town - Jenga Mwili</option><option>Gym Mjini - Punguza Uzito</option><option>Gym Forodhani - Wanawake Tu</option><option>Gym Mjini Magharibi - Wanaume Tu</option></select><input id="aFee" type="number" value="50000"><div id="aMsg" class="msg"></div><button class="btn btn-green btn-full" onclick="doRegisterAdmin()">➕ Sajili Admin →</button></div>`;
+function renderAttend(){
+  document.getElementById('attList').innerHTML=attends.slice(0,30).map(a=>`<div style="background:#111;padding:10px;border-radius:12px;margin:6px 0;font-size:13px">💪 <b>${a.memberName||''}</b> • ${a.groupName||''} • ${a.createdAt?new Date(a.createdAt).toLocaleString('sw-TZ'):''}</div>`).join('')||'<div class="empty">Hakuna mahudhurio bado.</div>';
 }
-async function doRegisterAdmin(){let b={ownerId:user.id,name:document.getElementById('aName').value.trim(),username:document.getElementById('aUser').value.trim(),phone:document.getElementById('aPhone').value.trim(),password:document.getElementById('aPass').value,gymGroup:document.getElementById('aGroup').value,monthlyFee:document.getElementById('aFee').value||50000}; if(!b.name||!b.username||!b.password||!b.phone){showMsg('aMsg','Jaza zote',false);return;} let r=await fetch(API_URL+'/api/auth/register-admin',{method:'POST',headers:{'Content-Type':'application/json'},body:JSON.stringify(b)}); let d=await r.json(); showMsg('aMsg',d.message,d.success); if(d.success) setTimeout(()=>go('adminlist'),800);}
-async function renderAdminPay(){document.getElementById('content').innerHTML=`<h2>⏳ Malipo ya Admin Yanasubiri</h2><div id="pays">Inapakia...</div>`; try{let r=await fetch(API_URL+'/api/admin-payment/pending'); let list=await r.json(); document.getElementById('pays').innerHTML=list.map(p=>`<div class="card">💰 <b>${p.adminName}</b> • ${(p.amount||0).toLocaleString()} TZS • ${p.month} • Ref: <b>${p.reference}</b> • ${p.method}<br><button class="btn btn-green" onclick="approvePay(${p.id})">✅ Thibitisha →</button><button class="btn btn-red" onclick="rejectPay(${p.id})">❌ Kataa</button></div>`).join('')||'Hakuna malipo';}catch(e){document.getElementById('pays').innerHTML='Imeshindikana kupakia';}}
-async function approvePay(id){let r=await fetch(API_URL+'/api/admin-payment/approve/'+id,{method:'POST'}); let d=await r.json(); alert(d.message); go('adminpay');}
-async function rejectPay(id){if(!confirm('Kataa?'))return; let r=await fetch(API_URL+'/api/admin-payment/reject/'+id,{method:'POST'}); let d=await r.json(); alert(d.message); go('adminpay');}
-async function renderAdminList(){document.getElementById('content').innerHTML=`<h2>💰 Ma-Admin Wangu</h2><div id="alist">Inapakia...</div>`; try{let r=await fetch(API_URL+'/api/owner/admins-report?ownerId='+user.id); let d=await r.json(); document.getElementById('alist').innerHTML=(d.admins||[]).map(a=>`<div class="card"><b>${a.name}</b> • ${a.username} • ${a.group||a.gymGroup||''}<br>Ada: ${(a.monthlyFee||0).toLocaleString()} • Status: ${a.status} • Siku: <b>${a.daysLeft}</b> • Members: ${a.membersCount}</div>`).join('')||'Hakuna Admin';}catch(e){document.getElementById('alist').innerHTML='Imeshindikana';}}
-function renderSajiliMember(){document.getElementById('content').innerHTML=`<h2>➕ Sajili Member Mpya</h2><div class="card"><input id="mName" placeholder="Jina la Member"><input id="mUser" placeholder="Username"><input id="mPhone" placeholder="Simu"><input id="mPass" type="password" placeholder="Password"><select id="mPlan"><option>JARIBIO</option><option>MWEZI</option><option>MIEZI 3</option><option>MWAKA</option></select><select id="mGoal"><option>Jenga Mwili</option><option>Punguza Uzito</option><option>Wanawake Tu</option><option>Wanaume Tu</option></select><div id="mMsg" class="msg"></div><button class="btn btn-yellow btn-full" onclick="doRegisterMember()">➕ Sajili Member →</button></div>`;}
-async function doRegisterMember(){let b={name:document.getElementById('mName').value.trim(),username:document.getElementById('mUser').value.trim(),phone:document.getElementById('mPhone').value.trim(),password:document.getElementById('mPass').value,plan:document.getElementById('mPlan').value,goal:document.getElementById('mGoal').value,gymGroup:user.gymGroup,createdBy:user.id}; if(!b.name||!b.username||!b.password){showMsg('mMsg','Jaza Jina, Username na Password',false);return;} let r=await fetch(API_URL+'/api/auth/register-member',{method:'POST',headers:{'Content-Type':'application/json'},body:JSON.stringify(b)}); let d=await r.json(); showMsg('mMsg',d.message,d.success); if(d.success) setTimeout(()=>go('pending'),800);}
-async function renderPending(){document.getElementById('content').innerHTML=`<h2>⏳ Members Wanasubiri</h2><div id="plist">Inapakia...</div>`; let r=await fetch(API_URL+'/api/admin/members/'+user.id); let list=await r.json(); let pend=list.filter(x=>x.status==='pending'); document.getElementById('plist').innerHTML=pend.map(m=>`<div class="card"><b>${m.name}</b> • ${m.username} • ${m.phone}<br>Plan: ${m.plan} • Goal: ${m.goal}<br><button class="btn btn-green" onclick="approveMember(${m.id})">✅ Kubali</button><button class="btn btn-red" onclick="rejectMember(${m.id})">❌ Kataa</button></div>`).join('')||'Hakuna anayesubiri';}
-async function approveMember(id){let r=await fetch(API_URL+'/api/admin/approve-member/'+id+'?adminId='+user.id,{method:'POST'}); let d=await r.json(); alert(d.message||'Amekubaliwa'); go('pending');}
-async function rejectMember(id){let r=await fetch(API_URL+'/api/admin/reject-member/'+id+'?adminId='+user.id,{method:'POST'}); let d=await r.json(); alert(d.message||'Amekataliwa'); go('pending');}
-async function renderMembers(){document.getElementById('content').innerHTML=`<h2>👥 Members Wangu</h2><div id="mlist">Inapakia...</div>`; let r=await fetch(API_URL+'/api/admin/members/'+user.id); let list=await r.json(); let act=list.filter(x=>x.status==='active'); document.getElementById('mlist').innerHTML=act.map(m=>`<div class="card"><b>${m.name}</b> • ${m.username} • ${m.phone}<br>Plan: ${m.plan} • Status: ${m.status}<br><button class="btn btn-yellow" onclick="markAtt(${m.id})">✅ Weka Mahudhurio Leo</button></div>`).join('')||'Hakuna Member active';}
-async function markAtt(id){let r=await fetch(API_URL+'/api/admin/attendance/'+id+'?adminId='+user.id,{method:'POST'}); let d=await r.json(); alert(d.message||'Mahudhurio yamewekwa');}
-function renderPay(){document.getElementById('content').innerHTML=`<h2>💰 Lipa Ada ya Mwezi</h2><div class="card" style="border-color:#FFD400"><b>Lipa kwa M-Pesa / Airtel / Mixx</b><br>Namba: <b style="color:#FFD400;font-size:20px">0778709707</b> - Jina: GYM Zanzibar<br>Baada ya kutuma, weka Namba ya Muamala hapa chini.</div><div class="card"><input id="payAmount" type="number" value="50000"><input id="payMonth" value="Nov 2026"><input id="payRef" placeholder="Namba ya Muamala - mfano: 8H7K..."><select id="payMethod"><option>M-Pesa</option><option>Airtel Money</option><option>Mixx by Yas</option><option>Bank</option></select><button class="btn btn-green btn-full" onclick="doPay()">💰 Nimetuma Malipo →</button></div>`;}
-async function doPay(){let b={adminId:user.id,amount:document.getElementById('payAmount').value,month:document.getElementById('payMonth').value,reference:document.getElementById('payRef').value.trim(),method:document.getElementById('payMethod').value}; if(!b.reference){alert('Weka Namba ya Muamala');return;} let r=await fetch(API_URL+'/api/admin-payment/pay',{method:'POST',headers:{'Content-Type':'application/json'},body:JSON.stringify(b)}); let d=await r.json(); alert(d.message); if(d.success) go('mypay');}
-async function renderMyPay(){document.getElementById('content').innerHTML=`<h2>📜 Malipo Yangu</h2><div id="myp">Inapakia...</div>`; let r=await fetch(API_URL+'/api/admin-payment/my/'+user.id); let list=await r.json(); document.getElementById('myp').innerHTML=list.map(p=>`<div class="card">💰 <b>${(p.amount||0).toLocaleString()} TZS</b> • ${p.month} • Ref: ${p.reference} • ${p.method}<br>Status: <b>${p.status==='paid'?'✅ Imethibitishwa':p.status==='pending'?'⏳ Inasubiri Owner':'❌ Imekataliwa'}</b></div>`).join('')||'Hakuna malipo';}
-function renderMyStatus(){document.getElementById('content').innerHTML=`<h2>🏋️ Status Yangu</h2><div class="card">Jina: <b>${user.name}</b><br>Username: ${user.username}<br>Simu: ${user.phone}<br>Group: ${user.gymGroup}<br>Plan: <b>${user.plan||''}</b> • Goal: <b>${user.goal||''}</b><br>Status: <b style="color:${user.status==='active'?'#25D366':'#FFD400'}">${user.status==='active'?'✅ Active':user.status==='pending'?'⏳ Inasubiri Admin':'🔒 Imefungwa'}</b></div>`;}
-function renderAttendance(){document.getElementById('content').innerHTML=`<h2>📅 Mahudhurio</h2><div class="card">Admin ataweka mahudhurio yako kila ukifika Gym.<br><br>Ukifika Gym, mwambie Admin akuwekee Mahudhurio.</div>`;}
-go('home');
+async function act(type,id){ await fetch(API_URL+'/api/auth/'+type+'/'+id,{method:'PUT'}); loadDash(); }
+async function addMember(){
+  let b={name:document.getElementById('mName').value.trim(),username:document.getElementById('mUser').value.trim(),phone:document.getElementById('mPhone').value.trim(),password:document.getElementById('mPass').value,gymGroup:document.getElementById('mGroup').value,plan:document.getElementById('mPlan').value,role:'MEMBER'};
+  if(!b.name||!b.username||!b.password){showMsg('addMsg','Jaza jina, username na password',false);return;}
+  try{ let r=await fetch(API_URL+'/api/auth/register',{method:'POST',headers:{'Content-Type':'application/json'},body:JSON.stringify(b)}); let d=await r.json(); if(d.success){ ['mName','mUser','mPhone','mPass'].forEach(id=>document.getElementById(id).value=''); showMsg('addMsg','✅ Member '+b.name+' amesajiliwa!',true); loadDash(); showTab('members'); } else showMsg('addMsg',d.message||'Imeshindikana',false); }catch(e){ showMsg('addMsg','❌ Backend haijapatikana',false); }
+}
+loadDash();
 </script></body></html>
