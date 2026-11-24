@@ -1,41 +1,97 @@
-<!DOCTYPE html><html lang="sw"><head><meta charset="UTF-8"><meta name="viewport" content="width=device-width,initial-scale=1"><title>💪 GYM ZANZIBAR</title>
+<!DOCTYPE html><html lang="sw"><head><meta charset="UTF-8"><meta name="viewport" content="width=device-width,initial-scale=1,maximum-scale=1"><title>💪 GYM ZANZIBAR</title>
 <style>
 *{box-sizing:border-box;margin:0;padding:0;font-family:'Segoe UI',system-ui,-apple-system}
-:root{--y:#FFD400;--o:#FF6B00;--bg:#0B0B0F;--card:#16161C;--line:#26262E}
-body{background:var(--bg);color:#fff;overflow-x:hidden;line-height:1.5}
-a{color:var(--y);text-decoration:none}
-.top{position:sticky;top:0;z-index:50;background:rgba(11,11,15,.92);backdrop-filter:blur(14px);border-bottom:1px solid var(--line);padding:12px 16px;display:flex;justify-content:space-between;align-items:center;gap:10px}
-.logo{font-size:20px;font-weight:900;letter-spacing:-.5px}.logo span{color:var(--y)}
-.nav{display:flex;gap:18px;font-size:13px;font-weight:700}.nav a{color:#C9C9D1}.nav a:hover{color:#fff}
-.btn{padding:13px 22px;border:none;border-radius:999px;font-weight:800;cursor:pointer;font-size:14px;display:inline-flex;align-items:center;justify-content:center;gap:6px;transition:.2s;box-shadow:0 6px 20px rgba(0,0,0,.25)}
-.btn:active{transform:scale(.97)}.btn-yellow{background:linear-gradient(135deg,#FFD400,#FFAA00);color:#000}.btn-dark{background:#1E1E26;color:#fff;border:1px solid #333}.btn-green{background:linear-gradient(135deg,#25D366,#00B84D);color:#fff}.btn-orange{background:linear-gradient(135deg,#FF6B00,#FF2D00);color:#fff}.btn-white{background:#fff;color:#000}
-.hero{padding:44px 16px 28px;text-align:center;background:radial-gradient(700px 320px at 50% 0%,rgba(255,212,0,.22),transparent),radial-gradient(500px 300px at 90% 20%,rgba(255,107,0,.15),transparent)}
-.hero-badge{background:rgba(255,212,0,.12);border:1px solid rgba(255,212,0,.4);color:var(--y);padding:7px 14px;border-radius:999px;font-size:12px;font-weight:800}
-.hero h1{font-size:clamp(32px,7vw,56px);line-height:1.02;margin:16px 0;letter-spacing:-1.5px}.hero h1 span{background:linear-gradient(135deg,#FFD400,#FF6B00);-webkit-background-clip:text;-webkit-text-fill-color:transparent}
-.hero p{color:#A8A8B3;font-size:clamp(14px,2.5vw,17px);max-width:620px;margin:0 auto 20px}
+html{scroll-behavior:smooth}
+body{background:#0B0B0F;color:#fff;overflow-x:hidden;line-height:1.5}
+a{color:#FFD400;text-decoration:none}
+img{max-width:100%}
+/* TOP - RESPONSIVE */
+.top{position:sticky;top:0;z-index:50;background:rgba(11,11,15,.95);backdrop-filter:blur(12px);border-bottom:1px solid #222;padding:12px 16px;display:flex;justify-content:space-between;align-items:center;gap:10px}
+.logo{font-size:19px;font-weight:900;white-space:nowrap}.logo span{color:#FFD400}
+.nav{display:flex;gap:18px;font-size:13px;font-weight:700}.nav a{color:#ccc;padding:6px 2px}.nav a:hover{color:#FFD400}
+.top-btns{display:flex;gap:8px;flex-shrink:0}
+.hamburger{display:none;font-size:22px;background:none;border:1px solid #333;color:#fff;padding:6px 10px;border-radius:10px;cursor:pointer}
+.mobile-nav{display:none;background:#141414;border-bottom:1px solid #222;padding:10px 16px;flex-direction:column;gap:2px}
+.mobile-nav.show{display:flex}
+.mobile-nav a{padding:12px 10px;border-radius:10px;color:#ddd;font-weight:700;font-size:14px}
+.mobile-nav a:hover{background:#1E1E1E;color:#FFD400}
+/* BUTTONS */
+.btn{padding:13px 22px;border:none;border-radius:999px;font-weight:800;cursor:pointer;font-size:14px;display:inline-flex;align-items:center;justify-content:center;gap:6px;text-align:center;transition:.2s;white-space:nowrap}
+.btn:active{transform:scale(.97)}
+.btn-yellow{background:linear-gradient(135deg,#FFD400,#FFAA00);color:#000;box-shadow:0 8px 20px rgba(255,212,0,.25)}
+.btn-dark{background:#1A1A1A;color:#fff;border:1px solid #333}
+.btn-green{background:#25D366;color:#fff}
+.btn-orange{background:linear-gradient(135deg,#FF6B00,#FF2D00);color:#fff}
+.btn-white{background:#fff;color:#000}
+.btn-sm{padding:10px 16px;font-size:13px}
+/* HERO - RESPONSIVE */
+.hero{padding:36px 16px 26px;text-align:center;background:radial-gradient(600px 300px at 50% 0%,rgba(255,212,0,.13),transparent)}
+.hero-badge{display:inline-block;background:rgba(255,212,0,.13);border:1px solid rgba(255,212,0,.4);color:#FFD400;padding:6px 14px;border-radius:999px;font-size:12px;font-weight:800;max-width:100%}
+.hero h1{font-size:clamp(28px,6vw,52px);line-height:1.08;margin:14px 0;letter-spacing:-1px}
+.hero h1 span{background:linear-gradient(135deg,#FFD400,#FF6B00);-webkit-background-clip:text;-webkit-text-fill-color:transparent}
+.hero p{color:#aaa;font-size:clamp(13px,2.5vw,16px);max-width:600px;margin:0 auto 18px;line-height:1.6}
 .hero-btns{display:flex;gap:10px;justify-content:center;flex-wrap:wrap}
-.hero-stats{display:flex;gap:10px;justify-content:center;flex-wrap:wrap;margin-top:22px}.hero-stat{background:var(--card);border:1px solid var(--line);padding:14px 18px;border-radius:18px;min-width:110px;flex:1;max-width:160px}.hero-stat b{font-size:22px;color:var(--y);display:block}
-.wrap{max-width:1120px;margin:0 auto;padding:0 16px}
-.section{padding:26px 0}.section h2{font-size:clamp(22px,5vw,28px);letter-spacing:-.5px}.section h2 span{color:var(--y)}.sub{color:#888;font-size:14px;margin:6px 0 16px}
-.grid3{display:grid;grid-template-columns:repeat(3,1fr);gap:16px}.grid2{display:grid;grid-template-columns:1fr 1fr;gap:16px}
-.card{background:var(--card);border:1px solid var(--line);border-radius:24px;overflow:hidden;transition:.2s}.card:hover{transform:translateY(-3px);border-color:#3A3A44}
-.card-top{height:170px;display:flex;align-items:center;justify-content:center;font-size:72px;position:relative}.card-top .price{position:absolute;top:12px;right:12px;background:rgba(0,0,0,.65);backdrop-filter:blur(6px);color:#fff;padding:6px 12px;border-radius:999px;font-size:12px;font-weight:800}
-.pad{padding:18px}.pad p{font-size:13px;color:#9A9AA5;line-height:1.6}.pad h3{margin:8px 0 6px}
-.chip{display:inline-block;background:var(--y);color:#000;padding:5px 11px;border-radius:999px;font-size:11px;font-weight:800}
-input,select{width:100%;padding:14px;border:1px solid #333;border-radius:14px;margin:6px 0;font-size:15px;background:#111;color:#fff;outline:none}input:focus,select:focus{border-color:var(--y)}
-.plan{border:2px solid var(--line);border-radius:24px;padding:22px;text-align:center;background:var(--card);position:relative}.plan.hot{border-color:var(--y);box-shadow:0 0 0 1px var(--y),0 16px 40px rgba(255,212,0,.12)}
-.progress{height:12px;background:#2A2A2A;border-radius:999px;overflow:hidden}.progress div{height:100%;background:linear-gradient(90deg,#FFD400,#FF6B00);transition:.4s}
-.modal{position:fixed;inset:0;background:rgba(0,0,0,.75);backdrop-filter:blur(4px);display:none;align-items:center;justify-content:center;z-index:99;padding:14px}.modal.show{display:flex}.modal-box{background:#1A1A22;border:1px solid #333;width:100%;max-width:430px;padding:24px;border-radius:26px;text-align:center;box-shadow:0 20px 60px rgba(0,0,0,.5)}
+.hero-stats{display:flex;gap:10px;justify-content:center;flex-wrap:wrap;margin-top:18px}
+.hero-stat{background:#161616;border:1px solid #2A2A2A;padding:14px 12px;border-radius:16px;min-width:0;flex:1;max-width:160px}
+.hero-stat b{font-size:clamp(18px,4vw,22px);color:#FFD400;display:block}
+.hero-stat span{font-size:11px;color:#888}
+/* LAYOUT */
+.wrap{max-width:1100px;margin:0 auto;padding:0 16px}
+.section{padding:22px 0}
+.section h2{font-size:clamp(20px,4.5vw,26px)}
+.section h2 span{color:#FFD400}
+.sub{color:#888;font-size:13px;margin:6px 0 14px}
+.grid3{display:grid;grid-template-columns:repeat(3,1fr);gap:14px}
+.grid2{display:grid;grid-template-columns:1fr 1fr;gap:14px}
+.card{background:#151515;border:1px solid #2A2A2A;border-radius:22px;overflow:hidden}
+.card-top{height:170px;display:flex;align-items:center;justify-content:center;font-size:72px;position:relative}
+.card-top .price{position:absolute;top:12px;right:12px;background:rgba(0,0,0,.7);backdrop-filter:blur(4px);color:#fff;padding:6px 10px;border-radius:999px;font-size:11px;font-weight:800}
+.pad{padding:16px}.pad h3{font-size:16px;margin:6px 0}.pad p{font-size:13px;color:#999;line-height:1.6}
+.chip{display:inline-block;background:#FFD400;color:#000;padding:5px 11px;border-radius:999px;font-size:11px;font-weight:800}
+input,select{width:100%;padding:13px;border:1px solid #333;border-radius:14px;margin:6px 0;font-size:15px;background:#111;color:#fff;outline:none}
+input:focus,select:focus{border-color:#FFD400}
+.plan{border:2px solid #2A2A2A;border-radius:22px;padding:20px;text-align:center;background:#151515;position:relative}
+.plan.hot{border-color:#FFD400;box-shadow:0 10px 30px rgba(255,212,0,.12)}
+.progress{height:12px;background:#2A2A2A;border-radius:999px;overflow:hidden}.progress div{height:100%;background:linear-gradient(90deg,#FFD400,#FF6B00)}
+.modal{position:fixed;inset:0;background:rgba(0,0,0,.75);backdrop-filter:blur(4px);display:none;align-items:center;justify-content:center;z-index:99;padding:14px}.modal.show{display:flex}.modal-box{background:#161616;border:1px solid #333;width:100%;max-width:430px;padding:22px;border-radius:24px;text-align:center;max-height:90vh;overflow-y:auto}
 .pay-info{background:#FFF8E1;color:#222;padding:14px;border-radius:14px;text-align:left;font-size:14px;line-height:1.8}
-.footer{text-align:center;padding:20px;color:#666;font-size:12px;border-top:1px solid #222;margin-top:20px}
-@media(max-width:900px){.grid3{grid-template-columns:repeat(2,1fr)}}
-@media(max-width:600px){.grid3,.grid2{grid-template-columns:1fr}.nav{display:none}.top{padding:10px 12px}.hero{padding:28px 12px 20px}.hero-stat{min-width:0;padding:12px 8px}.btn{padding:12px 18px;font-size:13px}.card-top{height:150px;font-size:60px}}
+.footer{text-align:center;padding:20px 14px;color:#666;font-size:12px;border-top:1px solid #222;margin-top:20px;line-height:1.6}
+/* TABLET */
+@media(max-width:900px){
+  .grid3{grid-template-columns:repeat(2,1fr)}
+  .nav{display:none}
+  .hamburger{display:block}
+}
+/* SIMU KUBWA */
+@media(max-width:600px){
+  .grid3,.grid2{grid-template-columns:1fr}
+  .top{padding:10px 12px}
+  .logo{font-size:17px}
+  .top-btns .btn-sm{padding:9px 12px;font-size:12px}
+  .hero{padding:26px 12px 20px}
+  .hero-btns{flex-direction:column}
+  .hero-btns .btn{width:100%}
+  .hero-stats{flex-wrap:nowrap;gap:6px}
+  .hero-stat{padding:10px 4px;border-radius:12px}
+  .card-top{height:150px;font-size:60px}
+  .pad{padding:14px}
+  .plan{padding:16px}
+  .modal-box{padding:18px 14px}
+}
+/* SIMU NDOGO SANA */
+@media(max-width:360px){
+  .hero-stats{flex-wrap:wrap}
+  .hero-stat{flex:1 1 45%;max-width:none}
+  .top-btns .btn-sm{padding:8px 10px;font-size:11px}
+  .logo{font-size:15px}
+}
 </style></head><body>
-<div class="top"><div class="logo">💪 GYM <span>ZANZIBAR</span></div><div class="nav"><a href="#vikundi">Vikundi</a><a href="#vifurushi">Vifurushi</a><a href="#maendeleo">Maendeleo</a><a href="#hudhurio">Mahudhurio</a></div><div style="display:flex;gap:8px"><a href="login.html" class="btn btn-dark" style="padding:10px 16px;font-size:13px">Ingia</a><a href="register-member.html" class="btn btn-yellow" style="padding:10px 16px;font-size:13px">Jisajili →</a></div></div>
-<div class="hero"><span class="hero-badge">✨ #1 GYM ZANZIBAR • STONE TOWN</span><h1>Jenga Mwili Wako<br><span>Kuwa Bora Kila Siku 💪</span></h1><p>Gym • Kocha Binafsi • Chakula • Maendeleo. Jiunge na kikundi chako, lipa kwa urahisi, ona uzito wako unavyopungua kila wiki.</p><div class="hero-btns"><a href="#vikundi" class="btn btn-yellow">💪 Jiunge Sasa →</a><a href="#vifurushi" class="btn btn-white">💰 Vifurushi</a><a href="#maendeleo" class="btn btn-green">📊 Maendeleo</a></div><div class="hero-stats"><div class="hero-stat"><b id="sMembers">77</b><span style="font-size:11px;color:#888">Wanachama</span></div><div class="hero-stat"><b id="sGroups">4</b><span style="font-size:11px;color:#888">Vikundi</span></div><div class="hero-stat"><b>4</b><span style="font-size:11px;color:#888">Makocha</span></div><div class="hero-stat"><b id="sToday">0</b><span style="font-size:11px;color:#888">Leo Wamekuja</span></div></div></div>
+<div class="top"><div class="logo">💪 GYM <span>ZANZIBAR</span></div><div class="nav"><a href="#vikundi">Vikundi</a><a href="#vifurushi">Vifurushi</a><a href="#maendeleo">Maendeleo</a><a href="#hudhurio">Mahudhurio</a></div><div class="top-btns"><a href="login.html" class="btn btn-dark btn-sm">Ingia</a><a href="login.html" class="btn btn-yellow btn-sm">Jisajili →</a><button class="hamburger" onclick="document.getElementById('mnav').classList.toggle('show')">☰</button></div></div>
+<div class="mobile-nav" id="mnav"><a href="#vikundi" onclick="document.getElementById('mnav').classList.remove('show')">💪 Vikundi</a><a href="#vifurushi" onclick="document.getElementById('mnav').classList.remove('show')">💰 Vifurushi</a><a href="#maendeleo" onclick="document.getElementById('mnav').classList.remove('show')">📊 Maendeleo</a><a href="#hudhurio" onclick="document.getElementById('mnav').classList.remove('show')">✅ Mahudhurio</a><a href="login.html">🔑 Ingia / Jisajili →</a></div>
+<div class="hero"><span class="hero-badge">✨ #1 GYM ZANZIBAR</span><h1>Jenga Mwili Wako<br><span>Kuwa Bora Kila Siku 💪</span></h1><p>Gym • Kocha Binafsi • Chakula • Maendeleo. Jiunge na kikundi chako, lipa kwa urahisi, ona uzito wako unavyopungua kila wiki.</p><div class="hero-btns"><a href="#vikundi" class="btn btn-yellow">💪 Jiunge Sasa →</a><a href="#vifurushi" class="btn btn-white">💰 Vifurushi</a><a href="#maendeleo" class="btn btn-green">📊 Maendeleo</a></div><div class="hero-stats"><div class="hero-stat"><b id="sMembers">77</b><span>Wanachama</span></div><div class="hero-stat"><b id="sGroups">4</b><span>Vikundi</span></div><div class="hero-stat"><b>4</b><span>Makocha</span></div><div class="hero-stat"><b id="sToday">0</b><span>Leo Wamekuja</span></div></div></div>
 <div class="wrap">
-<div class="section" id="vikundi"><h2>💪 Vikundi vya <span>Gym</span></h2><p class="sub">Chagua kikundi chako — Kocha anakusubiri.</p><input id="search" placeholder="🔍 Tafuta kikundi..." oninput="renderGroups()"><div class="grid3" id="groupGrid" style="margin-top:14px"></div></div>
-<div class="section" id="vifurushi"><h2>💰 <span>Vifurushi</span></h2><p class="sub">Chagua kifurushi. Lipa kwa PBZ, rahisi na salama.</p><div class="grid3"><div class="plan"><div style="font-size:44px">🎁</div><h3>JARIBIO</h3><div style="font-size:30px;font-weight:900;color:#FFD400">0 TZS</div><span style="color:#888;font-size:13px">Siku 3 Bure</span><div style="text-align:left;font-size:13px;line-height:2;margin:12px 0">✅ Siku 3 • Gym yote<br>✅ Kocha • Vifaa vyote</div><button class="btn btn-dark" style="width:100%" onclick="location.href='register-member.html'">Jisajili Bure →</button></div><div class="plan hot"><span class="chip" style="position:absolute;top:-12px;left:50%;transform:translateX(-50%)">🔥 MARUFU</span><div style="font-size:44px">💪</div><h3>MWEZI</h3><div style="font-size:30px;font-weight:900;color:#FFD400">30,000 TZS</div><span style="color:#888;font-size:13px">/ Mwezi</span><div style="text-align:left;font-size:13px;line-height:2;margin:12px 0">✅ Siku 30 • Gym yote<br>✅ Kocha binafsi • Chakula</div><button class="btn btn-yellow" style="width:100%" onclick="openWa('KIDOGO','MWEZI - 30,000 TZS')">Chagua MWEZI →</button></div><div class="plan" style="border-color:#FF6B00"><span class="chip" style="background:#FF6B00;color:#fff;position:absolute;top:-12px;left:50%;transform:translateX(-50%)">🏆 BORA</span><div style="font-size:44px">🏆</div><h3>MWAKA</h3><div style="font-size:30px;font-weight:900;color:#FFD400">300,000 TZS</div><span style="color:#888;font-size:13px">/ Mwaka</span><div style="text-align:left;font-size:13px;line-height:2;margin:12px 0">✅ Miezi 12 • Kocha kila siku<br>✅ Supplements bure</div><button class="btn btn-orange" style="width:100%" onclick="openWa('KUBWA','MWAKA - 300,000 TZS')">Chagua MWAKA →</button></div></div></div>
+<div class="section" id="vikundi"><h2>💪 Vikundi vya <span>Gym</span></h2><p class="sub">Chagua kikundi chako.</p><input id="search" placeholder="🔍 Tafuta kikundi..." oninput="renderGroups()"><div class="grid3" id="groupGrid" style="margin-top:14px"></div></div>
+<div class="section" id="vifurushi"><h2>💰 <span>Vifurushi</span></h2><p class="sub">Chagua kifurushi. Utaingiza WhatsApp, tutakutumia taarifa za malipo (PBZ).</p><div class="grid3"><div class="plan"><div style="font-size:44px">🎁</div><h3>JARIBIO</h3><div style="font-size:30px;font-weight:900;color:#FFD400">0 TZS</div><span style="color:#888;font-size:13px">Siku 3 Bure</span><div style="text-align:left;font-size:13px;line-height:2;margin:12px 0">✅ Siku 3 • Gym yote<br>✅ Kocha • Vifaa vyote</div><button class="btn btn-dark" style="width:100%" onclick="location.href='login.html'">Jisajili Bure →</button></div><div class="plan hot"><span class="chip" style="position:absolute;top:-12px;left:50%;transform:translateX(-50%)">🔥 MARUFU</span><div style="font-size:44px">💪</div><h3>MWEZI</h3><div style="font-size:30px;font-weight:900;color:#FFD400">30,000 TZS</div><span style="color:#888;font-size:13px">/ Mwezi</span><div style="text-align:left;font-size:13px;line-height:2;margin:12px 0">✅ Siku 30 • Gym yote<br>✅ Kocha binafsi • Chakula</div><button class="btn btn-yellow" style="width:100%" onclick="openWa('KIDOGO','MWEZI - 30,000 TZS')">Chagua MWEZI →</button></div><div class="plan" style="border-color:#FF6B00"><span class="chip" style="background:#FF6B00;color:#fff;position:absolute;top:-12px;left:50%;transform:translateX(-50%)">🏆 BORA</span><div style="font-size:44px">🏆</div><h3>MWAKA</h3><div style="font-size:30px;font-weight:900;color:#FFD400">300,000 TZS</div><span style="color:#888;font-size:13px">/ Mwaka</span><div style="text-align:left;font-size:13px;line-height:2;margin:12px 0">✅ Miezi 12 • Kocha kila siku<br>✅ Supplements bure</div><button class="btn btn-orange" style="width:100%" onclick="openWa('KUBWA','MWAKA - 300,000 TZS')">Chagua MWAKA →</button></div></div></div>
 <div class="section" id="maendeleo"><h2>📊 <span>Maendeleo Yangu</span></h2><div class="grid2"><div class="card"><div class="pad"><label>Uzito wa Kwanza (kg)</label><input id="wStart" type="number" placeholder="85"><label>Uzito wa Sasa (kg)</label><input id="wNow" type="number" placeholder="78"><label>Lengo (kg)</label><input id="wGoal" type="number" placeholder="70"><button class="btn btn-yellow" style="width:100%" onclick="calcProgress()">📊 Ona Maendeleo →</button></div></div><div class="card"><div class="pad"><h3 id="progTitle">Maendeleo yako yataonekana hapa</h3><div class="progress" style="margin:12px 0"><div id="progBar" style="width:0%"></div></div><p id="progText" style="color:#aaa;font-size:13px">Weka uzito wako kushoto.</p><div id="progList"></div></div></div></div></div>
 <div class="section" id="hudhurio"><h2>✅ <span>Mahudhurio ya Leo</span></h2><div class="card"><div class="pad"><input id="aName" placeholder="Jina lako"><select id="aGroup"><option>Gym Stone Town - Jenga Mwili</option><option>Gym Mjini - Punguza Uzito</option><option>Gym Forodhani - Wanawake Tu</option><option>Gym Mjini Magharibi - Wanaume Tu</option></select><button class="btn btn-green" style="width:100%" onclick="doAttend()">✅ Nimefika Leo →</button><div id="attendList"></div></div></div></div>
 <div class="section" id="join"><h2>💪 <span>Jiunge na Kikundi</span></h2><div class="card"><div class="pad"><input id="jName" placeholder="Jina lako"><input id="jPhone" placeholder="Simu 077..."><input id="jGroup" placeholder="Bonyeza Jiunge kwenye kikundi"><select id="jGoal"><option>Kujenga Mwili</option><option>Kupunguza Uzito</option><option>Kuwa na Afya</option><option>Kujenga Misuli</option></select><button class="btn btn-yellow" style="width:100%" onclick="doJoin()">💪 Jiunge Sasa →</button></div></div></div>
