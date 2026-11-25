@@ -1,0 +1,47 @@
+<!DOCTYPE html><html lang="sw"><head><meta charset="UTF-8"><meta name="viewport" content="width=device-width,initial-scale=1,maximum-scale=1"><title>Jisajili Member - GYM Zanzibar</title>
+<style>
+*{box-sizing:border-box;margin:0;padding:0;font-family:'Segoe UI',system-ui}
+body{background:#0B0B0F;color:#fff;min-height:100vh;display:flex;align-items:center;justify-content:center;padding:14px}
+.box{width:100%;max-width:440px;background:#16161C;border:1px solid #2A2A32;padding:28px;border-radius:28px}
+h2{font-size:clamp(22px,5vw,26px);text-align:center}.sub{text-align:center;color:#888;font-size:13px;margin:6px 0 16px;line-height:1.5}
+label{font-size:13px;color:#aaa}
+input,select{width:100%;padding:15px;border:1px solid #333;border-radius:14px;margin:6px 0 12px;background:#111;color:#fff;font-size:16px;outline:none}input:focus,select:focus{border-color:#FFD400}
+.btn{width:100%;padding:15px;border:none;border-radius:999px;font-weight:800;cursor:pointer;font-size:15px;margin-top:6px}.btn-yellow{background:linear-gradient(135deg,#FFD400,#FFAA00);color:#000}.btn-dark{background:#222;color:#fff;border:1px solid #333}.btn:disabled{opacity:.6}
+.msg{padding:12px;border-radius:12px;font-size:13px;margin:10px 0;display:none;text-align:center;line-height:1.5;white-space:pre-line}.msg.err{display:block;background:#FF2D0022;color:#FF6B6B;border:1px solid #FF2D00}.msg.ok{display:block;background:#25D36622;color:#25D366;border:1px solid #25D366}
+.links{text-align:center;margin-top:14px;font-size:13px}.links a{color:#FFD400;text-decoration:none}
+.debug{margin-top:10px;font-size:11px;color:#666;text-align:center;word-break:break-all}
+</style></head><body>
+<div class="box"><div style="text-align:center;font-size:52px">💪</div><h2>Jisajili Member</h2><p class="sub">Jaza fomu, subiri Owner akukubali</p>
+<label>Jina Kamili</label><input id="name" placeholder="mfano: Ali Juma">
+<label>Username</label><input id="u" placeholder="mfano: ali01">
+<label>Simu</label><input id="phone" placeholder="0777000000">
+<label>Gym Group</label><input id="gymGroup" placeholder="Zanzibar Gym" value="Zanzibar Gym">
+<label>Lengo (Goal)</label><select id="goal"><option value="Kupunguza uzito">Kupunguza uzito</option><option value="Kujenga misuli">Kujenga misuli</option><option value="Afya / Fitness">Afya / Fitness</option></select>
+<label>Password</label><input id="p" type="password" placeholder="••••••••">
+<div id="msg" class="msg"></div>
+<button class="btn btn-yellow" id="btn" onclick="doRegister()">Jisajili →</button>
+<button class="btn btn-dark" onclick="location.href='login.html'">← Tayari nina akaunti? Ingia</button>
+<div id="debug" class="debug"></div></div>
+<script>
+const API_URL='https://gym-groups.onrender.com';
+function showMsg(t,ok=false){let e=document.getElementById('msg');e.textContent=t;e.className='msg '+(ok?'ok':'err');}
+async function doRegister(){
+let name=document.getElementById('name').value.trim();
+let u=document.getElementById('u').value.trim();
+let phone=document.getElementById('phone').value.trim();
+let gymGroup=document.getElementById('gymGroup').value.trim();
+let goal=document.getElementById('goal').value;
+let p=document.getElementById('p').value;
+if(!name||!u||!phone||!p){showMsg('Jaza sehemu zote muhimu');return;}
+let btn=document.getElementById('btn'); btn.disabled=true; btn.textContent='⏳ Inasajili...';
+try{
+let r=await fetch(API_URL+'/api/auth/register-member',{method:'POST',headers:{'Content-Type':'application/json'},body:JSON.stringify({name:name,username:u,phone:phone,password:p,gymGroup:gymGroup,goal:goal,plan:'JARIBIO'})});
+let txt=await r.text();
+document.getElementById('debug').textContent='Status: '+r.status+' | Jibu: '+txt.substring(0,300);
+let d={}; try{d=JSON.parse(txt);}catch(e){showMsg('❌ Backend amerudisha: '+txt.substring(0,200)); btn.disabled=false; btn.textContent='Jisajili →'; return;}
+if(d.success){showMsg('✅ '+(d.message||'Umesajiliwa! Subiri ukubaliwe'),true); setTimeout(()=>{location.href='login.html';},1500); return;}
+showMsg('❌ '+(d.message||'Imeshindikana'));
+}catch(e){showMsg('❌ Backend haijapatikana. Bonyeza Amsha Backend kwenye Login kwanza.');}
+btn.disabled=false; btn.textContent='Jisajili →';
+}
+</script></body></html>
