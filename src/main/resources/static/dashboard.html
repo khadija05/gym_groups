@@ -1,82 +1,120 @@
-<!DOCTYPE html><html lang="sw"><head><meta charset="UTF-8"><meta name="viewport" content="width=device-width,initial-scale=1,maximum-scale=1"><title>Dashboard - GYM Zanzibar</title>
+<!DOCTYPE html>
+<html lang="sw">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width,initial-scale=1,maximum-scale=1">
+<title>Dashboard - 💪 GYM ZANZIBAR</title>
 <style>
-*{box-sizing:border-box;margin:0;padding:0;font-family:'Segoe UI',system-ui}
-body{background:#0B0B0F;color:#fff;padding:14px}
-.top{max-width:1100px;margin:0 auto;display:flex;justify-content:space-between;align-items:center;gap:10px;flex-wrap:wrap;margin-bottom:14px}
-.logo{font-size:19px;font-weight:900}.logo span{color:#FFD400}
-.btn{padding:10px 16px;border:none;border-radius:999px;font-weight:800;cursor:pointer;font-size:13px;white-space:nowrap}.btn-yellow{background:#FFD400;color:#000}.btn-green{background:#25D366;color:#fff}.btn-red{background:#FF2D00;color:#fff}.btn-dark{background:#222;color:#fff;border:1px solid #333}.btn:disabled{opacity:.6}
-.wrap{max-width:1100px;margin:0 auto}
-.welcome{background:linear-gradient(135deg,#FFD400,#FF6B00);color:#000;padding:18px;border-radius:20px;display:flex;justify-content:space-between;gap:12px;flex-wrap:wrap;align-items:center}
-.stats{display:grid;grid-template-columns:repeat(4,1fr);gap:12px;margin:14px 0}.stat{background:#161616;border:1px solid #2A2A2A;padding:16px;border-radius:18px;text-align:center}.stat b{font-size:clamp(18px,4vw,26px);color:#FFD400;display:block}
-.card{background:#161616;border:1px solid #2A2A2A;padding:16px;border-radius:20px;margin:12px 0}
-input,select{width:100%;padding:12px;background:#111;color:#fff;border:1px solid #333;border-radius:12px;margin:6px 0;font-size:14px}
-.row{display:flex;gap:10px;flex-wrap:wrap}.row>*{flex:1;min-width:140px}
-.member{background:#111;padding:13px;border-radius:14px;margin:8px 0;display:flex;justify-content:space-between;gap:10px;flex-wrap:wrap}
-.badge{padding:4px 10px;border-radius:999px;font-size:11px;font-weight:800}.b-active{background:#25D36622;color:#25D366}.b-pending{background:#FFD40022;color:#FFD400}.b-locked{background:#FF2D0022;color:#FF2D00}
-.tabs{display:flex;gap:8px;overflow-x:auto;padding-bottom:4px}.tabs button{padding:11px 18px;border-radius:999px;border:1px solid #333;background:#161616;color:#fff;cursor:pointer;font-weight:700;white-space:nowrap}.tabs button.active{background:#FFD400;color:#000}
-.msg{padding:12px;border-radius:12px;font-size:13px;margin:10px 0;display:none;text-align:center;white-space:pre-line}.msg.ok{display:block;background:#25D36622;color:#25D366;border:1px solid #25D366}.msg.err{display:block;background:#FF2D0022;color:#FF6B6B;border:1px solid #FF2D00}
-.empty{text-align:center;color:#888;padding:20px}
-@media(max-width:760px){.stats{grid-template-columns:repeat(2,1fr)}.member{flex-direction:column}}
-</style></head><body>
-<div class="top"><div class="logo">💪 GYM <span>ZANZIBAR</span> • <span id="roleLabel">Dashboard</span></div><div style="display:flex;gap:8px;flex-wrap:wrap"><span id="userTop" style="font-size:13px;color:#aaa;align-self:center"></span><a href="index.html" class="btn btn-dark">🏠 Home</a><button class="btn btn-yellow" onclick="loadDash()">🔄 Onyesha Upya</button><button class="btn btn-red" onclick="logout()">Toka</button></div></div>
-<div class="wrap">
-<div class="welcome"><div><h2 id="hello">Karibu 👋</h2><p id="userInfo">Inapakia...</p></div><div style="background:rgba(0,0,0,.2);padding:10px 14px;border-radius:14px;text-align:center"><b id="todayCount" style="font-size:22px">0</b><br><span style="font-size:11px">Wamefika Leo</span></div></div>
-<div id="ownerBanner" style="display:none;background:#FFD40022;border:1px solid #FFD400;padding:14px;border-radius:16px;margin-top:14px"><b>👑 Wewe ni OWNER</b><br><span style="font-size:13px;color:#ccc">Unaweza kukubali Member, kufunga, na kusajili Admin hapa chini. Owner ID yako: <b id="ownerIdShow"></b></span></div>
-<div class="stats"><div class="stat"><b id="sMembers">0</b><span>Wanachama</span></div><div class="stat"><b id="sPending">0</b><span>Wanasubiri</span></div><div class="stat"><b id="sActive">0</b><span>Active</span></div><div class="stat"><b id="sAdmins">0</b><span>Admins</span></div></div>
-<div class="tabs"><button id="tab-members" class="active" onclick="showTab('members')">👥 Wanachama</button><button id="tab-add" onclick="showTab('add')">➕ Sajili Member</button><button id="tab-admin" onclick="showTab('admin')">🛡️ Sajili Admin</button><button id="tab-attend" onclick="showTab('attend')">✅ Mahudhurio</button></div>
-<div id="sec-members" class="card"><div class="row"><input id="q" placeholder="🔍 Tafuta jina / simu..." oninput="renderMembers()"><select id="fStatus" onchange="renderMembers()"><option value="">Status Zote</option><option value="active">Active</option><option value="pending">Pending</option><option value="locked">Locked</option></select></div><div id="memberList"></div><div id="adminList"></div></div>
-<div id="sec-add" class="card" style="display:none"><h3>➕ Sajili Member Mpya</h3><input id="mName" placeholder="Jina Kamili"><input id="mUser" placeholder="Username"><input id="mPhone" placeholder="Simu 077..."><input id="mPass" type="password" placeholder="Password"><select id="mGroup"><option>Gym Stone Town - Jenga Mwili</option><option>Gym Mjini - Punguza Uzito</option><option>Gym Forodhani - Wanawake Tu</option><option>Gym Mjini Magharibi - Wanaume Tu</option></select><select id="mPlan"><option value="KIDOGO">MWEZI - 30,000</option><option value="KUBWA">MWAKA - 300,000</option><option value="JARIBIO">JARIBIO - 0</option></select><div id="addMsg" class="msg"></div><button class="btn btn-green" style="width:100%" onclick="addMember()">➕ Sajili Member →</button></div>
-<div id="sec-admin" class="card" style="display:none"><h3>🛡️ Sajili Admin Mpya (Owner Tu)</h3><p style="font-size:13px;color:#aaa;margin-bottom:8px">Admin atasaidia kuongoza Gym. Lazima uwe umeingia kama OWNER.</p><input id="aName" placeholder="Jina Kamili la Admin"><input id="aUser" placeholder="Username ya Admin"><input id="aPhone" placeholder="Simu 077..."><input id="aPass" type="password" placeholder="Password ya Admin"><input id="aFee" type="number" placeholder="Mshahara / Ada 50000"><div id="adminMsg" class="msg"></div><button class="btn btn-yellow" style="width:100%" onclick="addAdmin()">🛡️ Sajili Admin →</button></div>
-<div id="sec-attend" class="card" style="display:none"><h3>✅ Mahudhurio</h3><div id="attList"></div></div>
-<div id="debug" style="font-size:11px;color:#666;text-align:center;word-break:break-all;margin-top:10px"></div>
+*{box-sizing:border-box;margin:0;padding:0;font-family:'Segoe UI',system-ui,-apple-system}
+body{background:#F1F5F9;color:#111;min-height:100vh;overflow-x:hidden}
+a{color:#FFD400;text-decoration:none}
+.top{position:sticky;top:0;z-index:50;background:#0B0B0F;color:#fff;padding:12px 16px;display:flex;justify-content:space-between;align-items:center;gap:10px;border-bottom:3px solid #FFD400}
+.logo{font-size:18px;font-weight:900;white-space:nowrap}.logo span{color:#FFD400}
+.user-info{display:flex;align-items:center;gap:10px}
+.avatar{width:38px;height:38px;background:linear-gradient(135deg,#FFD400,#FF6B00);border-radius:50%;display:flex;align-items:center;justify-content:center;font-size:18px;flex-shrink:0}
+.user-info b{font-size:14px;display:block;line-height:1.2}
+.user-info span{font-size:11px;color:#aaa}
+.btn-logout{background:#ef4444;color:#fff;border:0;padding:9px 14px;border-radius:999px;font-weight:800;cursor:pointer;font-size:12px;white-space:nowrap}
+.layout{display:flex;min-height:calc(100vh - 62px)}
+.sidebar{width:230px;background:#0B0B0F;color:#fff;padding:18px 12px;flex-shrink:0;position:sticky;top:62px;height:calc(100vh - 62px);overflow-y:auto}
+.sidebar h3{font-size:11px;color:#888;letter-spacing:1px;margin:14px 8px 8px}
+.side-btn{width:100%;text-align:left;background:transparent;color:#ddd;border:0;padding:12px 12px;border-radius:12px;cursor:pointer;font-size:14px;font-weight:600;display:flex;gap:8px;align-items:center;margin-bottom:4px}
+.side-btn.active,.side-btn:hover{background:#1E1E1E;color:#FFD400}
+.side-btn span.badge{background:#FFD400;color:#000;font-size:11px;padding:2px 7px;border-radius:999px;margin-left:auto;font-weight:800}
+.main{flex:1;padding:18px;max-width:1100px;margin:0 auto;width:100%}
+.welcome{background:#0B0B0F;color:#fff;padding:20px;border-radius:20px;margin-bottom:16px}
+.welcome h1{font-size:clamp(20px,4vw,26px)}.welcome h1 span{color:#FFD400}.welcome p{color:#aaa;font-size:13px;margin-top:4px}
+.grid{display:grid;grid-template-columns:repeat(4,1fr);gap:12px;margin-bottom:16px}
+.card{background:#fff;padding:18px;border-radius:18px;box-shadow:0 2px 10px rgba(0,0,0,.05);border:1px solid #eee}
+.card .icon{font-size:26px;margin-bottom:8px}.card .label{font-size:12px;color:#888}.card b{font-size:clamp(20px,4vw,26px);display:block}.card small{font-size:11px;color:#22c55e;font-weight:700}
+.form-card{background:#fff;padding:20px;border-radius:20px;box-shadow:0 2px 10px rgba(0,0,0,.05);margin-bottom:16px}
+.form-card h3{font-size:16px;margin-bottom:12px}.form-card h3 span{color:#FF6B00}
+input,select{width:100%;padding:13px;border:1px solid #ddd;border-radius:12px;margin:6px 0;font-size:15px;background:#fff;outline:none}
+input:focus,select:focus{border-color:#FFD400}
+.btn{padding:13px 20px;border:none;border-radius:999px;font-weight:800;cursor:pointer;font-size:14px;display:inline-flex;align-items:center;justify-content:center;gap:6px}
+.btn:active{transform:scale(.97)}.btn-yellow{background:linear-gradient(135deg,#FFD400,#FFAA00);color:#000}.btn-green{background:#25D366;color:#fff}.btn-orange{background:linear-gradient(135deg,#FF6B00,#FF2D00);color:#fff}.btn-dark{background:#111;color:#fff}.btn-full{width:100%;margin-top:8px}.btn-row{display:flex;gap:8px;flex-wrap:wrap;margin-top:8px}.btn-row .btn{flex:1;min-width:120px}
+.progress{height:12px;background:#eee;border-radius:999px;overflow:hidden;margin:10px 0}.progress div{height:100%;background:linear-gradient(90deg,#FFD400,#FF6B00)}
+.table-wrap{overflow-x:auto;-webkit-overflow-scrolling:touch}table{width:100%;border-collapse:collapse;min-width:560px}th{font-size:12px;color:#888;text-align:left;padding:12px 10px;border-bottom:2px solid #eee}td{padding:12px 10px;border-bottom:1px solid #f1f1f1;font-size:14px}
+.status{padding:4px 10px;border-radius:999px;font-size:11px;font-weight:800;white-space:nowrap}.status.ok{background:#DCFCE7;color:#166534}.status.bad{background:#FEE2E2;color:#991B1B}
+.member-row{display:flex;gap:10px;align-items:center;padding:12px 0;border-bottom:1px solid #f1f1f1}.member-avatar{width:40px;height:40px;background:#FFF3CD;border-radius:50%;display:flex;align-items:center;justify-content:center;font-size:18px;flex-shrink:0}
+.empty{text-align:center;padding:30px 10px;color:#999}.empty div{font-size:40px;margin-bottom:8px}
+.bottom-nav{display:none;position:fixed;bottom:0;left:0;right:0;background:#0B0B0F;border-top:1px solid #222;padding:8px 6px calc(8px + env(safe-area-inset-bottom));z-index:60;justify-content:space-around}
+.bottom-nav button{background:none;border:0;color:#aaa;font-size:11px;cursor:pointer;display:flex;flex-direction:column;align-items:center;gap:2px;padding:6px 8px;border-radius:12px;flex:1}
+.bottom-nav button span{font-size:20px}.bottom-nav button.active{color:#FFD400;background:#1E1E1E}
+@media(max-width:900px){.sidebar{width:200px}.grid{grid-template-columns:repeat(2,1fr)}.main{padding:14px}}
+@media(max-width:700px){
+  .sidebar{display:none}.bottom-nav{display:flex}.layout{padding-bottom:70px}
+  .top{padding:10px 12px}.logo{font-size:16px}.user-info b{font-size:13px}.btn-logout{padding:8px 10px;font-size:11px}
+  .main{padding:12px}.welcome{padding:16px;border-radius:16px}.grid{grid-template-columns:repeat(2,1fr);gap:8px}.card{padding:14px;border-radius:14px}.card b{font-size:20px}.form-card{padding:16px 14px;border-radius:16px}.btn-row{flex-direction:column}.btn-row .btn{width:100%;flex:none}.btn{width:100%}
+}
+@media(max-width:360px){.grid{grid-template-columns:1fr}.user-info span{display:none}.avatar{width:32px;height:32px;font-size:15px}.logo{font-size:14px}}
+</style>
+</head>
+<body>
+<div class="top"><div class="logo">💪 GYM <span>ZANZIBAR</span></div><div class="user-info"><div class="avatar" id="avatar">👤</div><div><b id="name">Karibu</b><span id="role">...</span></div><button class="btn-logout" onclick="logout()">Toka</button></div></div>
+<div class="layout">
+  <div class="sidebar">
+    <h3>MENU</h3>
+    <button class="side-btn active" onclick="showSection('home',this)">🏠 Nyumbani</button>
+    <button class="side-btn" id="btn-members" onclick="showSection('members',this)">👥 Members <span class="badge" id="badgeMembers">0</span></button>
+    <button class="side-btn" id="btn-gyms" onclick="showSection('gyms',this)">🏋️ Gym Zangu</button>
+    <button class="side-btn" id="btn-pay" onclick="showSection('pay',this)">💰 Malipo</button>
+    <button class="side-btn" id="btn-workout" onclick="showSection('workout',this)">💪 Workout</button>
+    <button class="side-btn" id="btn-progress" onclick="showSection('progress',this)">📊 Maendeleo</button>
+    <h3>MENGINE</h3>
+    <button class="side-btn" onclick="location.href='/index.html'">🌐 Tovuti</button>
+    <button class="side-btn" onclick="location.href='https://wa.me/255887387001'">💬 Msaada</button>
+    <button class="side-btn" onclick="logout()" style="color:#ff6b6b">🚪 Toka</button>
+  </div>
+  <div class="main"><div id="content">Inapakia... ⏳</div></div>
+</div>
+<div class="bottom-nav">
+  <button class="active" onclick="showSection('home',this,'bottom')"><span>🏠</span>Nyumbani</button>
+  <button onclick="showSection('members',this,'bottom')"><span>👥</span>Members</button>
+  <button onclick="showSection('pay',this,'bottom')"><span>💰</span>Malipo</button>
+  <button onclick="showSection('workout',this,'bottom')"><span>💪</span>Workout</button>
+  <button onclick="showSection('progress',this,'bottom')"><span>📊</span>Maendeleo</button>
 </div>
 <script>
-const API_URL='https://gym-groups.onrender.com';
-let user=null; let members=[]; let admins=[]; let attends=[];
-function showTab(t){ ['members','add','admin','attend'].forEach(x=>{ document.getElementById('sec-'+x).style.display=x===t?'block':'none'; document.getElementById('tab-'+x).classList.toggle('active',x===t); }); }
-function logout(){ localStorage.removeItem('gym_user'); localStorage.removeItem('gym_token'); location.href='login.html'; }
-function showMsg(id,txt,ok=true){let el=document.getElementById(id);el.textContent=txt;el.className='msg '+(ok?'ok':'err');}
-async function loadDash(){
-  let raw=localStorage.getItem('gym_user');
-  if(!raw){ location.href='login.html'; return; }
-  try{ user=JSON.parse(raw); }catch(e){ location.href='login.html'; return; }
-  user.role=(user.role||'MEMBER').toString().toUpperCase().trim();
-  localStorage.setItem('gym_user',JSON.stringify(user));
-  document.getElementById('hello').textContent='Karibu '+(user.name||user.username)+' 👋';
-  document.getElementById('userTop').textContent=user.username+' • '+user.role+' • ID:'+user.id;
-  document.getElementById('roleLabel').textContent=user.role;
-  document.getElementById('userInfo').textContent=(user.role==='OWNER'?'Wewe ni Owner wa GYM Zanzibar':user.role==='ADMIN'?'Wewe ni Admin':'Wewe ni Member')+' • '+(user.gymGroup||'GYM Zanzibar')+' • '+(user.plan||'');
-  if(user.role==='OWNER'){ document.getElementById('ownerBanner').style.display='block'; document.getElementById('ownerIdShow').textContent=user.id; }
-  // REKEBISHA: Tumia endpoint sahihi za Backend
-  try{ if(user.role==='OWNER'){ let r=await fetch(API_URL+'/api/owner/members/'+user.id); if(r.ok) members=await r.json(); } }catch(e){ members=[]; }
-  try{ if(user.role==='OWNER'){ let r=await fetch(API_URL+'/api/owner/admins/'+user.id); if(r.ok) admins=await r.json(); } }catch(e){ admins=[]; }
-  try{ let r=await fetch(API_URL+'/api/gym/attendance'); if(r.ok) attends=await r.json(); }catch(e){ attends=[]; }
-  document.getElementById('sMembers').textContent=members.length;
-  document.getElementById('sPending').textContent=members.filter(m=>m.status==='pending').length;
-  document.getElementById('sActive').textContent=members.filter(m=>m.status==='active').length;
-  document.getElementById('sAdmins').textContent=admins.length;
-  document.getElementById('todayCount').textContent=attends.length;
-  renderMembers(); renderAttend();
+const API_URL='';
+const token=localStorage.getItem('token');
+const user=JSON.parse(localStorage.getItem('user')||'{}');
+if(!token) location.href='/login.html';
+document.getElementById('name').innerText=user.name||'Karibu';
+document.getElementById('role').innerText=(user.role||'').toUpperCase()+' • Gym ID: '+(user.gym_id||'ALL');
+document.getElementById('avatar').innerText = user.role==='owner'?'👑':user.role==='admin'?'🛡️':user.role==='coach'?'💪':'🏋️';
+if(user.role==='member'){ document.getElementById('btn-members').style.display='none'; document.getElementById('btn-gyms').style.display='none'; }
+if(user.role==='coach'){ document.getElementById('btn-gyms').style.display='none'; }
+let DASH=null, GYMS=[]; let currentSection='home';
+async function api(path,method='GET',body){ const r=await fetch(API_URL+path,{method,headers:{'Content-Type':'application/json','Authorization':'Bearer '+token},body:body?JSON.stringify(body):undefined}); const d=await r.json(); if(!r.ok) alert(d.error||'Hitilafu'); return d; }
+function val(id){ return document.getElementById(id)?.value||''; }
+function logout(){ localStorage.clear(); location.href='/login.html'; }
+function showSection(sec, btn, from){ currentSection=sec; document.querySelectorAll('.side-btn').forEach(b=>b.classList.remove('active')); document.querySelectorAll('.bottom-nav button').forEach(b=>b.classList.remove('active')); if(btn) btn.classList.add('active'); render(); window.scrollTo({top:0,behavior:'smooth'}); }
+async function load(){ DASH = await api('/api/dashboard'); if(user.role==='owner') GYMS = await api('/api/owner/gyms'); if(DASH.members!==undefined) document.getElementById('badgeMembers').innerText=DASH.members; render(); }
+function render(){
+  const c=document.getElementById('content'); if(!DASH){ c.innerHTML='Inapakia...'; return; }
+  if(user.role==='owner'){
+    if(currentSection==='gyms'){ c.innerHTML=`<div class="welcome"><h1>🏋️ Gym <span>Zilizoopo</span></h1><p>Gym zote zinazotumia mfumo wako</p></div><div class="form-card">${GYMS.length? GYMS.map(g=>`<div class="member-row"><div class="member-avatar">🏋️</div><div style="flex:1"><b>${g.name}</b><div style="color:#888;font-size:12px">${g.location} • Members: ${g.members}</div></div><span class="status ok">Active</span></div>`).join('') : `<div class="empty"><div>🏋️</div>Hakuna Gym bado</div>`}</div>`; return; }
+    c.innerHTML=`<div class="welcome"><h1>Karibu, <span>${user.name} 👑</span></h1><p>Wewe ni Owner wa mfumo. Unda Gym, mpe Admin, ona kila kitu.</p></div><div class="grid"><div class="card"><div class="icon">🏋️</div><div class="label">Gym Zote</div><b>${DASH.gyms}</b><small>Zinazotumia mfumo</small></div><div class="card"><div class="icon">👥</div><div class="label">Members Wote</div><b>${DASH.members}</b><small>Kutoka Gym zote</small></div><div class="card"><div class="icon">💰</div><div class="label">Mapato Yote</div><b>${Number(DASH.income).toLocaleString()} TZS</b><small>Jumla</small></div><div class="card"><div class="icon">📈</div><div class="label">Hali</div><b>✅ Active</b><small>Mfumo unafanya kazi</small></div></div><div class="form-card"><h3>➕ Ongeza Gym Mpya + <span>Admin</span></h3><input id="gname" placeholder="Jina la Gym - Mfano: Power Gym"><input id="gloc" placeholder="Mahali - Mfano: Stone Town"><input id="aname" placeholder="Jina la Admin"><input id="aphone" placeholder="Simu ya Admin - 077..."><input id="apass" type="password" placeholder="Password ya Admin"><button class="btn btn-yellow btn-full" onclick="createGym()">Tengeneza Gym →</button></div><div class="form-card"><h3>🏋️ Gym Zilizoopo</h3>${GYMS.length? GYMS.map(g=>`<div class="member-row"><div class="member-avatar">🏋️</div><div style="flex:1"><b>${g.name}</b><div style="color:#888;font-size:12px">${g.location} • Members: ${g.members}</div></div><span class="status ok">Active</span></div>`).join('') : '<p style="color:#999">Hakuna Gym bado</p>'}</div>`; return;
+  }
+  if(user.role==='admin'||user.role==='coach'){
+    if(currentSection==='members'){ c.innerHTML=`<div class="welcome"><h1>👥 Members wa <span>Gym Yako</span></h1><p>Jumla: ${DASH.members} • Leo wamefika: ${DASH.today}</p></div><div class="form-card"><h3>➕ Sajili Member Mpya</h3><input id="mname" placeholder="Jina Kamili"><input id="mphone" placeholder="Simu - 077..."><input id="mpass" placeholder="Password"><select id="mplan"><option>Mwezi 1</option><option>Wiki 1</option><option>Miezi 3</option></select><button class="btn btn-yellow btn-full" onclick="addMember()">Sajili Member →</button></div><div class="form-card"><h3>👥 Orodha ya Members</h3>${(DASH.list||[]).length? `<div class="table-wrap"><table><tr><th>ID</th><th>Jina</th><th>Simu</th><th>Plan</th><th>Inaisha</th><th>Status</th></tr>${DASH.list.map(m=>`<tr><td><b>#${m.id}</b></td><td>${m.full_name}</td><td>${m.phone}</td><td>${m.plan}</td><td>${m.end_date}</td><td><span class="status ${m.status==='Imeisha'?'bad':'ok'}">${m.status}</span></td></tr>`).join('')}</table></div>` : `<div class="empty"><div>👥</div>Hakuna Member bado</div>`}</div>`; return; }
+    if(currentSection==='pay'){ c.innerHTML=`<div class="welcome"><h1>💰 <span>Malipo</span></h1><p>Mapato ya Gym yako: <b>${Number(DASH.income).toLocaleString()} TZS</b></p></div><div class="form-card"><h3>💰 Rekodi Malipo</h3><input id="mid" placeholder="Member ID - Mfano: 5" inputmode="numeric"><input id="amt" placeholder="Kiasi - Mfano: 30000" inputmode="numeric"><button class="btn btn-yellow btn-full" onclick="pay()">✅ Rekodi Malipo →</button><p style="color:#888;font-size:12px;margin-top:8px">Muda wa Member utaongezwa siku 30 kiotomatiki.</p></div><div class="form-card"><h3>👥 Chagua Member kwa haraka</h3>${(DASH.list||[]).map(m=>`<div class="member-row"><div class="member-avatar">🏋️</div><div style="flex:1"><b>${m.full_name}</b><div style="color:#888;font-size:12px">ID: ${m.id} • ${m.plan} • ${m.status}</div></div><button class="btn btn-dark" onclick="document.getElementById('mid').value='${m.id}';window.scrollTo({top:0,behavior:'smooth'})">Chagua</button></div>`).join('')||'<p style="color:#999">Hakuna Member</p>'}</div>`; return; }
+    if(currentSection==='workout'){ c.innerHTML=`<div class="welcome"><h1>💪 <span>Workout Plan</span></h1><p>Tuma mpango wa mazoezi kwa Member</p></div><div class="form-card"><h3>💪 Tuma Workout</h3><input id="mid" placeholder="Member ID"><input id="wtext" placeholder="Mfano: Pushups 3x10, Squats 3x12, Plank 1 min"><button class="btn btn-orange btn-full" onclick="workout()">Tuma Workout →</button></div><div class="form-card"><h3>👥 Members</h3>${(DASH.list||[]).map(m=>`<div class="member-row"><div class="member-avatar">🏋️</div><div style="flex:1"><b>${m.full_name}</b><div style="color:#888;font-size:12px">ID: ${m.id} • ${m.plan}</div></div><button class="btn btn-dark" onclick="document.getElementById('mid').value='${m.id}';window.scrollTo({top:0,behavior:'smooth'})">Chagua</button></div>`).join('')||'<p style="color:#999">Hakuna Member</p>'}</div>`; return; }
+    if(currentSection==='progress'){ c.innerHTML=`<div class="welcome"><h1>📊 <span>Maendeleo ya Gym</span></h1><p>Leo wamefika: <b>${DASH.today}</b> • Members: <b>${DASH.members}</b></p></div><div class="grid"><div class="card"><div class="icon">👥</div><div class="label">Members</div><b>${DASH.members}</b></div><div class="card"><div class="icon">✅</div><div class="label">Leo Waliofika</div><b>${DASH.today}</b></div><div class="card"><div class="icon">💰</div><div class="label">Mapato</div><b>${Number(DASH.income).toLocaleString()} TZS</b></div></div><div class="form-card"><h3>📊 Ripoti ya Leo</h3><p style="color:#666;font-size:14px;line-height:1.8">Leo wamefika <b>${DASH.today}</b> kati ya <b>${DASH.members}</b> Members.<br>Mapato jumla: <b>${Number(DASH.income).toLocaleString()} TZS</b></p></div>`; return; }
+    c.innerHTML=`<div class="welcome"><h1>Karibu, <span>${user.name} ${user.role==='admin'?'🛡️':'💪'}</span></h1><p>${user.role==='admin'?'Wewe ni Admin wa Gym hii. Simamia Kocha, Members na Mapato.':'Wewe ni Kocha. Fundisha Members, tuma Workout, rekodi mahudhurio.'}</p></div><div class="grid"><div class="card"><div class="icon">👥</div><div class="label">Members</div><b>${DASH.members}</b><small>Wa Gym yako</small></div><div class="card"><div class="icon">✅</div><div class="label">Leo Waliofika</div><b>${DASH.today}</b><small>Leo</small></div><div class="card"><div class="icon">💰</div><div class="label">Mapato</div><b>${Number(DASH.income).toLocaleString()} TZS</b><small>Jumla</small></div><div class="card"><div class="icon">🏋️</div><div class="label">Hali</div><b>✅ Active</b><small>Gym inafanya kazi</small></div></div><div class="form-card"><h3>⚡ Haraka - <span>Fanya Sasa</span></h3><div class="btn-row"><button class="btn btn-yellow" onclick="showSection('members')">👥 Sajili Member</button><button class="btn btn-green" onclick="showSection('pay')">💰 Malipo</button><button class="btn btn-orange" onclick="showSection('workout')">💪 Workout</button></div></div>${user.role==='admin'?`<div class="form-card"><h3>➕ Ongeza Kocha</h3><input id="cname" placeholder="Jina la Kocha"><input id="cphone" placeholder="Simu - 077..."><input id="cpass" placeholder="Password"><button class="btn btn-dark btn-full" onclick="addCoach()">Ongeza Kocha →</button></div>`:''}<div class="form-card"><h3>👥 Members wa Karibuni</h3>${(DASH.list||[]).slice(0,5).map(m=>`<div class="member-row"><div class="member-avatar">🏋️</div><div style="flex:1"><b>${m.full_name}</b><div style="color:#888;font-size:12px">${m.plan} • Inaisha: ${m.end_date}</div></div><span class="status ${m.status==='Imeisha'?'bad':'ok'}">${m.status}</span></div>`).join('')||'<p style="color:#999">Hakuna Member bado</p>'}</div>`; return;
+  }
+  if(currentSection==='progress'){ const pct = DASH.member?.weight_start && DASH.member?.weight_now ? Math.min(100, Math.max(0, Math.round(Math.abs(DASH.member.weight_start - DASH.member.weight_now) / Math.max(1, Math.abs(DASH.member.weight_start - 70)) * 100))) : 0; c.innerHTML=`<div class="welcome"><h1>📊 <span>Maendeleo Yangu</span></h1><p>Weka uzito wako kila wiki uone mabadiliko</p></div><div class="form-card"><h3>⚖️ Weka Uzito Wako</h3><input id="ws" type="number" placeholder="Uzito wa Kwanza - Mfano: 85"><input id="wn" type="number" placeholder="Uzito wa Sasa - Mfano: 78"><input id="wg" type="number" placeholder="Lengo - Mfano: 70"><button class="btn btn-yellow btn-full" onclick="saveProgress()">💾 Hifadhi Maendeleo →</button></div><div class="form-card"><h3>📊 Maendeleo Yako: ${pct}%</h3><div class="progress"><div style="width:${pct}%"></div></div><p style="color:#666;font-size:14px">Kwanza: <b>${DASH.member?.weight_start||'-'} kg</b> • Sasa: <b>${DASH.member?.weight_now||'-'} kg</b></p></div>`; return; }
+  if(currentSection==='workout'){ c.innerHTML=`<div class="welcome"><h1>💪 <span>Workout Yangu</span></h1><p>Mpango wako kutoka kwa Kocha</p></div><div class="form-card"><h3>💪 Leo Fanya Hii:</h3><p style="font-size:16px;line-height:1.8;background:#FFF8E1;padding:14px;border-radius:12px">${DASH.workout||'Hakuna mpango bado, muulize Kocha'}</p><a href="https://wa.me/255887387001?text=Habari%20Kocha!%20Nataka%20Workout%20Plan" target="_blank" class="btn btn-green btn-full">💬 Muulize Kocha WhatsApp</a></div>`; return; }
+  c.innerHTML=`<div class="welcome"><h1>Karibu, <span>${user.name} 🏋️</span></h1><p>Endelea kujenga mwili wako. Uko vizuri!</p></div><div class="grid"><div class="card"><div class="icon">📦</div><div class="label">Plan Yako</div><b>${DASH.member?.plan||'-'}</b></div><div class="card"><div class="icon">📅</div><div class="label">Inaisha</div><b style="font-size:18px">${DASH.member?.end_date||'-'}</b></div><div class="card"><div class="icon">⚖️</div><div class="label">Uzito Sasa</div><b>${DASH.member?.weight_now||'-'} kg</b></div><div class="card"><div class="icon">🎯</div><div class="label">Hali</div><b>✅ Active</b></div></div><div class="form-card"><h3>💪 Workout Plan Yako</h3><p style="font-size:15px;line-height:1.8;background:#FFF8E1;padding:14px;border-radius:12px">${DASH.workout||'Hakuna mpango bado, muulize Kocha'}</p><div class="btn-row"><button class="btn btn-yellow" onclick="showSection('workout')">💪 Ona Workout</button><button class="btn btn-green" onclick="showSection('progress')">📊 Maendeleo</button></div></div><div class="form-card"><h3>💰 Lipia Mwezi Mpya</h3><p style="color:#666;font-size:14px">Muda wako unaisha: <b>${DASH.member?.end_date||'-'}</b></p><button class="btn btn-orange btn-full" onclick="location.href='/index.html'">💰 Lipia Sasa →</button></div>`;
 }
-function renderMembers(){
-  let q=(document.getElementById('q').value||'').toLowerCase(); let f=document.getElementById('fStatus').value;
-  let list=members.filter(m=>((m.name||'')+' '+(m.phone||'')+' '+(m.username||'')).toLowerCase().includes(q) && (!f||m.status===f));
-  document.getElementById('memberList').innerHTML='<h3 style="margin:10px 0">👥 Members ('+list.length+')</h3>'+(list.length?list.map(m=>`<div class="member"><div><b>${m.name||m.username}</b> • ${m.phone||''}<br><span style="color:#aaa;font-size:12px">${m.gymGroup||''} • ${m.plan||''}</span> <span class="badge ${m.status==='active'?'b-active':m.status==='pending'?'b-pending':'b-locked'}">${m.status||''}</span></div><div style="display:flex;gap:6px"><button class="btn btn-green" onclick="act('approve',${m.id})">✅ Kubali</button><button class="btn btn-red" onclick="act('reject',${m.id})">🔒 Funga</button></div></div>`).join(''):'<div class="empty">Hakuna wanachama bado. Sajili Member kwanza.</div>');
-  document.getElementById('adminList').innerHTML='<h3 style="margin:14px 0 6px">🛡️ Admins ('+admins.length+')</h3>'+(admins.length?admins.map(a=>`<div class="member"><div><b>${a.name||a.username}</b> • ${a.phone||''}<br><span style="color:#aaa;font-size:12px">ADMIN • ${a.gymGroup||''}</span> <span class="badge b-active">${a.status||''}</span></div><div><span style="font-size:12px;color:#aaa">ID: ${a.id}</span></div></div>`).join(''):'<div class="empty">Hakuna Admin bado.</div>');
-}
-function renderAttend(){ document.getElementById('attList').innerHTML=attends.slice(0,30).map(a=>`<div style="background:#111;padding:10px;border-radius:12px;margin:6px 0;font-size:13px">💪 <b>${a.memberName||''}</b> • ${a.groupName||''} • ${a.createdAt?new Date(a.createdAt).toLocaleString('sw-TZ'):''}</div>`).join('')||'<div class="empty">Hakuna mahudhurio bado.</div>'; }
-async function act(type,id){ try{ let r=await fetch(API_URL+'/api/owner/'+type+'/'+id,{method:'POST'}); let t=await r.text(); document.getElementById('debug').textContent='Approve: '+t.substring(0,200); }catch(e){} loadDash(); }
-async function addMember(){
-  let b={name:document.getElementById('mName').value.trim(),username:document.getElementById('mUser').value.trim(),phone:document.getElementById('mPhone').value.trim(),password:document.getElementById('mPass').value,gymGroup:document.getElementById('mGroup').value,plan:document.getElementById('mPlan').value,role:'MEMBER',createdBy:user.id};
-  if(!b.name||!b.username||!b.password){showMsg('addMsg','Jaza jina, username na password',false);return;}
-  try{ let r=await fetch(API_URL+'/api/auth/register-member',{method:'POST',headers:{'Content-Type':'application/json'},body:JSON.stringify(b)}); let txt=await r.text(); document.getElementById('debug').textContent='Add Member: '+txt.substring(0,300); let d=JSON.parse(txt); if(d.success){ ['mName','mUser','mPhone','mPass'].forEach(id=>document.getElementById(id).value=''); showMsg('addMsg','✅ Member '+b.name+' amesajiliwa! Sasa mkubali hapa.',true); loadDash(); showTab('members'); } else showMsg('addMsg','❌ '+(d.message||'Imeshindikana'),false); }catch(e){ showMsg('addMsg','❌ Backend haijapatikana: '+e.message,false); }
-}
-async function addAdmin(){
-  if(user.role!=='OWNER'){ showMsg('adminMsg','❌ Ni OWNER tu anayeweza kusajili Admin. Uko kama '+user.role,false); return; }
-  if(!user.id){ showMsg('adminMsg','❌ Owner ID haipo. Toka uingie tena kama Owner.',false); return; }
-  let b={name:document.getElementById('aName').value.trim(),username:document.getElementById('aUser').value.trim(),phone:document.getElementById('aPhone').value.trim(),password:document.getElementById('aPass').value,gymGroup:user.gymGroup||'GYM Zanzibar',ownerId:user.id,monthlyFee:document.getElementById('aFee').value||0};
-  if(!b.name||!b.username||!b.password){showMsg('adminMsg','Jaza jina, username na password ya Admin',false);return;}
-  try{ let r=await fetch(API_URL+'/api/auth/register-admin',{method:'POST',headers:{'Content-Type':'application/json'},body:JSON.stringify(b)}); let txt=await r.text(); document.getElementById('debug').textContent='Add Admin: '+txt.substring(0,400); let d={}; try{d=JSON.parse(txt);}catch(e){ showMsg('adminMsg','❌ Backend: '+txt.substring(0,200),false); return; } if(d.success){ ['aName','aUser','aPhone','aPass','aFee'].forEach(id=>document.getElementById(id).value=''); showMsg('adminMsg','✅ Admin '+b.name+' amesajiliwa! Sasa anaweza kuingia na username: '+b.username,true); loadDash(); showTab('members'); } else showMsg('adminMsg','❌ '+(d.message||'Imeshindikana'),false); }catch(e){ showMsg('adminMsg','❌ Backend haijapatikana: '+e.message,false); }
-}
-loadDash();
-</script></body></html>
+async function createGym(){ await api('/api/owner/create-gym','POST',{gymName:val('gname'),location:val('gloc'),adminName:val('aname'),adminPhone:val('aphone'),adminPass:val('apass')}); alert('✅ Gym imetengenezwa!'); load(); }
+async function addMember(){ await api('/api/members','POST',{full_name:val('mname'),phone:val('mphone'),password:val('mpass'),plan:val('mplan')}); alert('✅ Member amesajiliwa!'); load(); }
+async function addCoach(){ await api('/api/coach','POST',{full_name:val('cname'),phone:val('cphone'),password:val('cpass')}); alert('✅ Kocha ameongezwa!'); }
+async function pay(){ await api('/api/pay','POST',{member_id:Number(val('mid')),amount:Number(val('amt'))}); alert('✅ Malipo yamepokelewa!'); load(); }
+async function workout(){ await api('/api/workout','POST',{member_id:Number(val('mid')),plan_text:val('wtext')}); alert('✅ Workout imetumwa!'); }
+async function saveProgress(){ await api('/api/progress','POST',{weightStart:Number(val('ws')),weightNow:Number(val('wn')),weightGoal:Number(val('wg'))}); alert('✅ Imehifadhiwa!'); load(); }
+load();
+</script>
+</body>
+</html>
