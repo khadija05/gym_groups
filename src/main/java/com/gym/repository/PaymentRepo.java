@@ -1,1 +1,5 @@
+package com.gym.repo;
+import com.gym.model.*; import org.springframework.data.jpa.repository.*; import org.springframework.data.repository.query.Param; import java.util.*; import java.time.LocalDate;
+
 public interface PaymentRepo extends JpaRepository<Payment,Long>{ @Query("SELECT COALESCE(SUM(p.amount),0) FROM Payment p WHERE p.gymId=:gymId") long sumByGym(@Param("gymId") Long gymId); @Query("SELECT COALESCE(SUM(p.amount),0) FROM Payment p") long sumAll(); }
+
