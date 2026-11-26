@@ -1,158 +1,120 @@
-<!DOCTYPE html><html lang="sw"><head><meta charset="UTF-8"><meta name="viewport" content="width=device-width,initial-scale=1,maximum-scale=1"><title>GYM Zanzibar - Ingia / Jisajili</title>
+<!DOCTYPE html>
+<html lang="sw">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width,initial-scale=1,maximum-scale=1">
+<title>Ingia - 💪 GYM ZANZIBAR</title>
 <style>
-*{box-sizing:border-box;margin:0;padding:0;font-family:'Segoe UI',system-ui}
-body{background:#0B0B0F;color:#fff;min-height:100vh;display:flex;align-items:flex-start;justify-content:center;padding:12px}
-.box{width:100%;max-width:480px;background:#16161C;border:1px solid #2A2A32;padding:22px;border-radius:28px;margin-top:10px}
-h2{text-align:center;font-size:24px}.sub{text-align:center;color:#888;font-size:13px;margin:6px 0 14px;line-height:1.5}
-.tabs{display:grid;grid-template-columns:1fr 1fr 1fr 1fr;gap:6px;background:#111;padding:6px;border-radius:999px;margin-bottom:16px}
-.tab{padding:10px 4px;border:none;border-radius:999px;background:transparent;color:#aaa;font-weight:700;font-size:11px;cursor:pointer}
-.tab.active{background:#FFD400;color:#000}
-label{font-size:13px;color:#aaa}
-input,select{width:100%;padding:14px;border:1px solid #333;border-radius:14px;margin:6px 0 10px;background:#111;color:#fff;font-size:15px;outline:none}input:focus,select:focus{border-color:#FFD400}
-.btn{width:100%;padding:15px;border:none;border-radius:999px;font-weight:800;cursor:pointer;font-size:15px;margin-top:6px}.btn-yellow{background:linear-gradient(135deg,#FFD400,#FFAA00);color:#000}.btn-green{background:#25D366;color:#fff}.btn-dark{background:#222;color:#fff;border:1px solid #333}.btn:disabled{opacity:.6}
-.msg{padding:12px;border-radius:12px;font-size:13px;margin:10px 0;display:none;text-align:center;line-height:1.5;white-space:pre-line}.msg.err{display:block;background:#FF2D0022;color:#FF6B6B;border:1px solid #FF2D00}.msg.ok{display:block;background:#25D36622;color:#25D366;border:1px solid #25D366}
-.hint{background:#FFD40011;border:1px dashed #FFD40055;padding:10px;border-radius:12px;font-size:12px;color:#FFD400;line-height:1.6;margin-bottom:12px}
-.debug{margin-top:10px;font-size:11px;color:#666;text-align:center;word-break:break-all}
-.page{display:none}.page.active{display:block}
-.row{display:grid;grid-template-columns:1fr 1fr;gap:8px}
-</style></head><body>
-<div class="box">
-<div style="text-align:center;font-size:48px">💪</div>
-<h2>GYM Zanzibar</h2><p class="sub">Chagua — Ingia au Jisajili. Kila kitu kiko hapa kwenye page moja.</p>
-
-<div class="tabs">
-<button class="tab active" id="tab-login" onclick="showPage('login')">🔑 Ingia</button>
-<button class="tab" id="tab-member" onclick="showPage('member')">💪 Member</button>
-<button class="tab" id="tab-owner" onclick="showPage('owner')">👑 Owner</button>
-<button class="tab" id="tab-admin" onclick="showPage('admin')">🛡️ Admin</button>
-</div>
-
-<!-- INGIA -->
-<div id="page-login" class="page active">
-<div class="hint">👑 Owner: <b>khadija / 1234</b> &nbsp;|&nbsp; 🛡️ Admin: <b>admin1 / 1234</b> &nbsp;|&nbsp; 💪 Member: akaunti yako</div>
-<label>Username</label><input id="login-u" placeholder="mfano: khadija" autocomplete="username">
-<label>Password</label><input id="login-p" type="password" placeholder="••••••••" autocomplete="current-password">
-<div id="msg-login" class="msg"></div>
-<button class="btn btn-yellow" id="btn-login" onclick="doLogin()">Ingia →</button>
-<button class="btn btn-green" id="wakeBtn" onclick="wakeBackend()">⏰ Amsha Backend Kwanza (50s) →</button>
-</div>
-
-<!-- MEMBER -->
-<div id="page-member" class="page">
-<div class="hint">Jisajili kama Member. Utasubiri Owner akukubali ndipo uingie.</div>
-<label>Jina Kamili</label><input id="m-name" placeholder="mfano: Ali Juma">
-<label>Username</label><input id="m-u" placeholder="mfano: ali01">
-<label>Simu</label><input id="m-phone" placeholder="0777000000">
-<label>Gym Group</label><input id="m-gym" value="Zanzibar Gym">
-<label>Lengo</label><select id="m-goal"><option value="Kupunguza uzito">Kupunguza uzito</option><option value="Kujenga misuli">Kujenga misuli</option><option value="Afya / Fitness">Afya / Fitness</option></select>
-<label>Password</label><input id="m-p" type="password" placeholder="••••••••">
-<div id="msg-member" class="msg"></div>
-<button class="btn btn-yellow" id="btn-member" onclick="doRegMember()">Jisajili Member →</button>
-</div>
-
-<!-- OWNER -->
-<div id="page-owner" class="page">
-<div class="hint">Sajili Owner mara moja tu. Owner ndiye anayemiliki Gym. Baada ya kusajili, kumbuka Owner ID yako — Admin ataitumia.</div>
-<label>Jina Kamili</label><input id="o-name" placeholder="mfano: Khadija">
-<label>Username</label><input id="o-u" placeholder="mfano: khadija">
-<label>Simu</label><input id="o-phone" placeholder="0777000000">
-<label>Jina la Gym</label><input id="o-gym" value="Zanzibar Gym">
-<label>Password</label><input id="o-p" type="password" placeholder="••••••••">
-<div id="msg-owner" class="msg"></div>
-<button class="btn btn-yellow" id="btn-owner" onclick="doRegOwner()">Sajili Owner 👑 →</button>
-</div>
-
-<!-- ADMIN -->
-<div id="page-admin" class="page">
-<div class="hint">Admin anasajiliwa na Owner. Lazima ujue <b>Owner ID</b>. Kama Owner ni <b>khadija</b>, Owner ID yake ni <b>1</b>. Ukikosea, utasema "Owner hayupo".</div>
-<label>Owner ID (lazima)</label><input id="a-ownerId" placeholder="mfano: 1" inputmode="numeric">
-<label>Jina Kamili</label><input id="a-name" placeholder="mfano: Admin One">
-<label>Username</label><input id="a-u" placeholder="mfano: admin1">
-<label>Simu</label><input id="a-phone" placeholder="0777000000">
-<label>Password</label><input id="a-p" type="password" placeholder="••••••••">
-<div id="msg-admin" class="msg"></div>
-<button class="btn btn-yellow" id="btn-admin" onclick="doRegAdmin()">Sajili Admin 🛡️ →</button>
-</div>
-
-<button class="btn btn-dark" onclick="location.href='index.html'">← Nyumbani</button>
-<div id="debug" class="debug"></div>
-</div>
+*{box-sizing:border-box;margin:0;padding:0;font-family:'Segoe UI',system-ui,-apple-system}
+body{background:#0B0B0F;color:#fff;min-height:100vh;display:flex;flex-direction:column;overflow-x:hidden}
+a{color:#FFD400;text-decoration:none}
+.top{position:sticky;top:0;z-index:50;background:rgba(11,11,15,.95);backdrop-filter:blur(12px);border-bottom:1px solid #222;padding:12px 16px;display:flex;justify-content:space-between;align-items:center;gap:10px}
+.logo{font-size:19px;font-weight:900;white-space:nowrap}.logo span{color:#FFD400}
+.top a{font-size:13px;font-weight:700}
+.center{flex:1;display:flex;justify-content:center;align-items:center;padding:20px 14px;background:radial-gradient(600px 300px at 50% 0%,rgba(255,212,0,.12),transparent)}
+.box{background:#151515;border:1px solid #2A2A2A;width:100%;max-width:430px;padding:26px;border-radius:24px;box-shadow:0 20px 50px rgba(0,0,0,.5)}
+.box-logo{text-align:center;font-size:52px;margin-bottom:6px}
+.box h2{text-align:center;font-size:22px}
+.box p.sub{text-align:center;color:#999;font-size:13px;margin:6px 0 16px}
+.tabs{display:flex;gap:8px;background:#0B0B0F;padding:5px;border-radius:999px;margin-bottom:16px}
+.tabs button{flex:1;padding:11px;border:0;border-radius:999px;font-weight:800;cursor:pointer;font-size:14px;background:transparent;color:#aaa;transition:.2s}
+.tabs button.active{background:linear-gradient(135deg,#FFD400,#FFAA00);color:#000}
+label{font-size:12px;color:#aaa;font-weight:700;display:block;margin-top:10px}
+input,select{width:100%;padding:14px;border:1px solid #333;border-radius:14px;margin:6px 0;font-size:15px;background:#111;color:#fff;outline:none}
+input:focus{border-color:#FFD400}
+.show-pass{display:flex;align-items:center;gap:6px;font-size:12px;color:#888;margin:4px 0}
+.show-pass input{width:auto;margin:0}
+.btn{width:100%;padding:15px;border:none;border-radius:999px;font-weight:800;cursor:pointer;font-size:15px;display:flex;align-items:center;justify-content:center;gap:6px;margin-top:12px}
+.btn:active{transform:scale(.97)}
+.btn-yellow{background:linear-gradient(135deg,#FFD400,#FFAA00);color:#000;box-shadow:0 8px 20px rgba(255,212,0,.25)}
+.btn-green{background:#25D366;color:#fff}
+#msg{text-align:center;font-size:13px;margin-top:12px;min-height:18px;color:#ff6b6b}
+#msg.ok{color:#22c55e}
+.demo{background:#FFF8E1;color:#222;padding:12px;border-radius:14px;font-size:12px;line-height:1.7;margin-top:14px}
+.footer{text-align:center;padding:16px;color:#666;font-size:12px;border-top:1px solid #222}
+@media(max-width:600px){
+  .top{padding:10px 12px}.logo{font-size:17px}
+  .center{padding:14px 12px;align-items:flex-start;padding-top:22px}
+  .box{padding:20px 16px;border-radius:20px}.box-logo{font-size:44px}.box h2{font-size:20px}
+  .tabs button{padding:10px;font-size:13px}input{padding:13px;font-size:16px}.btn{padding:14px;font-size:14px}
+}
+@media(max-width:360px){.logo{font-size:15px}.box{padding:18px 12px}.box h2{font-size:18px}}
+</style>
+</head>
+<body>
+<div class="top"><div class="logo">💪 GYM <span>ZANZIBAR</span></div><a href="/index.html">← Nyumbani</a></div>
+<div class="center"><div class="box">
+  <div class="box-logo">💪</div>
+  <h2>Karibu Tena!</h2>
+  <p class="sub">Ingia kuona Dashboard yako — Owner, Admin, Kocha au Member</p>
+  <div class="tabs">
+    <button id="tLogin" class="active" onclick="showTab('login')">🔑 Ingia</button>
+    <button id="tReg" onclick="showTab('reg')">📝 Jisajili</button>
+  </div>
+  <div id="loginForm">
+    <label>NAMBA YA SIMU</label>
+    <input id="phone" placeholder="Mfano: 077... / 070..." inputmode="tel">
+    <label>PASSWORD</label>
+    <input id="pass" type="password" placeholder="Password yako">
+    <label class="show-pass"><input type="checkbox" onclick="document.getElementById('pass').type=this.checked?'text':'password'"> Onyesha Password</label>
+    <button class="btn btn-yellow" onclick="login()">INGIA →</button>
+    <button class="btn btn-green" onclick="location.href='https://wa.me/255887387001?text=Habari!%20Nimesahau%20password%20yangu'">💬 Nimesahau Password?</button>
+  </div>
+  <div id="regForm" style="display:none">
+    <label>JINA KAMILI</label>
+    <input id="rName" placeholder="Jina lako kamili">
+    <label>NAMBA YA SIMU</label>
+    <input id="rPhone" placeholder="077..." inputmode="tel">
+    <label>PASSWORD</label>
+    <input id="rPass" type="password" placeholder="Tengeneza password">
+    <label class="show-pass"><input type="checkbox" onclick="document.getElementById('rPass').type=this.checked?'text':'password'"> Onyesha Password</label>
+    <button class="btn btn-yellow" onclick="register()">JISAJILI →</button>
+  </div>
+  <p id="msg"></p>
+  <div class="demo"><b>🧪 Jaribu (Demo):</b><br>Owner: <b>0700000000</b> / <b>Owner123!</b><br>Member mpya: Jisajili hapo juu</div>
+</div></div>
+<div class="footer">© 2026 Gym Zanzibar • Stone Town • Mjini Magharibi • Forodhani</div>
 <script>
-const API_URL='https://gym-groups.onrender.com';
-function showPage(name){
-  document.querySelectorAll('.page').forEach(e=>e.classList.remove('active'));
-  document.querySelectorAll('.tab').forEach(e=>e.classList.remove('active'));
-  document.getElementById('page-'+name).classList.add('active');
-  document.getElementById('tab-'+name).classList.add('active');
-  document.getElementById('debug').textContent='';
+const API_URL='';
+function showTab(t){
+  document.getElementById('loginForm').style.display = t==='login'?'block':'none';
+  document.getElementById('regForm').style.display = t==='reg'?'block':'none';
+  document.getElementById('tLogin').classList.toggle('active', t==='login');
+  document.getElementById('tReg').classList.toggle('active', t==='reg');
+  document.getElementById('msg').innerText='';
 }
-function showMsg(id,t,ok=false){let e=document.getElementById(id);e.textContent=t;e.className='msg '+(ok?'ok':'err');}
-async function wakeBackend(){
-  let b=document.getElementById('wakeBtn'); b.disabled=true; b.textContent='⏳ Inaamsha... subiri 50s';
-  showMsg('msg-login','⏳ Backend imelala (Render Free). Inaamka... Subiri 50s.',true);
-  try{ let r=await fetch(API_URL+'/api/health',{cache:'no-store'}); let t=await r.text(); document.getElementById('debug').textContent='Health: '+t.substring(0,200); if(r.ok) showMsg('msg-login','✅ Backend Imeamka! Sasa Ingia.',true); else showMsg('msg-login','⚠️ '+t.substring(0,150)); }catch(e){ showMsg('msg-login','❌ Bado inaamka. Subiri 30s bonyeza tena.'); }
-  b.disabled=false; b.textContent='⏰ Amsha Backend Kwanza (50s) →';
-}
-async function doLogin(){
-  let u=document.getElementById('login-u').value.trim(), p=document.getElementById('login-p').value;
-  if(!u||!p){showMsg('msg-login','Jaza username na password');return;}
-  let btn=document.getElementById('btn-login'); btn.disabled=true; btn.textContent='⏳ Inaingia...';
+async function login(){
+  const phone=document.getElementById('phone').value.trim();
+  const password=document.getElementById('pass').value;
+  const msg=document.getElementById('msg');
+  if(!phone || !password){ msg.innerText='Jaza simu na password'; return; }
+  msg.innerText='Inaingia... ⏳'; msg.className='ok';
   try{
-    let r=await fetch(API_URL+'/api/auth/login',{method:'POST',headers:{'Content-Type':'application/json'},body:JSON.stringify({username:u,password:p})});
-    let txt=await r.text(); document.getElementById('debug').textContent='Status: '+r.status+' | '+txt.substring(0,300);
-    if(txt.trim().startsWith('<')){showMsg('msg-login','❌ Backend imelala.\n1. Bonyeza Amsha Backend\n2. Subiri 50s\n3. Ingia tena'); btn.disabled=false; btn.textContent='Ingia →'; return;}
-    let d={}; try{d=JSON.parse(txt);}catch(e){showMsg('msg-login','❌ '+txt.substring(0,200)); btn.disabled=false; btn.textContent='Ingia →'; return;}
-    if(d.success){
-      let role=(d.role||'MEMBER').toUpperCase();
-      let userData={...d,role:role,username:u,userId:d.userId||d.id,ownerId:d.ownerId||d.id};
-      localStorage.setItem('gym_user',JSON.stringify(userData));
-      localStorage.setItem('gym_token','logged-in-'+Date.now());
-      showMsg('msg-login','✅ Karibu '+(d.name||d.username)+'! Inaelekea...',true);
-      setTimeout(()=>{ if(role==='OWNER') location.href='owner-dashboard.html'; else if(role==='ADMIN') location.href='admin-dashboard.html'; else location.href='dashboard.html'; },800); return;
-    }
-    showMsg('msg-login','❌ '+(d.message||'Imeshindikana'));
-  }catch(e){showMsg('msg-login','❌ Backend haijapatikana. Bonyeza Amsha Backend kwanza.');}
-  btn.disabled=false; btn.textContent='Ingia →';
+    const r=await fetch(API_URL+'/api/auth/login',{method:'POST',headers:{'Content-Type':'application/json'},body:JSON.stringify({phone,password})});
+    const d=await r.json();
+    if(!r.ok){ msg.innerText=d.error||'Imeshindikana kuingia'; msg.style.color='#ff6b6b'; return; }
+    localStorage.setItem('token',d.token);
+    localStorage.setItem('user',JSON.stringify(d.user));
+    location.href='/dashboard.html';
+  }catch(e){ msg.innerText='Server haipatikani. Jaribu tena.'; msg.style.color='#ff6b6b'; }
 }
-async function doRegMember(){
-  let name=document.getElementById('m-name').value.trim(),u=document.getElementById('m-u').value.trim(),phone=document.getElementById('m-phone').value.trim(),gymGroup=document.getElementById('m-gym').value.trim(),goal=document.getElementById('m-goal').value,p=document.getElementById('m-p').value;
-  if(!name||!u||!phone||!p){showMsg('msg-member','Jaza zote');return;}
-  let btn=document.getElementById('btn-member'); btn.disabled=true; btn.textContent='⏳ Inasajili...';
+async function register(){
+  const fullName=document.getElementById('rName').value.trim();
+  const phone=document.getElementById('rPhone').value.trim();
+  const password=document.getElementById('rPass').value;
+  const msg=document.getElementById('msg');
+  if(!fullName || !phone || !password){ msg.innerText='Jaza taarifa zote'; return; }
+  msg.innerText='Inajisajili... ⏳'; msg.className='ok';
   try{
-    let r=await fetch(API_URL+'/api/auth/register-member',{method:'POST',headers:{'Content-Type':'application/json'},body:JSON.stringify({name:name,username:u,phone:phone,password:p,gymGroup:gymGroup,goal:goal,plan:'JARIBIO'})});
-    let txt=await r.text(); document.getElementById('debug').textContent='Status: '+r.status+' | '+txt.substring(0,300);
-    let d={}; try{d=JSON.parse(txt);}catch(e){showMsg('msg-member','❌ '+txt.substring(0,200)); btn.disabled=false; btn.textContent='Jisajili Member →'; return;}
-    if(d.success){showMsg('msg-member','✅ '+(d.message||'Umesajiliwa! Subiri ukubaliwe'),true); setTimeout(()=>showPage('login'),1500); return;}
-    showMsg('msg-member','❌ '+(d.message||'Imeshindikana'));
-  }catch(e){showMsg('msg-member','❌ Backend imelala. Amsha kwanza kwenye Tab ya Ingia.');}
-  btn.disabled=false; btn.textContent='Jisajili Member →';
+    const r=await fetch(API_URL+'/api/auth/register',{method:'POST',headers:{'Content-Type':'application/json'},body:JSON.stringify({fullName,phone,password})});
+    const d=await r.json();
+    if(!r.ok){ msg.innerText=d.error; msg.style.color='#ff6b6b'; return; }
+    msg.innerText='✅ Umejisajili! Ingia sasa'; msg.style.color='#22c55e';
+    showTab('login'); document.getElementById('phone').value=phone;
+  }catch(e){ msg.innerText='Server haipatikani. Jaribu tena.'; }
 }
-async function doRegOwner(){
-  let name=document.getElementById('o-name').value.trim(),u=document.getElementById('o-u').value.trim(),phone=document.getElementById('o-phone').value.trim(),gymGroup=document.getElementById('o-gym').value.trim(),p=document.getElementById('o-p').value;
-  if(!name||!u||!phone||!p){showMsg('msg-owner','Jaza zote');return;}
-  let btn=document.getElementById('btn-owner'); btn.disabled=true; btn.textContent='⏳ Inasajili...';
-  try{
-    let r=await fetch(API_URL+'/api/auth/register-owner',{method:'POST',headers:{'Content-Type':'application/json'},body:JSON.stringify({name:name,username:u,phone:phone,password:p,gymGroup:gymGroup})});
-    let txt=await r.text(); document.getElementById('debug').textContent='Status: '+r.status+' | '+txt.substring(0,300);
-    let d={}; try{d=JSON.parse(txt);}catch(e){showMsg('msg-owner','❌ '+txt.substring(0,200)); btn.disabled=false; btn.textContent='Sajili Owner 👑 →'; return;}
-    if(d.success){showMsg('msg-owner','✅ '+(d.message||'Owner amesajiliwa!')+'\nOwner ID yako ni: '+(d.userId||d.id||'1')+'\nSasa nenda Tab ya Ingia uingie.',true); setTimeout(()=>showPage('login'),2000); return;}
-    showMsg('msg-owner','❌ '+(d.message||'Imeshindikana'));
-  }catch(e){showMsg('msg-owner','❌ Backend imelala. Amsha kwanza kwenye Tab ya Ingia.');}
-  btn.disabled=false; btn.textContent='Sajili Owner 👑 →';
-}
-async function doRegAdmin(){
-  let ownerId=document.getElementById('a-ownerId').value.trim(),name=document.getElementById('a-name').value.trim(),u=document.getElementById('a-u').value.trim(),phone=document.getElementById('a-phone').value.trim(),p=document.getElementById('a-p').value;
-  if(!ownerId||!name||!u||!phone||!p){showMsg('msg-admin','Jaza zote, usisahau Owner ID');return;}
-  let btn=document.getElementById('btn-admin'); btn.disabled=true; btn.textContent='⏳ Inasajili...';
-  try{
-    let r=await fetch(API_URL+'/api/auth/register-admin',{method:'POST',headers:{'Content-Type':'application/json'},body:JSON.stringify({name:name,username:u,phone:phone,password:p,ownerId:parseInt(ownerId)})});
-    let txt=await r.text(); document.getElementById('debug').textContent='Status: '+r.status+' | '+txt.substring(0,300);
-    let d={}; try{d=JSON.parse(txt);}catch(e){showMsg('msg-admin','❌ '+txt.substring(0,200)); btn.disabled=false; btn.textContent='Sajili Admin 🛡️ →'; return;}
-    if(d.success){showMsg('msg-admin','✅ '+(d.message||'Admin amesajiliwa!')+'\nSasa nenda Tab ya Ingia uingie.',true); setTimeout(()=>showPage('login'),1500); return;}
-    showMsg('msg-admin','❌ '+(d.message||'Imeshindikana'));
-  }catch(e){showMsg('msg-admin','❌ Backend imelala. Amsha kwanza kwenye Tab ya Ingia.');}
-  btn.disabled=false; btn.textContent='Sajili Admin 🛡️ →';
-}
-document.getElementById('login-p').addEventListener('keypress',e=>{if(e.key==='Enter')doLogin();});
-fetch(API_URL+'/api/health').catch(()=>{});
-</script></body></html>
+document.getElementById('pass').addEventListener('keydown',e=>{ if(e.key==='Enter') login(); });
+document.getElementById('rPass').addEventListener('keydown',e=>{ if(e.key==='Enter') register(); });
+</script>
+</body>
+</html>
