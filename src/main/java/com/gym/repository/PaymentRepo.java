@@ -1,0 +1,1 @@
+public interface PaymentRepo extends JpaRepository<Payment,Long>{ @Query("SELECT COALESCE(SUM(p.amount),0) FROM Payment p WHERE p.gymId=:gymId") long sumByGym(@Param("gymId") Long gymId); @Query("SELECT COALESCE(SUM(p.amount),0) FROM Payment p") long sumAll(); }
