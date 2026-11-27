@@ -9,22 +9,13 @@ public class DashboardController {
   private Long gymId(HttpServletRequest r){ Object v=r.getAttribute("gymId"); if(v==null) v=r.getAttribute("gym_id"); if(v==null) return null; try{return Long.valueOf(v.toString());}catch(Exception e){return null;} }
   private Long userId(HttpServletRequest r){ Object v=r.getAttribute("userId"); if(v==null) v=r.getAttribute("user_id"); if(v==null) return null; try{return Long.valueOf(v.toString());}catch(Exception e){return null;} }
   private long safeLong(Long v){ return v==null?0:v; }
-
   @GetMapping("/dashboard") public ResponseEntity<?> dashboard(HttpServletRequest r){
     String ro=role(r);
     if(ro.isEmpty()) return ResponseEntity.ok(Map.of("role","guest","gyms",0,"members",0,"income",0,"today",0,"list",List.of()));
     if("owner".equals(ro)){
-      long gc=0,mc=0,inc=0;
-      try{gc=gyms.count();}catch(Exception e){}
-      try{mc=users.findAll().stream().filter(u->u.getRole()!=null&&u.getRole().equalsIgnoreCase("member")).count();}catch(Exception e){}
-      try{inc=safeLong(payments.sumAll());}catch(Exception e){}
-      // FIX: Rudisha na orodha ya Gym ndani ya dashboard yenyewe
+      long gc=0,mc=0,inc=0; try{gc=gyms.count();}catch(Exception e){} try{mc=users.findAll().stream().filter(u->u.getRole()!=null&&u.getRole().equalsIgnoreCase("member")).count();}catch(Exception e){} try{inc=safeLong(payments.sumAll());}catch(Exception e){}
       Map<String,Object> res=new HashMap<>(); res.put("role",ro); res.put("gyms",gc); res.put("members",mc); res.put("income",inc); res.put("today",mc); res.put("list",List.of());
-      try{
-        var gymList=gyms.findAll().stream().map(g->{ Map<String,Object> mm=new HashMap<>(); mm.put("id",g.getId()); mm.put("name",g.getName()==null?"":g.getName()); mm.put("location",g.getLocation()==null?"":g.getLocation());
-        long c=users.findAll().stream().filter(u->u.getRole()!=null&&u.getRole().equalsIgnoreCase("member")&&g.getId()!=null&&g.getId().equals(u.getGymId())).count(); mm.put("members",c); return mm; }).toList();
-        res.put("gymsList",gymList);
-      }catch(Exception e){ res.put("gymsList",List.of()); }
+      try{ var gymList=gyms.findAll().stream().map(g->{ Map<String,Object> mm=new HashMap<>(); mm.put("id",g.getId()); mm.put("name",g.getName()==null?"":g.getName()); mm.put("location",g.getLocation()==null?"":g.getLocation()); long c=users.findAll().stream().filter(u->u.getRole()!=null&&u.getRole().equalsIgnoreCase("member")&&g.getId()!=null&&g.getId().equals(u.getGymId())).count(); mm.put("members",c); return mm; }).toList(); res.put("gymsList",gymList); }catch(Exception e){ res.put("gymsList",List.of()); }
       return ResponseEntity.ok(res);
     }
     if(List.of("admin","coach","trainer").contains(ro)){
@@ -40,22 +31,19 @@ public class DashboardController {
     Map<String,Object> mem=new HashMap<>(); mem.put("plan",m==null||m.getPlan()==null?"Mwezi 1":m.getPlan()); mem.put("end_date",m==null||m.getEndDate()==null?"":m.getEndDate().toString()); mem.put("weight_now",m==null||m.getWeightNow()==null?0:m.getWeightNow()); mem.put("weight_start",m==null||m.getWeightStart()==null?0:m.getWeightStart()); mem.put("weight_goal",m==null||m.getWeightGoal()==null?0:m.getWeightGoal());
     return ResponseEntity.ok(Map.of("role",ro,"member",mem,"workout",w==null?"Hakuna mpango bado, muulize Kocha":w.getPlanText(),"members",1,"income",0,"today",0));
   }
-
   @PostMapping("/owner/create-gym") public ResponseEntity<?> createGym(@RequestBody Map<String,String> b, HttpServletRequest r){
     if(!"owner".equals(role(r))) return ResponseEntity.status(403).body(Map.of("error","Huna ruhusa - Ingia kama Owner"));
     if(b.get("adminPhone")==null||b.get("adminPhone").isBlank()) return ResponseEntity.badRequest().body(Map.of("error","Simu ya Admin inahitajika"));
     if(users.findByPhone(b.get("adminPhone")).isPresent()) return ResponseEntity.badRequest().body(Map.of("error","Admin huyo tayari yupo - tumia namba nyingine"));
     Gym g=new Gym(); g.setName(b.get("gymName")); g.setLocation(b.get("location")); g=gyms.save(g);
-    User a=new User(); a.setGymId(g.getId()); a.setFullName(b.get("adminName")); a.setPhone(b.get("adminPhone")); a.setPasswordHash(encoder.encode(b.get("adminPass")==null?"123456":b.get("adminPass"))); a.setRole("admin"); a.setActive(true); users.save(a);
+    User a=new User(); a.setGymId(g.getId()); a.setFullName(b.get("adminName")); a.setPhone(b.get("adminPhone")); a.setPasswordHash(encoder.encode(b.get("adminPass")==null?"123456":b.get("adminPass"))); a.setRole("admin"); a.setActive(true); try{a.setStatus("ACTIVE");}catch(Exception ignored){} users.save(a);
     return ResponseEntity.ok(Map.of("message","Gym na Admin vimetengenezwa"));
   }
-
   @GetMapping("/owner/gyms") public ResponseEntity<?> allGyms(HttpServletRequest r){
     if(!"owner".equals(role(r))) return ResponseEntity.status(403).body(Map.of("error","Huna ruhusa"));
-    var list=gyms.findAll().stream().map(g->{ Map<String,Object> mm=new HashMap<>(); mm.put("id",g.getId()); mm.put("name",g.getName()==null?"":g.getName()); mm.put("location",g.getLocation()==null?"":g.getLocation()); long c=users.findAll().stream().filter(u->u.getRole()!=null&&u.getRole().equalsIgnoreCase("member")&&g.getId().equals(u.getGymId())).count(); mm.put("members",c); return mm; }).toList();
+    var list=gyms.findAll().stream().map(g->{ Map<String,Object> mm=new HashMap<>(); mm.put("id",g.getId()); mm.put("name",g.getName()==null?"":g.getName()); mm.put("location",g.getLocation()==null?"":g.getLocation()); long c=users.findAll().stream().filter(u->u.getRole()!=null&&u.getRole().equalsIgnoreCase("member")&&g.getId()!=null&&g.getId().equals(u.getGymId())).count(); mm.put("members",c); return mm; }).toList();
     return ResponseEntity.ok(list);
   }
-
   @PostMapping("/members") public ResponseEntity<?> addMember(@RequestBody Map<String,String> b, HttpServletRequest r){
     if(!List.of("admin","coach","trainer").contains(role(r))) return ResponseEntity.status(403).body(Map.of("error","Huna ruhusa - Ingia kama Admin"));
     if(users.findByPhone(b.get("phone")).isPresent()) return ResponseEntity.badRequest().body(Map.of("error","Namba imeshatumika"));
