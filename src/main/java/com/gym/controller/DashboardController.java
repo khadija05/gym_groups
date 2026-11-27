@@ -9,6 +9,7 @@ public class DashboardController {
   private Long gymId(HttpServletRequest r){ Object v=r.getAttribute("gymId"); if(v==null) v=r.getAttribute("gym_id"); if(v==null) return null; try{return Long.valueOf(v.toString());}catch(Exception e){return null;} }
   private Long userId(HttpServletRequest r){ Object v=r.getAttribute("userId"); if(v==null) v=r.getAttribute("user_id"); if(v==null) return null; try{return Long.valueOf(v.toString());}catch(Exception e){return null;} }
   private long safeLong(Long v){ return v==null?0:v; }
+  private String cleanPhone(String p){ if(p==null) return ""; p=p.trim().replaceAll("[\\s-]",""); if(p.startsWith("+255")) p="0"+p.substring(4); return p; }
   @GetMapping("/dashboard") public ResponseEntity<?> dashboard(HttpServletRequest r){
     String ro=role(r);
     if(ro.isEmpty()) return ResponseEntity.ok(Map.of("role","guest","gyms",0,"members",0,"income",0,"today",0,"list",List.of()));
@@ -33,10 +34,13 @@ public class DashboardController {
   }
   @PostMapping("/owner/create-gym") public ResponseEntity<?> createGym(@RequestBody Map<String,String> b, HttpServletRequest r){
     if(!"owner".equals(role(r))) return ResponseEntity.status(403).body(Map.of("error","Huna ruhusa - Ingia kama Owner"));
-    if(b.get("adminPhone")==null||b.get("adminPhone").isBlank()) return ResponseEntity.badRequest().body(Map.of("error","Simu ya Admin inahitajika"));
-    if(users.findByPhone(b.get("adminPhone")).isPresent()) return ResponseEntity.badRequest().body(Map.of("error","Admin huyo tayari yupo - tumia namba nyingine"));
-    Gym g=new Gym(); g.setName(b.get("gymName")); g.setLocation(b.get("location")); g=gyms.save(g);
-    User a=new User(); a.setGymId(g.getId()); a.setFullName(b.get("adminName")); a.setPhone(b.get("adminPhone")); a.setPasswordHash(encoder.encode(b.get("adminPass")==null?"123456":b.get("adminPass"))); a.setRole("admin"); a.setActive(true); try{a.setStatus("ACTIVE");}catch(Exception ignored){} users.save(a);
+    String gymName = b.get("gymName")==null?"":b.get("gymName").trim();
+    String adminPhone = cleanPhone(b.get("adminPhone"));
+    if(gymName.isEmpty()) return ResponseEntity.badRequest().body(Map.of("error","Jina la Gym linahitajika"));
+    if(adminPhone.isEmpty()||adminPhone.length()<10) return ResponseEntity.badRequest().body(Map.of("error","Simu ya Admin si sahihi - mfano 077..."));
+    if(users.findByPhone(adminPhone).isPresent()) return ResponseEntity.badRequest().body(Map.of("error","Admin huyo tayari yupo - tumia namba nyingine"));
+    Gym g=new Gym(); g.setName(gymName); g.setLocation(b.get("location")==null?"Zanzibar":b.get("location").trim()); g=gyms.save(g);
+    User a=new User(); a.setGymId(g.getId()); a.setFullName(b.get("adminName")==null||b.get("adminName").isBlank()?"Admin":b.get("adminName").trim()); a.setPhone(adminPhone); a.setPasswordHash(encoder.encode(b.get("adminPass")==null||b.get("adminPass").isBlank()?"123456":b.get("adminPass"))); a.setRole("admin"); a.setActive(true); try{a.setStatus("ACTIVE");}catch(Exception ignored){} users.save(a);
     return ResponseEntity.ok(Map.of("message","Gym na Admin vimetengenezwa"));
   }
   @GetMapping("/owner/gyms") public ResponseEntity<?> allGyms(HttpServletRequest r){
@@ -46,15 +50,16 @@ public class DashboardController {
   }
   @PostMapping("/members") public ResponseEntity<?> addMember(@RequestBody Map<String,String> b, HttpServletRequest r){
     if(!List.of("admin","coach","trainer").contains(role(r))) return ResponseEntity.status(403).body(Map.of("error","Huna ruhusa - Ingia kama Admin"));
-    if(users.findByPhone(b.get("phone")).isPresent()) return ResponseEntity.badRequest().body(Map.of("error","Namba imeshatumika"));
+    String phone=cleanPhone(b.get("phone"));
+    if(users.findByPhone(phone).isPresent()) return ResponseEntity.badRequest().body(Map.of("error","Namba imeshatumika"));
     Long gid=gymId(r); if(gid==null&&userId(r)!=null){var a=users.findById(userId(r)).orElse(null); if(a!=null) gid=a.getGymId();}
-    User u=new User(); u.setGymId(gid); u.setFullName(b.get("full_name")); u.setPhone(b.get("phone")); u.setPasswordHash(encoder.encode(b.get("password")==null?"123456":b.get("password"))); u.setRole("member"); u.setActive(true); u=users.save(u);
+    User u=new User(); u.setGymId(gid); u.setFullName(b.get("full_name")); u.setPhone(phone); u.setPasswordHash(encoder.encode(b.get("password")==null?"123456":b.get("password"))); u.setRole("member"); u.setActive(true); u=users.save(u);
     Member m=new Member(); m.setUserId(u.getId()); m.setGymId(gid); m.setPlan(b.getOrDefault("plan","Mwezi 1")); int days="Wiki 1".equals(m.getPlan())?7:"Miezi 3".equals(m.getPlan())?90:30; m.setEndDate(LocalDate.now().plusDays(days)); members.save(m);
     return ResponseEntity.ok(Map.of("message","Member amesajiliwa"));
   }
   @PostMapping("/coach") public ResponseEntity<?> addCoach(@RequestBody Map<String,String> b, HttpServletRequest r){
     if(!"admin".equals(role(r))) return ResponseEntity.status(403).body(Map.of("error","Huna ruhusa"));
-    User u=new User(); u.setGymId(gymId(r)); u.setFullName(b.get("full_name")); u.setPhone(b.get("phone")); u.setPasswordHash(encoder.encode(b.get("password")==null?"123456":b.get("password"))); u.setRole("coach"); u.setActive(true); users.save(u);
+    User u=new User(); u.setGymId(gymId(r)); u.setFullName(b.get("full_name")); u.setPhone(cleanPhone(b.get("phone"))); u.setPasswordHash(encoder.encode(b.get("password")==null?"123456":b.get("password"))); u.setRole("coach"); u.setActive(true); users.save(u);
     return ResponseEntity.ok(Map.of("message","Kocha ameongezwa"));
   }
   @PostMapping("/pay") public ResponseEntity<?> pay(@RequestBody Map<String,Object> b, HttpServletRequest r){
