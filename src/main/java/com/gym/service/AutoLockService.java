@@ -1,6 +1,6 @@
 package com.gym.service;
 import com.gym.model.User;
-import com.gym.repository.UserRepository;
+import com.gym.repository.UserRepo;
 import org.springframework.scheduling.annotation.EnableScheduling;
 import org.springframework.scheduling.annotation.Scheduled;
 import org.springframework.stereotype.Service;
@@ -10,8 +10,8 @@ import java.util.List;
 
 @Service @EnableScheduling
 public class AutoLockService {
-  private final UserRepository users;
-  public AutoLockService(UserRepository users){ this.users=users; }
+  private final UserRepo users;
+  public AutoLockService(UserRepo users){ this.users=users; }
 
   @Scheduled(cron = "0 0 6 * * *")
   @Transactional
