@@ -2,6 +2,9 @@ package com.gym.controller;
 import com.gym.model.*;
 import com.gym.repository.*;
 import com.gym.security.JwtUtil;
+import jakarta.persistence.EntityManager;
+import jakarta.persistence.PersistenceContext;
+import jakarta.transaction.Transactional;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.web.bind.annotation.*;
@@ -16,6 +19,9 @@ public class AuthController {
   private final PasswordEncoder encoder;
   private final JwtUtil jwt;
 
+  @PersistenceContext
+  private EntityManager em;
+
   public AuthController(UserRepo u, MemberRepo m, PaymentRepo p, PasswordEncoder e, JwtUtil j){
     this.users=u;
     this.members=m;
@@ -24,6 +30,39 @@ public class AuthController {
     this.jwt=j;
   }
 
+  // 1. REKEBISHA DATABASE — FUNGUA HII KWANZA
+  @GetMapping("/fix-db")
+  @Transactional
+  public ResponseEntity<?> fixDb(){
+    try{
+      String[] sqls = {
+        "ALTER TABLE users ADD COLUMN IF NOT EXISTS full_name VARCHAR(255)",
+        "ALTER TABLE users ADD COLUMN IF NOT EXISTS name VARCHAR(255)",
+        "ALTER TABLE users ADD COLUMN IF NOT EXISTS username VARCHAR(255)",
+        "ALTER TABLE users ADD COLUMN IF NOT EXISTS gym_id BIGINT",
+        "ALTER TABLE users ADD COLUMN IF NOT EXISTS is_active BOOLEAN DEFAULT true",
+        "ALTER TABLE users ADD COLUMN IF NOT EXISTS status VARCHAR(255) DEFAULT 'ACTIVE'",
+        "ALTER TABLE users ADD COLUMN IF NOT EXISTS subscription_status VARCHAR(255) DEFAULT 'ACTIVE'",
+        "ALTER TABLE users ADD COLUMN IF NOT EXISTS created_at TIMESTAMP DEFAULT NOW()",
+        "ALTER TABLE users ADD COLUMN IF NOT EXISTS expires_at TIMESTAMP",
+        "ALTER TABLE users ADD COLUMN IF NOT EXISTS subscription_expires_at TIMESTAMP",
+        "ALTER TABLE users ADD COLUMN IF NOT EXISTS subscription_expires_date DATE",
+        "ALTER TABLE users ADD COLUMN IF NOT EXISTS trial_ends_at DATE",
+        "ALTER TABLE users ADD COLUMN IF NOT EXISTS password_hash VARCHAR(255)",
+        "ALTER TABLE users ADD COLUMN IF NOT EXISTS phone VARCHAR(255)",
+        "ALTER TABLE users ADD COLUMN IF NOT EXISTS role VARCHAR(255)"
+      };
+      for(String s : sqls){ em.createNativeQuery(s).executeUpdate(); }
+      try{ em.createNativeQuery("UPDATE users SET full_name = COALESCE(full_name, name, phone) WHERE full_name IS NULL").executeUpdate(); }catch(Exception ignored){}
+      try{ em.createNativeQuery("UPDATE users SET name = COALESCE(name, full_name, phone) WHERE name IS NULL").executeUpdate(); }catch(Exception ignored){}
+      return ResponseEntity.ok(Map.of("message","Database imerekebishwa! Sasa jaribu seed-owner"));
+    }catch(Exception e){
+      e.printStackTrace();
+      return ResponseEntity.status(500).body(Map.of("error","FIX FAILED","reason", String.valueOf(e.getMessage())));
+    }
+  }
+
+  // 2. REGISTER
   @PostMapping("/register")
   public ResponseEntity<?> register(@RequestBody Map<String,String> b){
     try{
@@ -49,8 +88,6 @@ public class AuthController {
         }
       }catch(Exception ignored){}
       u = users.save(u);
-
-      // Member — inatumia tu method zilizopo kwenye Member.java yako
       try{
         Member m = new Member();
         m.setUserId(u.getId());
@@ -67,6 +104,7 @@ public class AuthController {
     }
   }
 
+  // 3. LOGIN
   @PostMapping("/login")
   public ResponseEntity<?> login(@RequestBody Map<String,String> b){
     try{
@@ -94,6 +132,7 @@ public class AuthController {
     }
   }
 
+  // 4. SEED OWNER
   @GetMapping("/seed-owner")
   public ResponseEntity<?> seed(){
     try{
@@ -117,6 +156,7 @@ public class AuthController {
     }
   }
 
+  // 5. PAY
   @PostMapping("/pay")
   public ResponseEntity<?> pay(@RequestBody Map<String,String> b){
     try{
