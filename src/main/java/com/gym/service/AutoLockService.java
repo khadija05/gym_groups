@@ -1,25 +1,54 @@
 package com.gym.service;
-import com.gym.model.User; import com.gym.repository.UserRepository;
-import org.springframework.scheduling.annotation.EnableScheduling; import org.springframework.scheduling.annotation.Scheduled;
-import org.springframework.stereotype.Service; import java.time.LocalDateTime; import java.util.List;
+import com.gym.model.User;
+import com.gym.repository.UserRepository;
+import org.springframework.scheduling.annotation.EnableScheduling;
+import org.springframework.scheduling.annotation.Scheduled;
+import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
+import java.time.LocalDateTime;
+import java.util.List;
+
 @Service @EnableScheduling
 public class AutoLockService {
-    private final UserRepository users;
-    public AutoLockService(UserRepository u){this.users=u;}
-    @Scheduled(fixedRate=60000)
-    public void autoLockExpiredAdmins(){
-        List<User> admins = users.findAll().stream().filter(u->"ADMIN".equals(u.getRole())).toList();
-        for(User admin: admins){
-            if(admin.getSubscriptionExpiresAt()==null){
-                admin.setSubscriptionExpiresAt(admin.getCreatedAt().plusDays(30)); users.save(admin); continue;
-            }
-            if(admin.getSubscriptionExpiresAt().isBefore(LocalDateTime.now())){
-                if(!"locked".equals(admin.getStatus())){
-                    admin.setStatus("locked"); admin.setSubscriptionStatus("locked"); users.save(admin);
-                    System.out.println("🔒 Admin "+admin.getUsername()+" amejifunga - hajalipa");
-                    users.findAll().stream().filter(m->"MEMBER".equals(m.getRole()) && admin.getId().equals(m.getCreatedBy())).forEach(m->{ m.setStatus("locked"); users.save(m); });
-                }
-            }
-        }
+  private final UserRepository users;
+  public AutoLockService(UserRepository users){ this.users=users; }
+
+  @Scheduled(cron = "0 0 6 * * *")
+  @Transactional
+  public void lockExpiredAdmins(){
+    List<User> admins = users.findByRole("admin");
+    LocalDateTime now = LocalDateTime.now();
+    for(User admin : admins){
+      if(admin.getSubscriptionExpiresAt()==null) continue;
+      // Kama imeisha na bado ACTIVE
+      if(admin.getSubscriptionExpiresAt().isBefore(now) && !"LOCKED".equalsIgnoreCase(admin.getStatus())){
+        admin.setStatus("LOCKED");
+        admin.setSubscriptionStatus("EXPIRED");
+        admin.setActive(false);
+        users.save(admin);
+        System.out.println("🔒 AutoLock: " + admin.getUsername() + " amelockiwa");
+      }
     }
+  }
+
+  @Transactional
+  public int checkNow(){
+    List<User> admins = users.findByRole("admin");
+    LocalDateTime now = LocalDateTime.now();
+    int locked=0;
+    for(User admin : admins){
+      if(admin.getSubscriptionExpiresAt()!=null && admin.getSubscriptionExpiresAt().isBefore(now) && !"LOCKED".equalsIgnoreCase(admin.getStatus())){
+        admin.setStatus("LOCKED"); admin.setSubscriptionStatus("EXPIRED"); admin.setActive(false); users.save(admin); locked++;
+      }
+    }
+    return locked;
+  }
+
+  @Transactional
+  public void unlockAdmin(Long adminId, LocalDateTime newExpiry){
+    User admin = users.findById(adminId).orElseThrow(() -> new RuntimeException("Admin hayupo"));
+    admin.setStatus("ACTIVE"); admin.setSubscriptionStatus("ACTIVE"); admin.setActive(true);
+    admin.setSubscriptionExpiresAt(newExpiry);
+    users.save(admin);
+  }
 }
