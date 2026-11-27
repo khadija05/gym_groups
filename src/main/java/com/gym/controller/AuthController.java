@@ -1,5 +1,5 @@
 package com.gym.controller;
-import com.gym.model.*; import com.gym.repo.*; import com.gym.security.JwtUtil;
+import com.gym.model.*; import com.gym.repository.*; import com.gym.security.JwtUtil;
 import org.springframework.http.ResponseEntity; import org.springframework.security.crypto.password.PasswordEncoder; import org.springframework.web.bind.annotation.*; import java.util.*;
 @RestController @RequestMapping("/api/auth")
 public class AuthController {
