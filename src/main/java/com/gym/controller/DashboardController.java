@@ -1,5 +1,5 @@
 package com.gym.controller;
-import com.gym.model.*; import com.gym.repo.*;
+import com.gym.model.*; import com.gym.repository.*;
 import jakarta.servlet.http.HttpServletRequest; import org.springframework.http.ResponseEntity; import org.springframework.security.crypto.password.PasswordEncoder; import org.springframework.web.bind.annotation.*; import java.time.LocalDate; import java.util.*;
 @RestController @RequestMapping("/api")
 public class DashboardController {
