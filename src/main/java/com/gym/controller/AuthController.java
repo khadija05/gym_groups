@@ -34,26 +34,14 @@ public class AuthController {
       u.setSubscriptionStatus("ACTIVE");
       try{ if(b.get("gymId")!=null && !b.get("gymId").isBlank()) u.setGymId(Long.valueOf(b.get("gymId"))); }catch(Exception ignored){}
       u=users.save(u);
-
-      // TENGENEZA MEMBER — LAKINI KAMA IKISHINDWA, USIHARIBU REGISTER
       try{
         Member m=new Member();
         m.setUserId(u.getId());
         m.setGymId(u.getGymId());
-        // Jaza field zinazoweza kuwa NOT NULL kwenye Member
-        try{ m.setFullName(u.getFullName()); }catch(Exception ignored){}
-        try{ m.setName(u.getFullName()); }catch(Exception ignored){}
-        try{ m.setPhone(u.getPhone()); }catch(Exception ignored){}
-        try{ m.setStatus("ACTIVE"); }catch(Exception ignored){}
         members.save(m);
-      }catch(Exception e){
-        System.out.println("Member save failed (not fatal): " + e.getMessage());
-      }
+      }catch(Exception e){ System.out.println("Member save failed: "+e.getMessage()); }
       return ResponseEntity.ok(Map.of("message","Umejisajili! Ingia sasa"));
-    }catch(Exception e){
-      e.printStackTrace();
-      return ResponseEntity.status(500).body(Map.of("error","REGISTER FAILED","reason", String.valueOf(e.getMessage())));
-    }
+    }catch(Exception e){ e.printStackTrace(); return ResponseEntity.status(500).body(Map.of("error","REGISTER FAILED","reason", String.valueOf(e.getMessage()))); }
   }
 
   @PostMapping("/login")
@@ -72,10 +60,7 @@ public class AuthController {
       userMap.put("gymId", u.getGymId());
       userMap.put("gym_id", u.getGymId());
       return ResponseEntity.ok(Map.of("token",token,"user",userMap));
-    }catch(Exception e){
-      e.printStackTrace();
-      return ResponseEntity.status(500).body(Map.of("error","LOGIN FAILED","reason", String.valueOf(e.getMessage())));
-    }
+    }catch(Exception e){ e.printStackTrace(); return ResponseEntity.status(500).body(Map.of("error","LOGIN FAILED","reason", String.valueOf(e.getMessage()))); }
   }
 
   @GetMapping("/seed-owner")
@@ -93,10 +78,7 @@ public class AuthController {
       u.setSubscriptionStatus("ACTIVE");
       users.save(u);
       return ResponseEntity.ok(Map.of("message","Owner ametengenezwa","phone",phone,"password","123456"));
-    }catch(Exception e){
-      e.printStackTrace();
-      return ResponseEntity.status(500).body(Map.of("error","SEED FAILED","reason", String.valueOf(e.getMessage())));
-    }
+    }catch(Exception e){ e.printStackTrace(); return ResponseEntity.status(500).body(Map.of("error","SEED FAILED","reason", String.valueOf(e.getMessage()))); }
   }
 
   @PostMapping("/pay")
@@ -110,9 +92,6 @@ public class AuthController {
       p.setStatus("PENDING");
       payments.save(p);
       return ResponseEntity.ok(Map.of("message","Malipo yamepokelewa - tunathibitisha"));
-    }catch(Exception e){
-      e.printStackTrace();
-      return ResponseEntity.status(500).body(Map.of("error","PAY FAILED","reason", String.valueOf(e.getMessage())));
-    }
+    }catch(Exception e){ e.printStackTrace(); return ResponseEntity.status(500).body(Map.of("error","PAY FAILED","reason", String.valueOf(e.getMessage()))); }
   }
 }
