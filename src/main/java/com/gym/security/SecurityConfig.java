@@ -19,15 +19,10 @@ import java.util.List;
 public class SecurityConfig {
 
   private final JwtFilter jwtFilter;
-
-  public SecurityConfig(JwtFilter jwtFilter){
-    this.jwtFilter = jwtFilter;
-  }
+  public SecurityConfig(JwtFilter jwtFilter){ this.jwtFilter = jwtFilter; }
 
   @Bean
-  public PasswordEncoder passwordEncoder(){
-    return new BCryptPasswordEncoder();
-  }
+  public PasswordEncoder passwordEncoder(){ return new BCryptPasswordEncoder(); }
 
   @Bean
   public SecurityFilterChain filterChain(HttpSecurity http) throws Exception {
@@ -36,11 +31,12 @@ public class SecurityConfig {
       .cors(cors -> cors.configurationSource(corsConfigurationSource()))
       .sessionManagement(s -> s.sessionCreationPolicy(SessionCreationPolicy.STATELESS))
       .authorizeHttpRequests(auth -> auth
-        .requestMatchers("/", "/index.html", "/login.html", "/register.html", "/dashboard.html", "/owner.html", "/admin.html", "/trainer.html", "/member.html", "/css/**", "/js/**", "/images/**", "/*.html", "/*.css", "/*.js").permitAll()
         .requestMatchers("/api/auth/**").permitAll()
+        .requestMatchers("/api/health").permitAll()
         .requestMatchers("/api/public/**").permitAll()
-        .requestMatchers("/actuator/health").permitAll()
-        .anyRequest().authenticated()
+        .requestMatchers("/", "/login.html", "/register.html", "/index.html", "/member.html", "/owner.html", "/admin.html", "/trainer.html", "/dashboard.html", "/*.html", "/css/**", "/js/**", "/images/**", "/actuator/health").permitAll()
+        .requestMatchers("/api/**").authenticated()
+        .anyRequest().permitAll()
       )
       .addFilterBefore(jwtFilter, UsernamePasswordAuthenticationFilter.class);
     return http.build();
