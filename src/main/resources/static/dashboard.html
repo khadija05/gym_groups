@@ -89,7 +89,19 @@ function render(){
   if(currentSection==='workout'){ c.innerHTML=`<div class="welcome"><h1>💪 <span>Workout Yangu</span></h1><p>Mpango wako kutoka kwa Kocha</p></div><div class="form-card"><h3>💪 Leo Fanya Hii:</h3><p style="font-size:16px;line-height:1.8;background:#FFF8E1;padding:14px;border-radius:12px">${DASH.workout||'Hakuna mpango bado, muulize Kocha'}</p><a href="https://wa.me/255887387001?text=Habari%20Kocha!%20Nataka%20Workout%20Plan" target="_blank" class="btn btn-green btn-full">💬 Muulize Kocha WhatsApp</a></div>`; return; }
   c.innerHTML=`<div class="welcome"><h1>Karibu, <span>${user.name||user.fullName||''} 🏋️</span></h1><p>Endelea kujenga mwili wako. Uko vizuri!</p></div><div class="grid"><div class="card"><div class="icon">📦</div><div class="label">Plan Yako</div><b>${DASH.member?.plan||'-'}</b></div><div class="card"><div class="icon">📅</div><div class="label">Inaisha</div><b style="font-size:18px">${DASH.member?.end_date||'-'}</b></div><div class="card"><div class="icon">⚖️</div><div class="label">Uzito Sasa</div><b>${num(DASH.member?.weight_now)} kg</b></div><div class="card"><div class="icon">🎯</div><div class="label">Hali</div><b>✅ Active</b></div></div><div class="form-card"><h3>💪 Workout Plan Yako</h3><p style="font-size:15px;line-height:1.8;background:#FFF8E1;padding:14px;border-radius:12px">${DASH.workout||'Hakuna mpango bado, muulize Kocha'}</p><div class="btn-row"><button class="btn btn-yellow" onclick="showSection('workout')">💪 Ona Workout</button><button class="btn btn-green" onclick="showSection('progress')">📊 Maendeleo</button></div></div><div class="form-card"><h3>💰 Lipia Mwezi Mpya</h3><p style="color:#666;font-size:14px">Muda wako unaisha: <b>${DASH.member?.end_date||'-'}</b></p><button class="btn btn-orange btn-full" onclick="location.href='/index.html'">💰 Lipia Sasa →</button></div>`;
 }
-async function createGym(){ if(!val('gname')||!val('aphone')){ showToast('Jaza Jina la Gym na Simu ya Admin',false); return; } const r=await api('/api/owner/create-gym','POST',{gymName:val('gname'),location:val('gloc'),adminName:val('aname'),adminPhone:val('aphone'),adminPass:val('apass')}); if(r){ showToast('✅ Gym imetengenezwa!'); load(); } }
+// FIX MPYA YA TENGENEZA GYM - inasafisha namba, inaonyesha kosa halisi
+async function createGym(){
+  const gname = val('gname').trim();
+  const gloc = val('gloc').trim() || 'Zanzibar';
+  const aname = val('aname').trim() || 'Admin';
+  const aphone = val('aphone').trim();
+  const apass = val('apass').trim() || '123456';
+  if(!gname){ showToast('Jaza Jina la Gym kwanza', false); return; }
+  if(!aphone || aphone.length < 10){ showToast('Simu ya Admin si sahihi - mfano 077...', false); return; }
+  showToast('Inatengeneza Gym... ⏳', true);
+  const r = await api('/api/owner/create-gym','POST',{gymName:gname, location:gloc, adminName:aname, adminPhone:aphone, adminPass:apass});
+  if(r){ showToast('✅ Gym imetengenezwa!'); load(); }
+}
 async function addMember(){ if(!val('mname')||!val('mphone')){ showToast('Jaza Jina na Simu',false); return; } const r=await api('/api/members','POST',{full_name:val('mname'),phone:val('mphone'),password:val('mpass')||'123456',plan:val('mplan')}); if(r){ showToast('✅ Member amesajiliwa!'); load(); } }
 async function addCoach(){ if(!val('cname')||!val('cphone')){ showToast('Jaza Jina na Simu ya Kocha',false); return; } const r=await api('/api/coach','POST',{full_name:val('cname'),phone:val('cphone'),password:val('cpass')||'123456'}); if(r){ showToast('✅ Kocha ameongezwa!'); load(); } }
 async function pay(){ if(!val('mid')||!val('amt')){ showToast('Jaza Member ID na Kiasi',false); return; } const r=await api('/api/pay','POST',{member_id:Number(val('mid')),amount:Number(val('amt'))}); if(r){ showToast('✅ Malipo yamepokelewa!'); load(); } }
