@@ -34,7 +34,7 @@ public class SecurityConfig {
         .requestMatchers("/api/auth/**").permitAll()
         .requestMatchers("/api/health").permitAll()
         .requestMatchers("/api/public/**").permitAll()
-        .requestMatchers("/", "/login.html", "/register.html", "/index.html", "/member.html", "/owner.html", "/admin.html", "/trainer.html", "/dashboard.html", "/*.html", "/css/**", "/js/**", "/images/**", "/actuator/health").permitAll()
+        .requestMatchers("/", "/dashboard", "/dashboard.html", "/login.html", "/register.html", "/index.html", "/member.html", "/owner.html", "/admin.html", "/trainer.html", "/*.html", "/css/**", "/js/**", "/images/**", "/actuator/health").permitAll()
         .requestMatchers("/api/**").authenticated()
         .anyRequest().permitAll()
       )
