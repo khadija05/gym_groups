@@ -1,14 +1,44 @@
 package com.gym.security;
-import jakarta.servlet.*; import jakarta.servlet.http.*; import org.springframework.stereotype.Component; import org.springframework.web.filter.OncePerRequestFilter; import java.io.IOException;
+
+import jakarta.servlet.*;
+import jakarta.servlet.http.*;
+import org.springframework.stereotype.Component;
+import org.springframework.web.filter.OncePerRequestFilter;
+import java.io.IOException;
+
 @Component
 public class JwtFilter extends OncePerRequestFilter {
-  private final JwtUtil jwtUtil; public JwtFilter(JwtUtil j){this.jwtUtil=j;}
-  @Override protected void doFilterInternal(HttpServletRequest req, HttpServletResponse res, FilterChain chain) throws ServletException, IOException {
-    String h = req.getHeader("Authorization");
-    if(h!=null && h.startsWith("Bearer ")){
-      try{ var c = jwtUtil.parse(h.substring(7)); req.setAttribute("userId", Long.parseLong(c.getSubject())); req.setAttribute("gymId", c.get("gymId", Long.class)); req.setAttribute("role", c.get("role", String.class)); req.setAttribute("name", c.get("name", String.class)); }
-      catch(Exception e){ res.setStatus(401); res.getWriter().write("{\"error\":\"Token imeisha\"}"); return; }
+  private final JwtUtil jwtUtil;
+  public JwtFilter(JwtUtil jwtUtil){ this.jwtUtil = jwtUtil; }
+
+  @Override
+  protected void doFilterInternal(HttpServletRequest request, HttpServletResponse response, FilterChain filterChain) throws ServletException, IOException {
+    String path = request.getServletPath();
+
+    // RUHUSU BILA TOKEN — HII NDIO INAYOONDOA 403
+    if(path.startsWith("/api/auth/") || path.startsWith("/api/health") || path.startsWith("/api/public/") || path.equals("/") || path.endsWith(".html") || path.endsWith(".css") || path.endsWith(".js") || path.equals("/actuator/health")){
+      filterChain.doFilter(request, response);
+      return;
     }
-    chain.doFilter(req,res);
+
+    String header = request.getHeader("Authorization");
+    if(header != null && header.startsWith("Bearer ")){
+      try{
+        String token = header.substring(7);
+        if(jwtUtil.validate(token)){
+          // Token ni sahihi, endelea
+          filterChain.doFilter(request, response);
+          return;
+        }
+      }catch(Exception e){}
+    }
+    // Kama ni /api/** bila token, kataa — lakini usikatae /api/auth
+    if(path.startsWith("/api/")){
+      response.setStatus(401);
+      response.setContentType("application/json");
+      response.getWriter().write("{\"error\":\"Token inahitajika\"}");
+      return;
+    }
+    filterChain.doFilter(request, response);
   }
 }
