@@ -1,10 +1,14 @@
 package com.gym.security;
 
-import io.jsonwebtoken.*;
+import io.jsonwebtoken.Claims;
+import io.jsonwebtoken.Jwts;
+import io.jsonwebtoken.SignatureAlgorithm;
 import io.jsonwebtoken.security.Keys;
 import org.springframework.stereotype.Component;
 import java.security.Key;
 import java.util.Date;
+import java.util.HashMap;
+import java.util.Map;
 
 @Component
 public class JwtUtil {
@@ -12,49 +16,41 @@ public class JwtUtil {
   private final Key key = Keys.secretKeyFor(SignatureAlgorithm.HS256);
   private final long EXP = 1000L * 60 * 60 * 24 * 7; // siku 7
 
-  public String generate(Long userId, Long gymId, String role, String name){
+  public String generate(Long userId, String role, Long gymId) {
+    Map<String, Object> claims = new HashMap<>();
+    claims.put("role", role);
+    claims.put("gymId", gymId);
+    claims.put("gym_id", gymId);
     return Jwts.builder()
-      .setSubject(String.valueOf(userId))
-      .claim("gymId", gymId)
-      .claim("role", role)
-      .claim("name", name)
-      .setIssuedAt(new Date())
-      .setExpiration(new Date(System.currentTimeMillis() + EXP))
-      .signWith(key)
-      .compact();
+        .setClaims(claims)
+        .setSubject(String.valueOf(userId))
+        .setIssuedAt(new Date())
+        .setExpiration(new Date(System.currentTimeMillis() + EXP))
+        .signWith(key)
+        .compact();
   }
 
-  // HII NDIO ILIKUWA INAKOSWA — SASA IPO
-  public boolean validate(String token){
-    try{
-      Jwts.parserBuilder().setSigningKey(key).build().parseClaimsJws(token);
-      return true;
-    }catch(Exception e){
-      return false;
-    }
-  }
-
-  // Alias — ili kama faili nyingine inaita validateToken, isigome
-  public boolean validateToken(String token){ return validate(token); }
-  public boolean isValid(String token){ return validate(token); }
-
-  public Claims getClaims(String token){
+  private Claims parse(String token) {
     return Jwts.parserBuilder().setSigningKey(key).build().parseClaimsJws(token).getBody();
   }
 
-  public Long getUserId(String token){
-    try{ return Long.valueOf(getClaims(token).getSubject()); }catch(Exception e){ return null; }
+  public boolean validate(String token) {
+    try { parse(token); return true; } catch (Exception e) { return false; }
   }
 
-  public String getRole(String token){
-    try{ return (String) getClaims(token).get("role"); }catch(Exception e){ return null; }
+  public Long getUserId(String token) {
+    return Long.valueOf(parse(token).getSubject());
   }
 
-  public Long getGymId(String token){
-    try{
-      Object v = getClaims(token).get("gymId");
-      if(v==null) return null;
-      return Long.valueOf(String.valueOf(v));
-    }catch(Exception e){ return null; }
+  public String getRole(String token) {
+    Object r = parse(token).get("role");
+    return r == null ? "" : r.toString();
+  }
+
+  public Long getGymId(String token) {
+    Object g = parse(token).get("gymId");
+    if (g == null) g = parse(token).get("gym_id");
+    if (g == null) return null;
+    try { return Long.valueOf(g.toString()); } catch (Exception e) { return null; }
   }
 }
