@@ -42,7 +42,7 @@ input:focus{border-color:#FFD400}
 </style>
 </head>
 <body>
-<div class="top"><div class="logo">💪 GYM <span>ZANZIBAR</span></div><a href="/login.html">← Nyumbani</a></div>
+<div class="top"><div class="logo">💪 GYM <span>ZANZIBAR</span></div><a href="/index.html">← Nyumbani</a></div>
 <div class="center"><div class="box">
   <div class="box-logo">💪</div>
   <h2>Karibu Tena!</h2>
@@ -102,12 +102,11 @@ async function login(){
     if(user.gymId) localStorage.setItem('gymId',user.gymId);
     msg.innerText='✅ Umeingia! Inakupeleka...'; msg.style.color='#22c55e';
     setTimeout(()=>{
-      const role=(user.role||'').toUpperCase();
-      if(role==='OWNER') location.href='/owner.html';
-      else if(role==='ADMIN') location.href='/admin.html';
-      else if(role==='TRAINER') location.href='/trainer.html';
-      else if(role==='MEMBER') location.href='/member.html';
-      else location.href='/member.html';
+      if(user.role) user.role = user.role.toLowerCase();
+      if(user.role==='trainer') user.role='coach';
+      localStorage.setItem('user', JSON.stringify(user));
+      localStorage.setItem('role', user.role);
+      location.href='/dashboard.html';
     },700);
   }catch(e){ msg.innerText='Server bado haijaamka. Subiri sekunde 60, refresh ukurasa, jaribu tena.'; msg.style.color='#ff6b6b'; }
 }
