@@ -28,7 +28,8 @@ input:focus{border-color:#FFD400}
 .btn:active{transform:scale(.97)}
 .btn-yellow{background:linear-gradient(135deg,#FFD400,#FFAA00);color:#000;box-shadow:0 8px 20px rgba(255,212,0,.25)}
 .btn-green{background:#25D366;color:#fff}
-#msg{text-align:center;font-size:13px;margin-top:12px;min-height:18px;color:#ff6b6b}
+.btn-grey{background:#222;color:#fff}
+#msg{text-align:center;font-size:13px;margin-top:12px;min-height:18px;color:#ff6b6b;line-height:1.5}
 #msg.ok{color:#22c55e}
 .demo{background:#FFF8E1;color:#222;padding:12px;border-radius:14px;font-size:12px;line-height:1.7;margin-top:14px}
 .footer{text-align:center;padding:16px;color:#666;font-size:12px;border-top:1px solid #222}
@@ -59,6 +60,7 @@ input:focus{border-color:#FFD400}
     <label class="show-pass"><input type="checkbox" onclick="document.getElementById('pass').type=this.checked?'text':'password'"> Onyesha Password</label>
     <button class="btn btn-yellow" onclick="login()">INGIA →</button>
     <button class="btn btn-green" onclick="location.href='https://wa.me/255887387001?text=Habari!%20Nimesahau%20password%20yangu'">💬 Nimesahau Password?</button>
+    <button class="btn btn-grey" onclick="testBackend()">🔍 Jaribu Backend (Seed-Owner)</button>
   </div>
   <div id="regForm" style="display:none">
     <label>JINA KAMILI</label>
@@ -71,10 +73,17 @@ input:focus{border-color:#FFD400}
     <button class="btn btn-yellow" onclick="register()">JISAJILI →</button>
   </div>
   <p id="msg"></p>
+  <div class="demo">
+    <b>🔑 Akaunti ya kujaribu:</b><br>
+    Simu: <b>0770000000</b><br>
+    Password: <b>123456</b><br>
+    <span style="font-size:11px;color:#888">Bonyeza "Jaribu Backend" kwanza kama hujaunda Owner.</span>
+  </div>
 </div></div>
 <div class="footer">© 2026 Gym Zanzibar • Stone Town • Mjini Magharibi • Forodhani</div>
 <script>
 const API_URL = window.location.origin;
+
 function showTab(t){
   document.getElementById('loginForm').style.display = t==='login'?'block':'none';
   document.getElementById('regForm').style.display = t==='reg'?'block':'none';
@@ -82,51 +91,116 @@ function showTab(t){
   document.getElementById('tReg').classList.toggle('active', t==='reg');
   document.getElementById('msg').innerText='';
 }
+
+async function testBackend(){
+  const msg = document.getElementById('msg');
+  msg.innerText = 'Inajaribu Backend... ⏳';
+  msg.style.color = '#22c55e';
+  try{
+    const r = await fetch(API_URL + '/api/auth/seed-owner');
+    const text = await r.text();
+    console.log('SEED STATUS:', r.status, text);
+    if(r.status === 404){
+      msg.innerText = '❌ 404: Backend haina /api/auth/seed-owner. Render bado inatumia build ya zamani. Nenda Render → Clear build cache & Deploy.';
+      msg.style.color = '#ff6b6b';
+      return;
+    }
+    let d = {};
+    try{ d = JSON.parse(text); }catch(e){}
+    msg.innerText = '✅ Backend inafanya kazi! ' + (d.message || text);
+    msg.style.color = '#22c55e';
+    document.getElementById('phone').value = '0770000000';
+    document.getElementById('pass').value = '123456';
+  }catch(e){
+    msg.innerText = 'Server bado haijaamka. Subiri sekunde 60, refresh, jaribu tena.';
+    msg.style.color = '#ff6b6b';
+  }
+}
+
 async function login(){
-  const phone=document.getElementById('phone').value.trim();
-  const password=document.getElementById('pass').value;
-  const msg=document.getElementById('msg');
+  const phone = document.getElementById('phone').value.trim();
+  const password = document.getElementById('pass').value;
+  const msg = document.getElementById('msg');
   if(!phone || !password){ msg.innerText='Jaza simu na password'; msg.style.color='#ff6b6b'; return; }
   msg.innerText='Inaingia... ⏳ Subiri sekunde 50 kama server imelala'; msg.style.color='#22c55e';
   try{
     const controller = new AbortController();
     const timeout = setTimeout(()=>controller.abort(), 60000);
-    const r=await fetch(API_URL+'/api/auth/login',{method:'POST',headers:{'Content-Type':'application/json'},body:JSON.stringify({phone,password}),signal:controller.signal});
+    const r = await fetch(API_URL + '/api/auth/login', {
+      method:'POST',
+      headers:{'Content-Type':'application/json'},
+      body:JSON.stringify({phone,password}),
+      signal:controller.signal
+    });
     clearTimeout(timeout);
-    const d=await r.json().catch(()=>({}));
-    if(!r.ok){ msg.innerText=d.error||d.message||('Error: '+r.status); msg.style.color='#ff6b6b'; return; }
+    const text = await r.text();
+    console.log('LOGIN STATUS:', r.status, 'BODY:', text);
+    let d = {};
+    try{ d = JSON.parse(text); }catch(e){}
+    if(!r.ok){
+      if(r.status === 404){
+        msg.innerText = '❌ 404: Backend haina /api/auth/login. Bonyeza "Jaribu Backend" hapo juu, kama nayo 404 → Render → Clear build cache & Deploy.';
+      } else {
+        msg.innerText = d.error || d.message || ('Error: ' + r.status);
+      }
+      msg.style.color = '#ff6b6b';
+      return;
+    }
     const user = d.user || d;
-    localStorage.setItem('token',d.token);
-    localStorage.setItem('user',JSON.stringify(user));
-    localStorage.setItem('role',user.role||'');
-    if(user.gymId) localStorage.setItem('gymId',user.gymId);
-    msg.innerText='✅ Umeingia! Inakupeleka...'; msg.style.color='#22c55e';
+    localStorage.setItem('token', d.token);
+    localStorage.setItem('user', JSON.stringify(user));
+    localStorage.setItem('role', user.role || '');
+    if(user.gymId) localStorage.setItem('gymId', user.gymId);
+    msg.innerText = '✅ Umeingia! Inakupeleka...'; msg.style.color = '#22c55e';
     setTimeout(()=>{
       if(user.role) user.role = user.role.toLowerCase();
-      if(user.role==='trainer') user.role='coach';
+      if(user.role === 'trainer') user.role = 'coach';
       localStorage.setItem('user', JSON.stringify(user));
       localStorage.setItem('role', user.role);
-      location.href='/dashboard.html';
-    },700);
-  }catch(e){ msg.innerText='Server bado haijaamka. Subiri sekunde 60, refresh ukurasa, jaribu tena.'; msg.style.color='#ff6b6b'; }
+      location.href = '/dashboard.html';
+    }, 700);
+  }catch(e){
+    msg.innerText = 'Server bado haijaamka. Subiri sekunde 60, refresh ukurasa, jaribu tena.';
+    msg.style.color = '#ff6b6b';
+  }
 }
+
 async function register(){
-  const fullName=document.getElementById('rName').value.trim();
-  const phone=document.getElementById('rPhone').value.trim();
-  const password=document.getElementById('rPass').value;
-  const msg=document.getElementById('msg');
+  const fullName = document.getElementById('rName').value.trim();
+  const phone = document.getElementById('rPhone').value.trim();
+  const password = document.getElementById('rPass').value;
+  const msg = document.getElementById('msg');
   if(!fullName || !phone || !password){ msg.innerText='Jaza taarifa zote'; msg.style.color='#ff6b6b'; return; }
   msg.innerText='Inajisajili... ⏳'; msg.style.color='#22c55e';
   try{
-    const r=await fetch(API_URL+'/api/auth/register',{method:'POST',headers:{'Content-Type':'application/json'},body:JSON.stringify({fullName,phone,password})});
-    const d=await r.json().catch(()=>({}));
-    if(!r.ok){ msg.innerText=d.error||d.message||'Imeshindikana kujisajili'; msg.style.color='#ff6b6b'; return; }
-    msg.innerText='✅ Umejisajili! Ingia sasa'; msg.style.color='#22c55e';
-    showTab('login'); document.getElementById('phone').value=phone;
-  }catch(e){ msg.innerText='Server bado haijaamka. Subiri sekunde 60, refresh, jaribu tena.'; msg.style.color='#ff6b6b'; }
+    const r = await fetch(API_URL + '/api/auth/register', {
+      method:'POST',
+      headers:{'Content-Type':'application/json'},
+      body:JSON.stringify({fullName,phone,password})
+    });
+    const text = await r.text();
+    let d = {};
+    try{ d = JSON.parse(text); }catch(e){}
+    if(!r.ok){
+      if(r.status === 404){
+        msg.innerText = '❌ 404: Backend haina /api/auth/register. Nenda Render → Clear build cache & Deploy.';
+      } else {
+        msg.innerText = d.error || d.message || 'Imeshindikana kujisajili';
+      }
+      msg.style.color = '#ff6b6b';
+      return;
+    }
+    msg.innerText = '✅ Umejisajili! Ingia sasa'; msg.style.color = '#22c55e';
+    showTab('login');
+    document.getElementById('phone').value = phone;
+  }catch(e){
+    msg.innerText = 'Server bado haijaamka. Subiri sekunde 60, refresh, jaribu tena.';
+    msg.style.color = '#ff6b6b';
+  }
 }
-document.getElementById('pass').addEventListener('keydown',e=>{ if(e.key==='Enter') login(); });
-document.getElementById('rPass').addEventListener('keydown',e=>{ if(e.key==='Enter') register(); });
+
+document.getElementById('pass').addEventListener('keydown', e=>{ if(e.key==='Enter') login(); });
+document.getElementById('rPass').addEventListener('keydown', e=>{ if(e.key==='Enter') register(); });
 </script>
 </body>
 </html>
