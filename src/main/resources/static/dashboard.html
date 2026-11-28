@@ -20,7 +20,7 @@ body{background:#F1F5F9;color:#111;min-height:100vh;overflow-x:hidden}
 .welcome{background:#0B0B0F;color:#fff;padding:20px;border-radius:20px;margin-bottom:16px}
 .welcome h1{font-size:clamp(19px,5vw,26px);line-height:1.3}.welcome h1 span{color:#FFD400}.welcome p{color:#aaa;font-size:13px;margin-top:4px;line-height:1.5}
 .grid{display:grid;grid-template-columns:repeat(4,1fr);gap:12px;margin-bottom:16px}
-.card{background:#fff;padding:18px;border-radius:18px;box-shadow:0 2px 10px rgba(0,0,0,.05);border:1px solid #eee;min-width:0}
+.card{background:#fff;padding:18px;border-radius:18px;box-shadow:0 2px 10px rgba(0,0,0,.05);border:1px solid #eee;min-width:0;cursor:pointer}
 .card .icon{font-size:26px;margin-bottom:8px}.card .label{font-size:12px;color:#888}.card b{font-size:clamp(19px,4vw,26px);display:block;word-break:break-word}.card small{font-size:11px;color:#22c55e;font-weight:700}
 .form-card{background:#fff;padding:20px;border-radius:20px;box-shadow:0 2px 10px rgba(0,0,0,.05);margin-bottom:16px}
 .form-card h3{font-size:clamp(15px,4vw,16px);margin-bottom:12px}.form-card h3 span{color:#FF6B00}
@@ -30,7 +30,7 @@ input:focus,select:focus{border-color:#FFD400}
 .btn:active{transform:scale(.97)}.btn-yellow{background:linear-gradient(135deg,#FFD400,#FFAA00);color:#000}.btn-green{background:#25D366;color:#fff}.btn-orange{background:linear-gradient(135deg,#FF6B00,#FF2D00);color:#fff}.btn-dark{background:#111;color:#fff}.btn-full{width:100%;margin-top:8px}.btn-row{display:flex;gap:8px;flex-wrap:wrap;margin-top:8px}.btn-row .btn{flex:1;min-width:120px}
 .progress{height:12px;background:#eee;border-radius:999px;overflow:hidden;margin:10px 0}.progress div{height:100%;background:linear-gradient(90deg,#FFD400,#FF6B00)}
 .table-wrap{overflow-x:auto;-webkit-overflow-scrolling:touch}table{width:100%;border-collapse:collapse;min-width:560px}th{font-size:12px;color:#888;text-align:left;padding:12px 10px;border-bottom:2px solid #eee}td{padding:12px 10px;border-bottom:1px solid #f1f1f1;font-size:14px;white-space:nowrap}
-.status{padding:4px 10px;border-radius:999px;font-size:11px;font-weight:800;white-space:nowrap}.status.ok{background:#DCFCE7;color:#166534}.status.bad{background:#FEE2E2;color:#991B1B}
+.status{padding:4px 10px;border-radius:999px;font-size:11px;font-weight:800;white-space:nowrap}.status.ok{background:#DCFCE7;color:#166534}.status.bad{background:#FEE2E2;color:#991B1B}.status.warn{background:#FEF3C7;color:#92400E}
 .member-row{display:flex;gap:10px;align-items:center;padding:12px 0;border-bottom:1px solid #f1f1f1}.member-row b{word-break:break-word}.member-avatar{width:40px;height:40px;background:#FFF3CD;border-radius:50%;display:flex;align-items:center;justify-content:center;font-size:18px;flex-shrink:0}
 .empty{text-align:center;padding:30px 10px;color:#999}.empty div{font-size:40px;margin-bottom:8px}
 .bottom-nav{display:none;position:fixed;bottom:0;left:0;right:0;background:#0B0B0F;border-top:1px solid #222;padding:8px 6px calc(8px + env(safe-area-inset-bottom));z-index:60;justify-content:space-around}
@@ -38,6 +38,10 @@ input:focus,select:focus{border-color:#FFD400}
 .bottom-nav button span{font-size:20px}.bottom-nav button.active{color:#FFD400;background:#1E1E1E}
 #toast{position:fixed;left:50%;bottom:80px;transform:translateX(-50%) translateY(20px);background:#111;color:#fff;padding:12px 18px;border-radius:999px;font-size:14px;font-weight:700;box-shadow:0 8px 25px rgba(0,0,0,.3);opacity:0;pointer-events:none;transition:.3s;z-index:9999;max-width:92%;text-align:center;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
 #toast.show{opacity:1;transform:translateX(-50%) translateY(0)}#toast.ok{background:#16a34a}#toast.err{background:#dc2626}
+.detail-box{background:#FFF8E1;border:2px solid #FFD400;padding:16px;border-radius:16px;margin-top:12px}
+.gym-card{background:#fff;border:2px solid #eee;padding:16px;border-radius:16px;margin-bottom:12px}
+.gym-card.expired{border-color:#ff4444;background:#FFF1F1}
+.gym-card.warning{border-color:#FFAA00;background:#FFFBEB}
 @media(max-width:1024px){.grid{grid-template-columns:repeat(3,1fr)}.sidebar{width:210px}}
 @media(max-width:900px){.sidebar{width:190px}.grid{grid-template-columns:repeat(2,1fr)}.main{padding:14px}}
 @media(max-width:700px){.sidebar{display:none}.bottom-nav{display:flex}.layout{padding-bottom:74px}.top{padding:10px 12px}.user-info b{max-width:90px}.btn-logout{padding:8px 10px;font-size:11px}.main{padding:12px 10px}.welcome{padding:16px 14px;border-radius:16px}.grid{grid-template-columns:repeat(2,1fr);gap:8px}.card{padding:14px 12px;border-radius:14px}.card b{font-size:20px}.form-card{padding:16px 12px;border-radius:16px}.btn-row{flex-direction:column}.btn-row .btn{width:100%;flex:none}.btn{width:100%;padding:14px}.member-row{flex-wrap:wrap}.member-row .btn{width:100%;margin-top:6px}table{min-width:520px}}
@@ -58,7 +62,7 @@ document.getElementById('role').innerText=(user.role||'').toUpperCase()+' • Gy
 document.getElementById('avatar').innerText=user.role==='owner'?'👑':user.role==='admin'?'🛡️':user.role==='coach'?'💪':'🏋️';
 if(user.role==='member'){ document.getElementById('btn-members').style.display='none'; document.getElementById('btn-gyms').style.display='none'; }
 if(user.role==='coach'){ document.getElementById('btn-gyms').style.display='none'; }
-let DASH=null,GYMS=[]; let currentSection='home';
+let DASH=null,GYMS=[],ALL_MEMBERS=[],ALL_PAYMENTS=[]; let currentSection='home';
 function num(v){ const n=Number(v); return isNaN(n)?0:n; }
 function showToast(msg,ok=true){ const t=document.getElementById('toast'); t.innerText=msg; t.className='show '+(ok?'ok':'err'); clearTimeout(window._toastTimer); window._toastTimer=setTimeout(()=>{t.className='';},2800); }
 async function api(path,method='GET',body){ try{ const r=await fetch(API_URL+path,{method,headers:{'Content-Type':'application/json','Authorization':'Bearer '+token},body:body?JSON.stringify(body):undefined}); const d=await r.json().catch(()=>({})); if(!r.ok){ showToast(d.error||d.message||('Hitilafu: '+r.status),false); return null; } return d; }catch(e){ showToast('Server haijibu - jaribu tena',false); return null; } }
@@ -69,14 +73,50 @@ async function load(){
   DASH=await api('/api/dashboard');
   if(!DASH) DASH={gyms:0,members:0,income:0,today:0,list:[]};
   DASH.gyms=num(DASH.gyms); DASH.members=num(DASH.members); DASH.income=num(DASH.income); DASH.today=num(DASH.today); DASH.list=Array.isArray(DASH.list)?DASH.list:[];
-  if(user.role==='owner'){ const g=await api('/api/owner/gyms'); GYMS=Array.isArray(g)?g:[]; if(GYMS.length===0 && DASH.gymsList && Array.isArray(DASH.gymsList)) GYMS=DASH.gymsList; }
-  document.getElementById('badgeMembers').innerText=DASH.members; render();
+  if(user.role==='owner'){
+    const g=await api('/api/owner/gyms'); GYMS=Array.isArray(g)?g:[];
+    if(GYMS.length===0 && DASH.gymsList && Array.isArray(DASH.gymsList)) GYMS=DASH.gymsList;
+    const m=await api('/api/members'); if(Array.isArray(m)) ALL_MEMBERS=m;
+    if(ALL_MEMBERS.length===0 && DASH.list.length) ALL_MEMBERS=DASH.list.map(x=>({id:x.id,fullName:x.full_name||x.fullName,phone:x.phone,role:'MEMBER',status:x.status,plan:x.plan,gymId:x.gymId}));
+    const p=await api('/api/payments'); if(Array.isArray(p)) ALL_PAYMENTS=p;
+    if(ALL_PAYMENTS.length===0 && DASH.payments && Array.isArray(DASH.payments)) ALL_PAYMENTS=DASH.payments;
+  }
+  document.getElementById('badgeMembers').innerText=DASH.members || ALL_MEMBERS.length; render();
 }
 function render(){
   const c=document.getElementById('content'); if(!DASH){ c.innerHTML='Inapakia...'; return; }
   if(user.role==='owner'){
-    if(currentSection==='gyms'){ c.innerHTML=`<div class="welcome"><h1>🏋️ Gym <span>Zilizoopo</span></h1><p>Gym zote zinazotumia mfumo wako</p></div><div class="form-card">${GYMS.length?GYMS.map(g=>`<div class="member-row"><div class="member-avatar">🏋️</div><div style="flex:1"><b>${g.name||'-'}</b><div style="color:#888;font-size:12px">${g.location||'Zanzibar'} • Members: ${num(g.members)}</div></div><span class="status ok">Active</span></div>`).join(''):`<div class="empty"><div>🏋️</div>Hakuna Gym bado - Tengeneza Gym hapo chini</div>`}</div>`; return; }
-    c.innerHTML=`<div class="welcome"><h1>Karibu, <span>${user.name||user.fullName||''} 👑</span></h1><p>Wewe ni Owner wa mfumo. Unda Gym, mpe Admin, ona kila kitu.</p></div><div class="grid"><div class="card"><div class="icon">🏋️</div><div class="label">Gym Zote</div><b>${num(DASH.gyms)}</b><small>Zinazotumia mfumo</small></div><div class="card"><div class="icon">👥</div><div class="label">Members Wote</div><b>${num(DASH.members)}</b><small>Kutoka Gym zote</small></div><div class="card"><div class="icon">💰</div><div class="label">Mapato Yote</div><b>${num(DASH.income).toLocaleString()} TZS</b><small>Jumla</small></div><div class="card"><div class="icon">📈</div><div class="label">Hali</div><b>✅ Active</b><small>Mfumo unafanya kazi</small></div></div><div class="form-card"><h3>➕ Ongeza Gym Mpya + <span>Admin</span></h3><input id="gname" placeholder="Jina la Gym - Mfano: Power Gym"><input id="gloc" placeholder="Mahali - Mfano: Stone Town"><input id="aname" placeholder="Jina la Admin"><input id="aphone" placeholder="Simu ya Admin - 077..." inputmode="numeric"><input id="apass" type="password" placeholder="Password ya Admin"><button class="btn btn-yellow btn-full" onclick="createGym()">Tengeneza Gym →</button></div><div class="form-card"><h3>🏋️ Gym Zilizoopo</h3>${GYMS.length?GYMS.map(g=>`<div class="member-row"><div class="member-avatar">🏋️</div><div style="flex:1"><b>${g.name||'-'}</b><div style="color:#888;font-size:12px">${g.location||'Zanzibar'} • Members: ${num(g.members)}</div></div><span class="status ok">Active</span></div>`).join(''):'<p style="color:#999">Hakuna Gym bado - Tengeneza moja hapo juu</p>'}</div>`; return;
+    if(currentSection==='gyms'){
+      c.innerHTML=`<div class="welcome"><h1>🏋️ Gym <span>Zilizoopo</span></h1><p>Thibitisha malipo, fungua Gym, ona siku zilobaki, mtumie Admin message</p></div><div class="form-card"><h3>🏋️ Gym Zote (${GYMS.length})</h3>${GYMS.length?GYMS.map((g,i)=>{
+        const days = num(g.daysLeft);
+        const cls = days<=0 ? 'gym-card expired' : days<=5 ? 'gym-card warning' : 'gym-card';
+        const txt = days<=0 ? '❌ Package IMEISHA - Gym IMEFUNGWA' : '⏳ Siku zilobaki: '+days+' • Inaisha: '+(g.packageEndDate||'-');
+        return `<div class="${cls}"><div style="display:flex;justify-content:space-between;gap:10px;flex-wrap:wrap"><div style="flex:1;min-width:200px"><b style="font-size:16px">🏋️ ${g.name||'-'}</b><br><span style="font-size:12px;color:#888">👤 Admin: ${g.adminName||'-'} • 📞 ${g.adminPhone||'-'} • 📍 ${g.location||'Zanzibar'}</span><br><b style="font-size:13px;color:${days<=0?'#ff4444':days<=5?'#FF6B00':'#22c55e'}">${txt}</b><br><span style="font-size:12px">Status: ${g.status||'PENDING'} • ${g.warning||''}</span></div><span class="status ${days<=0?'bad':days<=5?'warn':'ok'}">${days<=0?'IMEISHA':days<=5?'KARIBU KUISHIA':'ACTIVE'}</span></div><div class="btn-row"><button class="btn btn-yellow" onclick="showSection('pay')">💰 Ona Malipo</button><button class="btn btn-green" onclick="remindAdmin('${g.adminPhone||''}','${(g.name||'').replace(/'/g,'')}','${days}','${g.packageEndDate||''}','${g.adminName||''}')">💬 Mtumie Message</button><button class="btn btn-dark" onclick="viewGym(${i})">👁️ View</button></div></div>`;
+      }).join(''):`<div class="empty"><div>🏋️</div>Hakuna Gym bado - Tengeneza Gym hapo chini</div>`}<div id="gymDetail"></div></div><div class="form-card"><h3>➕ Ongeza Gym Mpya + <span>Admin</span></h3><input id="gname" placeholder="Jina la Gym - Mfano: Power Gym"><input id="gloc" placeholder="Mahali - Mfano: Stone Town"><input id="aname" placeholder="Jina la Admin"><input id="aphone" placeholder="Simu ya Admin - 077..." inputmode="numeric"><input id="apass" type="password" placeholder="Password ya Admin"><button class="btn btn-yellow btn-full" onclick="createGym()">Tengeneza Gym →</button></div>`;
+      return;
+    }
+    if(currentSection==='members'){
+      c.innerHTML=`<div class="welcome"><h1>👥 Members <span>Wote - Gym Zote</span></h1><p>Jumla: ${ALL_MEMBERS.length || num(DASH.members)} • Kutoka Gym zote</p></div><div class="form-card"><input id="searchM" placeholder="🔍 Tafuta jina au simu..." oninput="filterMembers()"><div id="membersList">${renderMembersList(ALL_MEMBERS)}</div><div id="memberDetail"></div></div>`;
+      return;
+    }
+    if(currentSection==='pay'){
+      const total = ALL_PAYMENTS.reduce((s,p)=> s + num(p.amount), 0);
+      const pending = ALL_PAYMENTS.filter(p=> (p.status||'').toUpperCase()==='PENDING').length;
+      c.innerHTML=`<div class="welcome"><h1>💰 Malipo - <span>Gym Zote</span></h1><p>Jumla: <b>${total.toLocaleString()} TZS</b> • Malipo: ${ALL_PAYMENTS.length} • Yanayosubiri kuthibitishwa: ${pending}</p></div><div class="form-card"><h3>💰 Malipo ya Admin wa Kila Gym</h3>${ALL_PAYMENTS.length?ALL_PAYMENTS.map((p,i)=>`<div class="member-row"><div class="member-avatar">💰</div><div style="flex:1"><b>${p.gymName||p.plan||'Malipo'} - ${num(p.amount).toLocaleString()} TZS</b><div style="color:#888;font-size:12px">📞 ${p.phone||'-'} • Ref: ${p.reference||'-'} • Gym: ${p.gymName||p.gymId||'Zote'} • Admin: ${p.adminName||'-'}</div></div><span class="status ${p.status==='PENDING'?'warn':p.status==='APPROVED'?'ok':'bad'}">${p.status||'PENDING'}</span><button class="btn btn-yellow" style="width:auto;padding:10px 16px" onclick="viewPayment(${i})">👁️ View</button></div>`).join(''):`<div class="empty"><div>💰</div>Hakuna malipo bado</div>`}<div id="paymentDetail"></div></div>`;
+      return;
+    }
+    if(currentSection==='workout'){
+      c.innerHTML=`<div class="welcome"><h1>💪 <span>Workout</span></h1><p>Owner anaona muhtasari wa Gym zote</p></div><div class="form-card"><h3>📊 Muhtasari</h3><p>Gym: <b>${GYMS.length}</b> • Members: <b>${ALL_MEMBERS.length}</b> • Malipo: <b>${ALL_PAYMENTS.length}</b></p></div>`;
+      return;
+    }
+    if(currentSection==='progress'){
+      const expired = GYMS.filter(g=>num(g.daysLeft)<=0).length;
+      const soon = GYMS.filter(g=>num(g.daysLeft)>0 && num(g.daysLeft)<=5).length;
+      c.innerHTML=`<div class="welcome"><h1>📊 <span>Maendeleo ya Mfumo</span></h1><p>Gym zote, malipo na siku zilobaki</p></div><div class="grid"><div class="card"><div class="icon">🏋️</div><div class="label">Gym Zote</div><b>${GYMS.length}</b></div><div class="card"><div class="icon">👥</div><div class="label">Members</div><b>${ALL_MEMBERS.length}</b></div><div class="card"><div class="icon">💰</div><div class="label">Mapato</div><b>${ALL_PAYMENTS.reduce((s,p)=>s+num(p.amount),0).toLocaleString()} TZS</b></div><div class="card"><div class="icon">⚠️</div><div class="label">Zinazoisha Karibuni</div><b>${soon} • Zimeisha: ${expired}</b></div></div>`;
+      return;
+    }
+    c.innerHTML=`<div class="welcome"><h1>Karibu, <span>${user.name||user.fullName||''} 👑</span></h1><p>Wewe ni Owner wa mfumo. Thibitisha malipo ya Admin, fungua Gym, ona siku zilobaki.</p></div><div class="grid"><div class="card" onclick="showSection('gyms')"><div class="icon">🏋️</div><div class="label">Gym Zote</div><b>${num(DASH.gyms) || GYMS.length}</b><small>Bonyeza kuona →</small></div><div class="card" onclick="showSection('members')"><div class="icon">👥</div><div class="label">Members Wote</div><b>${ALL_MEMBERS.length || num(DASH.members)}</b><small>Bonyeza kuona →</small></div><div class="card" onclick="showSection('pay')"><div class="icon">💰</div><div class="label">Mapato Yote</div><b>${(ALL_PAYMENTS.reduce((s,p)=>s+num(p.amount),0) || num(DASH.income)).toLocaleString()} TZS</b><small>Bonyeza kuona →</small></div><div class="card" onclick="showSection('gyms')"><div class="icon">⏳</div><div class="label">Gym Zinazoisha</div><b>${GYMS.filter(g=>num(g.daysLeft)<=5).length}</b><small>Zinahitaji kumbusho</small></div></div><div class="form-card"><h3>➕ Ongeza Gym Mpya + <span>Admin</span></h3><input id="gname" placeholder="Jina la Gym - Mfano: Power Gym"><input id="gloc" placeholder="Mahali - Mfano: Stone Town"><input id="aname" placeholder="Jina la Admin"><input id="aphone" placeholder="Simu ya Admin - 077..." inputmode="numeric"><input id="apass" type="password" placeholder="Password ya Admin"><button class="btn btn-yellow btn-full" onclick="createGym()">Tengeneza Gym →</button></div><div class="form-card"><h3>🏋️ Gym Zilizoopo - Siku Zilobaki</h3>${GYMS.length?GYMS.map((g,i)=>{ const days=num(g.daysLeft); return `<div class="member-row"><div class="member-avatar">🏋️</div><div style="flex:1"><b>${g.name||'-'}</b><div style="color:#888;font-size:12px">${g.location||'Zanzibar'} • Admin: ${g.adminName||'-'} • ${days<=0?'❌ IMEISHA':'⏳ Siku: '+days}</div></div><button class="btn btn-green" style="width:auto;padding:10px 14px" onclick="remindAdmin('${g.adminPhone||''}','${(g.name||'').replace(/'/g,'')}','${days}','${g.packageEndDate||''}','${g.adminName||''}')">💬 Kumbusha</button><button class="btn btn-yellow" style="width:auto;padding:10px 16px" onclick="viewGym(${i})">👁️ View</button></div>`; }).join(''):'<p style="color:#999">Hakuna Gym bado - Tengeneza moja hapo juu</p>'}<div id="gymDetail"></div></div>`;
+    return;
   }
   if(user.role==='admin'||user.role==='coach'){
     if(currentSection==='members'){ c.innerHTML=`<div class="welcome"><h1>👥 Members wa <span>Gym Yako</span></h1><p>Jumla: ${num(DASH.members)} • Leo wamefika: ${num(DASH.today)}</p></div><div class="form-card"><h3>➕ Sajili Member Mpya</h3><input id="mname" placeholder="Jina Kamili"><input id="mphone" placeholder="Simu - 077..." inputmode="numeric"><input id="mpass" placeholder="Password"><select id="mplan"><option>Mwezi 1</option><option>Wiki 1</option><option>Miezi 3</option></select><button class="btn btn-yellow btn-full" onclick="addMember()">Sajili Member →</button></div><div class="form-card"><h3>👥 Orodha ya Members</h3>${(DASH.list||[]).length?`<div class="table-wrap"><table><tr><th>ID</th><th>Jina</th><th>Simu</th><th>Plan</th><th>Inaisha</th><th>Status</th></tr>${DASH.list.map(m=>`<tr><td><b>#${m.id}</b></td><td>${m.full_name||'-'}</td><td>${m.phone||'-'}</td><td>${m.plan||'-'}</td><td>${m.end_date||'-'}</td><td><span class="status ${m.status==='Imeisha'?'bad':'ok'}">${m.status||'Active'}</span></td></tr>`).join('')}</table></div>`:`<div class="empty"><div>👥</div>Hakuna Member bado</div>`}</div>`; return; }
@@ -89,7 +129,54 @@ function render(){
   if(currentSection==='workout'){ c.innerHTML=`<div class="welcome"><h1>💪 <span>Workout Yangu</span></h1><p>Mpango wako kutoka kwa Kocha</p></div><div class="form-card"><h3>💪 Leo Fanya Hii:</h3><p style="font-size:16px;line-height:1.8;background:#FFF8E1;padding:14px;border-radius:12px">${DASH.workout||'Hakuna mpango bado, muulize Kocha'}</p><a href="https://wa.me/255887387001?text=Habari%20Kocha!%20Nataka%20Workout%20Plan" target="_blank" class="btn btn-green btn-full">💬 Muulize Kocha WhatsApp</a></div>`; return; }
   c.innerHTML=`<div class="welcome"><h1>Karibu, <span>${user.name||user.fullName||''} 🏋️</span></h1><p>Endelea kujenga mwili wako. Uko vizuri!</p></div><div class="grid"><div class="card"><div class="icon">📦</div><div class="label">Plan Yako</div><b>${DASH.member?.plan||'-'}</b></div><div class="card"><div class="icon">📅</div><div class="label">Inaisha</div><b style="font-size:18px">${DASH.member?.end_date||'-'}</b></div><div class="card"><div class="icon">⚖️</div><div class="label">Uzito Sasa</div><b>${num(DASH.member?.weight_now)} kg</b></div><div class="card"><div class="icon">🎯</div><div class="label">Hali</div><b>✅ Active</b></div></div><div class="form-card"><h3>💪 Workout Plan Yako</h3><p style="font-size:15px;line-height:1.8;background:#FFF8E1;padding:14px;border-radius:12px">${DASH.workout||'Hakuna mpango bado, muulize Kocha'}</p><div class="btn-row"><button class="btn btn-yellow" onclick="showSection('workout')">💪 Ona Workout</button><button class="btn btn-green" onclick="showSection('progress')">📊 Maendeleo</button></div></div><div class="form-card"><h3>💰 Lipia Mwezi Mpya</h3><p style="color:#666;font-size:14px">Muda wako unaisha: <b>${DASH.member?.end_date||'-'}</b></p><button class="btn btn-orange btn-full" onclick="location.href='/index.html'">💰 Lipia Sasa →</button></div>`;
 }
-// FIX MPYA YA TENGENEZA GYM - inasafisha namba, inaonyesha kosa halisi
+function renderMembersList(list){
+  if(!list || !list.length) return '<div class="empty"><div>👥</div>Hakuna Member bado</div>';
+  return list.map((m,i)=>`<div class="member-row"><div class="member-avatar">🏋️</div><div style="flex:1"><b>${m.fullName||m.full_name||m.name||'-'}</b><div style="color:#888;font-size:12px">📞 ${m.phone||'-'} • ${m.role||'MEMBER'} • Gym: ${m.gymId||m.gym_id||'Zote'} • ${m.status||'Active'}</div></div><button class="btn btn-yellow" style="width:auto;padding:10px 16px" onclick="viewMember(${i})">👁️ View</button></div>`).join('');
+}
+function filterMembers(){
+  const q=(document.getElementById('searchM')?.value||'').toLowerCase();
+  const filtered=ALL_MEMBERS.filter(m=> (m.fullName||m.full_name||'').toLowerCase().includes(q) || (m.phone||'').includes(q));
+  document.getElementById('membersList').innerHTML=renderMembersList(filtered);
+}
+function viewMember(i){
+  const m=ALL_MEMBERS[i]; if(!m) return;
+  document.getElementById('memberDetail').innerHTML=`<div class="detail-box"><h3>👤 ${m.fullName||m.full_name||'-'}</h3><p><b>Simu:</b> ${m.phone||'-'}</p><p><b>Role:</b> ${m.role||'MEMBER'}</p><p><b>Gym ID:</b> ${m.gymId||m.gym_id||'Zote'}</p><p><b>Status:</b> ${m.status||'Active'}</p><p><b>Plan:</b> ${m.plan||'-'}</p><button class="btn btn-dark btn-full" onclick="document.getElementById('memberDetail').innerHTML=''">Funga</button></div>`;
+  document.getElementById('memberDetail').scrollIntoView({behavior:'smooth'});
+}
+function viewGym(i){
+  const g=GYMS[i]; if(!g) return;
+  const days=num(g.daysLeft);
+  const membersInGym=ALL_MEMBERS.filter(m=> String(m.gymId||m.gym_id)===String(g.id)).length;
+  const paysInGym=ALL_PAYMENTS.filter(p=> String(p.gymId||p.gym_id)===String(g.id));
+  const totalPays=paysInGym.reduce((s,p)=>s+num(p.amount),0);
+  document.getElementById('gymDetail').innerHTML=`<div class="detail-box"><h3>🏋️ ${g.name||'-'}</h3><p><b>Mahali:</b> ${g.location||'Zanzibar'}</p><p><b>Gym ID:</b> ${g.id||'-'}</p><p><b>Admin:</b> ${g.adminName||'-'} • ${g.adminPhone||'-'}</p><p><b>Members:</b> ${num(g.members) || membersInGym}</p><p><b>Malipo ya Gym hii:</b> ${paysInGym.length} • <b>${totalPays.toLocaleString()} TZS</b></p><p><b>Package:</b> ${days<=0?'❌ IMEISHA': '⏳ Siku '+days+' zilobaki • Inaisha '+ (g.packageEndDate||'-')}</p><p><b>Status:</b> ${g.status||'PENDING'}</p><div class="btn-row"><button class="btn btn-yellow" onclick="showSection('members')">👥 Ona Members</button><button class="btn btn-green" onclick="showSection('pay')">💰 Ona Malipo</button><button class="btn btn-green" onclick="remindAdmin('${g.adminPhone||''}','${(g.name||'').replace(/'/g,'')}','${days}','${g.packageEndDate||''}','${g.adminName||''}')">💬 Mtumie Message</button></div><button class="btn btn-dark btn-full" onclick="document.getElementById('gymDetail').innerHTML=''">Funga</button></div>`;
+  document.getElementById('gymDetail').scrollIntoView({behavior:'smooth'});
+}
+function viewPayment(i){
+  const p=ALL_PAYMENTS[i]; if(!p) return;
+  document.getElementById('paymentDetail').innerHTML=`<div class="detail-box"><h3>🧾 Malipo #${p.id||i+1}</h3><p><b>Gym:</b> ${p.gymName||p.gymId||'Zote'}</p><p><b>Admin:</b> ${p.adminName||'-'} • ${p.phone||'-'}</p><p><b>Plan:</b> ${p.plan||'-'}</p><p><b>Kiasi:</b> ${num(p.amount).toLocaleString()} TZS</p><p><b>Reference:</b> ${p.reference||'-'}</p><p><b>Status:</b> ${p.status||'PENDING'}</p><p><b>Tarehe:</b> ${p.createdAt||p.created_at||'-'}</p><div class="btn-row"><button class="btn btn-green" onclick="changePaymentStatus(${p.id},'APPROVED')">✅ Thibitisha - Fungua Gym + Siku 30</button><button class="btn btn-orange" onclick="changePaymentStatus(${p.id},'REJECTED')">❌ Kataa</button></div><button class="btn btn-dark btn-full" onclick="document.getElementById('paymentDetail').innerHTML=''">Funga</button></div>`;
+  document.getElementById('paymentDetail').scrollIntoView({behavior:'smooth'});
+}
+async function changePaymentStatus(id,status){
+  if(!id){ showToast('Haina ID',false); return; }
+  const r=await api('/api/payments/'+id+'/status','PUT',{status});
+  if(r){ showToast(r.message || '✅ Imethibitishwa!'); load(); }
+}
+function remindAdmin(phone, gymName, daysLeft, endDate, adminName){
+  if(!phone){ alert('Gym hii haina namba ya Admin'); return; }
+  let cleanPhone = String(phone).replace(/[^0-9]/g,'');
+  if(cleanPhone.startsWith('0')) cleanPhone = '255' + cleanPhone.substring(1);
+  let msg = '';
+  const name = adminName || gymName || 'Admin';
+  if(Number(daysLeft) <= 0){
+    msg = `Habari ${name}! Package yako ya ${gymName} - GYM ZANZIBAR IMEISHA. Gym yako imefungwa. Tafadhali lipia sasa ili tufungue tena. Asante!`;
+  } else if(Number(daysLeft) <= 5){
+    msg = `Habari ${name}! Kumbusho: Package yako ya ${gymName} - GYM ZANZIBAR inabaki siku ${daysLeft} tu. Inaisha tarehe ${endDate}. Tafadhali lipia kabla haijaisha ili Gym isiwe imefungwa. Asante!`;
+  } else {
+    msg = `Habari ${name}! Kumbusho: Package yako ya ${gymName} - GYM ZANZIBAR inabaki siku ${daysLeft}. Inaisha ${endDate}. Asante kwa kutumia mfumo wetu!`;
+  }
+  window.open('https://wa.me/' + cleanPhone + '?text=' + encodeURIComponent(msg), '_blank');
+}
 async function createGym(){
   const gname = val('gname').trim();
   const gloc = val('gloc').trim() || 'Zanzibar';
