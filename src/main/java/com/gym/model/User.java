@@ -12,7 +12,7 @@ public class User {
   private Long gymId;
   private String status = "ACTIVE";
 
-  // HIZI NDIZO ZILIZOKOSEKANA KWA AutoLockService
+  // Kwa AutoLockService
   private String subscriptionStatus = "ACTIVE";
   private LocalDateTime subscriptionExpiresAt;
   private boolean active = true;
@@ -26,19 +26,25 @@ public class User {
   public String getPhone(){ return phone; }
   public void setPhone(String p){ this.phone = p; }
 
+  // --- PASSWORD: Majina yote mawili ili Controller zote zifanye kazi ---
   public String getPassword(){ return password; }
   public void setPassword(String p){ this.password = p; }
+
+  // Alias kwa Controller za zamani zinazotumia passwordHash
+  public String getPasswordHash(){ return password; }
+  public void setPasswordHash(String p){ this.password = p; }
 
   public String getRole(){ return role; }
   public void setRole(String r){ this.role = r; }
 
   public Long getGymId(){ return gymId; }
   public void setGymId(Long g){ this.gymId = g; }
+  public Long getGym_id(){ return gymId; }
 
   public String getStatus(){ return status; }
   public void setStatus(String s){ this.status = s; }
 
-  // --- MPYA KWA AutoLockService ---
+  // --- Kwa AutoLockService ---
   public String getSubscriptionStatus(){ return subscriptionStatus; }
   public void setSubscriptionStatus(String s){ this.subscriptionStatus = s; }
 
